@@ -1,0 +1,14 @@
+[project]
+name = "vidyut"
+version = "0.1.0"
+description = "A lightning-fast Sanskrit toolkit"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+]
+
+[build-system]
+requires = ["maturin>=0.13,<0.14"]
+build-backend = "maturin"

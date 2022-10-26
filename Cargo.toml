@@ -1,0 +1,18 @@
+[package]
+name = "vidyut-py"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "vidyut"
+crate-type = ["cdylib"]
+
+[dependencies]
+vidyut = { git = "https://github.com/ambuda-org/vidyut" }
+
+[dependencies.pyo3]
+version = "0.17.2"
+features = ["extension-module", "abi3-py37"]
+
+[package.metadata.maturin]
+python-source = "python"
