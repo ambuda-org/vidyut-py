@@ -14,13 +14,13 @@ changes to the API and the data format.
 Usage
 -----
 
-    from vidyut import Parser
+    from vidyut import Segmenter
 
     # For details on what this path should point to, see `Setup` below.
-    p = Parser('path/to/my/data')
+    s = Segmenter('/path/to/vidyut-0.1.0')
 
     # All input must be in SLP1.
-    print(p.parse('gacCati'))
+    print(s.segment('gacCati'))
 
 
 Setup
@@ -38,13 +38,13 @@ To build this data, please use the main [Vidyut][vidyut] repo as follows.
     cd vidyut
     make install
 
-    # The output data will be in `data`. Once the `data` folder has been
-    # created, you can move it wherever you like.
-    ls data/
+    # The output data will be in `data/vidyut-x.y.z`, where `x.y.z` is the Vidyut version.
+    # Once the `data` folder has been # created, you can move it wherever you like.
+    ls data/vidyut-0.1.0/
 
-Then, pass the path to this data into the `Parser`:
+Then, pass the path to this data into the `Segmenter`:
 
-    p = Parser('path/to/my/data')
+    s = Segmenter('path/to/vidyut-0.1.0')
 
 
 [vidyut]: https://github.com/ambuda-org/vidyut

@@ -1,35 +1,36 @@
-use ::vidyut::io::DataPaths;
-use ::vidyut::parsing::Parser;
-use ::vidyut::semantics::Semantics;
+use ::vidyut::config::Config;
+use ::vidyut::segmenting::Segmenter;
+use ::vidyut::semantics::Pada;
 use pyo3::exceptions::PyValueError;
 use pyo3::prelude::*;
 use std::collections::HashMap;
 use std::path::PathBuf;
 
-impl ToPyDict for Semantics {
-    fn as_pydict(&self) -> HashMap<String, String> {
+trait ToPyDict {
+    fn to_pydict(&self) -> HashMap<String, String>;
+}
+
+impl ToPyDict for Pada {
+    fn to_pydict(&self) -> HashMap<String, String> {
         let mut ret = HashMap::new();
         let pos = match self {
-            Semantics::PrefixGroup => "prefix-group",
-            Semantics::Avyaya => "avyaya",
-            Semantics::Subanta(_) => "subanta",
-            Semantics::Tinanta(_) => "tinanta",
-            Semantics::None => "none",
-            Semantics::Ktva(_) => "ktva",
-            Semantics::Tumun(_) => "tumun",
+            Pada::Avyaya(_) => "avyaya",
+            Pada::Subanta(_) => "subanta",
+            Pada::Tinanta(_) => "tinanta",
+            Pada::None => "none",
         };
 
         match self {
             // FIXME: add more semantics here.
-            Semantics::Tinanta(s) => {
-                ret.insert("purusha", s.purusha.to_str());
-                ret.insert("vacana", s.vacana.to_str());
+            Pada::Tinanta(s) => {
+                ret.insert("purusha", s.purusha.as_str());
+                ret.insert("vacana", s.vacana.as_str());
                 // FIXME: add more fields here.
             }
-            Semantics::Subanta(s) => {
-                ret.insert("linga", s.linga.to_str());
-                ret.insert("vacana", s.vacana.to_str());
-                ret.insert("vibhakti", s.vibhakti.to_str());
+            Pada::Subanta(s) => {
+                ret.insert("linga", s.linga.as_str());
+                ret.insert("vacana", s.vacana.as_str());
+                ret.insert("vibhakti", s.vibhakti.as_str());
                 // FIXME: how to set Python boolean here?
                 ret.insert(
                     "is_purvapada",
@@ -66,42 +67,38 @@ impl PyParsedWord {
 }
 
 /// A Sanskrit parser.
-#[pyclass(name = "Parser")]
-struct PyParser {
-    parser: Parser,
-}
-
-trait ToPyDict {
-    fn as_pydict(&self) -> HashMap<String, String>;
+#[pyclass(name = "Segmenter")]
+struct PySegmenter {
+    segmenter: Segmenter,
 }
 
 #[pymethods]
-impl PyParser {
+impl PySegmenter {
     /// Initializes a Sanskrit parser by reading the necessary data from the filesystem. This
     /// method raises a ValueError if the initialiation fails.
     #[new]
     fn new(path: &str) -> PyResult<Self> {
-        let path = PathBuf::from(path);
-        let parser = Parser::from_paths(&DataPaths::from_dir(&path));
-        match parser {
-            Ok(parser) => Ok(PyParser { parser }),
+        let config = Config::new(&PathBuf::from(path));
+        let segmenter = Segmenter::new(config);
+        match segmenter {
+            Ok(segmenter) => Ok(PySegmenter { segmenter }),
             Err(e) => Err(PyValueError::new_err(format!(
-                "Could not initialize parser. Error was: `{:?}`",
+                "Could not initialize segmenter. Error was: `{:?}`",
                 e
             ))),
         }
     }
 
     /// Parses the given SLP1 input and returns a list of `ParsedWord` objects.
-    pub fn parse(&self, slp1_text: &str) -> Vec<PyParsedWord> {
-        let words = self.parser.parse(slp1_text);
+    pub fn segment(&self, slp1_text: &str) -> Vec<PyParsedWord> {
+        let words = self.segmenter.segment(slp1_text);
         let mut ret = Vec::new();
 
         for word in words {
             ret.push(PyParsedWord {
                 text: word.text.clone(),
                 lemma: word.lemma(),
-                semantics: word.semantics.as_pydict(),
+                semantics: word.semantics.to_pydict(),
             });
         }
 
@@ -114,6 +111,6 @@ impl PyParser {
 /// Vidyut supports only SLP1 transliteration.
 #[pymodule]
 fn vidyut(_py: Python, m: &PyModule) -> PyResult<()> {
-    m.add_class::<PyParser>()?;
+    m.add_class::<PySegmenter>()?;
     Ok(())
 }
