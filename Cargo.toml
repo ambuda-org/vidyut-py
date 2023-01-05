@@ -8,11 +8,10 @@ name = "vidyut"
 crate-type = ["cdylib"]
 
 [dependencies]
-vidyut = { git = "https://github.com/ambuda-org/vidyut" }
+vidyut-cheda = { git = "https://github.com/ambuda-org/vidyut" }
+vidyut-kosha = { git = "https://github.com/ambuda-org/vidyut" }
+vidyut-prakriya = { git = "https://github.com/ambuda-org/vidyut" }
 
 [dependencies.pyo3]
 version = "0.17.2"
 features = ["extension-module", "abi3-py37"]
-
-[package.metadata.maturin]
-python-source = "python"

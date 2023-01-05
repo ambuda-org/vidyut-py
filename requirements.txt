@@ -1,0 +1,5 @@
+maturin==0.14.8
+pytest==7.2.0
+
+# Dev dependencies
+black==22.12.0

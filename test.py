@@ -4,6 +4,8 @@ import sys
 data_path = sys.argv[1]
 s = Segmenter(data_path)
 
-print('loaded')
-for word in s.segment("Darmakzetre kurukzetre samavetA yuyutsavaH"):
+text = """sa BagavAnsfzwvedaM jagattasya ca sTitiM cikIrzuH marIcyAdInagre sfzwvA prajApatInpravfttilakzaRaM DarmaM grAhayAmAsa vedoktam"""
+
+print("loaded")
+for word in s.segment(text):
     print(word)
