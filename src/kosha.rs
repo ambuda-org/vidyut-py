@@ -2,20 +2,20 @@ use pyo3::exceptions::PyOSError;
 use pyo3::prelude::*;
 use semantics::PyPada;
 use std::path::PathBuf;
-use vidyut_kosha as rust;
+use vidyut_kosha::{Kosha, Builder};
 
 pub mod semantics;
 
 /// A compact Sanskrit kosha.
-#[pyclass]
-pub struct Kosha(rust::Kosha);
+#[pyclass(name = "Kosha")]
+pub struct PyKosha(Kosha);
 
 #[pymethods]
-impl Kosha {
+impl PyKosha {
     /// Load a `Kosha` instance from the given input path.
     #[new]
     fn new(path: PathBuf) -> PyResult<Self> {
-        match rust::Kosha::new(&path) {
+        match Kosha::new(&path) {
             Ok(k) => Ok(Self(k)),
             Err(_) => Err(PyOSError::new_err(
                 "Unknown error. Our best guess is that the input file is missing.",
@@ -52,19 +52,19 @@ impl Kosha {
 /// Builder for a `Kosha`.
 ///
 /// Memory usage is linear in the number of unique lemmas.
-#[pyclass]
-pub struct Builder {
-    builder: Option<rust::Builder>,
+#[pyclass(name = "Builder")]
+pub struct PyBuilder {
+    builder: Option<Builder>,
 }
 
 #[pymethods]
-impl Builder {
+impl PyBuilder {
     /// Create a new builder whose output will be written to `path`.
     ///
     /// If `path` does not exist, the builder will create it.
     #[new]
     fn new(path: PathBuf) -> PyResult<Self> {
-        match rust::Builder::new(&path) {
+        match Builder::new(&path) {
             Ok(k) => Ok(Self { builder: Some(k) }),
             Err(_) => Err(PyOSError::new_err(
                 "Unknown error. Our guess is that the input file is missing.",

@@ -86,8 +86,8 @@ fn py_cheda(_py: Python, m: &PyModule) -> PyResult<()> {
 #[pymodule]
 #[pyo3(name = "kosha")]
 fn py_kosha(_py: Python, m: &PyModule) -> PyResult<()> {
-    m.add_class::<kosha::Kosha>()?;
-    m.add_class::<kosha::Builder>()?;
+    m.add_class::<kosha::PyKosha>()?;
+    m.add_class::<kosha::PyBuilder>()?;
 
     // These symbols have name collisions with their similarly named counterparts in the `prakriya`
     // module. By wrapping these symbols in their own native module, we avoid the name collision
