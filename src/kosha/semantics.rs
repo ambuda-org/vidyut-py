@@ -1,16 +1,68 @@
 use pyo3::basic::CompareOp;
+use pyo3::exceptions::PyNotImplementedError;
 use pyo3::prelude::*;
+use std::collections::hash_map::DefaultHasher;
+use std::hash::{Hash, Hasher};
+use std::str::FromStr;
 
-use vidyut_kosha::semantics::*;
+use vidyut_kosha::morph::*;
 
-// We can't use `From<T> for Option<PyT>` because `Option` is not defined in this crate.
-trait ToPy<T> {
-    fn to_py(self) -> T;
-}
+/// Generates the following boilerplate methods:
+/// - `__hash__`
+/// - `__str__`
+/// - `from_string`, which is the inverse of `__str__`
+/// - `From<RustEnum> for PyEnum`
+/// - `From<PyEnum> for RustEnum`
+///
+/// Requirements:
+/// - Enum must derive `Hash`
+macro_rules! py_enum {
+    ($Py:ident, $Rust:ident, [$( $variant:ident ),*]) => {
+        impl From<$Rust> for $Py {
+            fn from(val: $Rust) -> Self {
+                match val {
+                    $(
+                        $Rust::$variant => $Py::$variant,
+                    )*
+                }
+            }
+        }
 
-// We can't use `From<Option<PyT>> for T` because our `T` symbols are not defined in this crate.
-trait ToRust<T> {
-    fn to_rust(self) -> T;
+        impl From<$Py> for $Rust {
+            fn from(val: $Py) -> Self {
+                match val {
+                    $(
+                        $Py::$variant => $Rust::$variant,
+                    )*
+                }
+            }
+        }
+
+        #[pymethods]
+        impl $Py {
+            fn __hash__(&self) -> u64 {
+                let mut hasher = DefaultHasher::new();
+                self.hash(&mut hasher);
+                hasher.finish()
+            }
+
+            fn __str__(&self) -> String {
+                let rust: $Rust = self.clone().into();
+                rust.as_str().to_string()
+            }
+
+            /// Create an enum value from the given string.
+            ///
+            /// This is an inverse of the `__str__` method.
+            #[staticmethod]
+            fn from_string(val: &str) -> PyResult<Self> {
+                match $Rust::from_str(val) {
+                    Ok(x) => Ok(x.into()),
+                    Err(_) => Err(PyNotImplementedError::new_err("Could not parse {val}")),
+                }
+            }
+        }
+    }
 }
 
 /// A short part-of-speech tag for some `Pada`.
@@ -19,7 +71,7 @@ trait ToRust<T> {
 /// model the *avyaya* (indeclinable) separately since it has different semantics from other
 /// subantas.
 #[pyclass(name = "PartOfSpeech")]
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub enum PyPartOfSpeech {
     /// An indeclinable.
     Avyaya,
@@ -27,11 +79,15 @@ pub enum PyPartOfSpeech {
     Subanta,
     /// A verb.
     Tinanta,
+    /// Unknown part of speech.
+    Unknown,
 }
+
+py_enum!(PyPartOfSpeech, POSTag, [Avyaya, Subanta, Tinanta, Unknown]);
 
 /// The person of a Sanskrit verb.
 #[pyclass(name = "Purusha")]
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Hash, Eq, PartialEq)]
 pub enum PyPurusha {
     /// The first *puruṣa* (third person).
     Prathama,
@@ -41,35 +97,11 @@ pub enum PyPurusha {
     Uttama,
 }
 
-impl ToPy<Option<PyPurusha>> for Purusha {
-    fn to_py(self) -> Option<PyPurusha> {
-        match self {
-            Purusha::Prathama => Some(PyPurusha::Prathama),
-            Purusha::Madhyama => Some(PyPurusha::Madhyama),
-            Purusha::Uttama => Some(PyPurusha::Uttama),
-            Purusha::None => None,
-        }
-    }
-}
-
-impl ToRust<Purusha> for Option<PyPurusha> {
-    fn to_rust(self) -> Purusha {
-        use Purusha as R;
-        use PyPurusha as Py;
-        match self {
-            Some(x) => match x {
-                Py::Prathama => R::Prathama,
-                Py::Madhyama => R::Madhyama,
-                Py::Uttama => R::Uttama,
-            },
-            None => R::None,
-        }
-    }
-}
+py_enum!(PyPurusha, Purusha, [Prathama, Madhyama, Uttama]);
 
 /// The gender of a Sanskrit nominal.
 #[pyclass(name = "Linga")]
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub enum PyLinga {
     /// The masculine gender.
     Pum,
@@ -79,35 +111,11 @@ pub enum PyLinga {
     Napumsaka,
 }
 
-impl ToPy<Option<PyLinga>> for Linga {
-    fn to_py(self) -> Option<PyLinga> {
-        match self {
-            Linga::Pum => Some(PyLinga::Pum),
-            Linga::Stri => Some(PyLinga::Stri),
-            Linga::Napumsaka => Some(PyLinga::Napumsaka),
-            Linga::None => None,
-        }
-    }
-}
-
-impl ToRust<Linga> for Option<PyLinga> {
-    fn to_rust(self) -> Linga {
-        use Linga as R;
-        use PyLinga as Py;
-        match self {
-            Some(x) => match x {
-                Py::Pum => R::Pum,
-                Py::Stri => R::Stri,
-                Py::Napumsaka => R::Napumsaka,
-            },
-            None => R::None,
-        }
-    }
-}
+py_enum!(PyLinga, Linga, [Pum, Stri, Napumsaka]);
 
 /// The number of a Sanskrit word.
 #[pyclass(name = "Vacana")]
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub enum PyVacana {
     /// The singular.
     Eka,
@@ -117,35 +125,11 @@ pub enum PyVacana {
     Bahu,
 }
 
-impl ToPy<Option<PyVacana>> for Vacana {
-    fn to_py(self) -> Option<PyVacana> {
-        match self {
-            Vacana::Eka => Some(PyVacana::Eka),
-            Vacana::Dvi => Some(PyVacana::Dvi),
-            Vacana::Bahu => Some(PyVacana::Bahu),
-            Vacana::None => None,
-        }
-    }
-}
-
-impl ToRust<Vacana> for Option<PyVacana> {
-    fn to_rust(self) -> Vacana {
-        use PyVacana as Py;
-        use Vacana as R;
-        match self {
-            Some(x) => match x {
-                Py::Eka => R::Eka,
-                Py::Dvi => R::Dvi,
-                Py::Bahu => R::Bahu,
-            },
-            None => R::None,
-        }
-    }
-}
+py_enum!(PyVacana, Vacana, [Eka, Dvi, Bahu]);
 
 /// The case of a Sanskrit nominal.
 #[pyclass(name = "Vibhakti")]
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Hash, Eq, PartialEq)]
 pub enum PyVibhakti {
     /// The first *vibhakti* (nominative case).
     V1,
@@ -165,46 +149,15 @@ pub enum PyVibhakti {
     Sambodhana,
 }
 
-impl ToPy<Option<PyVibhakti>> for Vibhakti {
-    fn to_py(self) -> Option<PyVibhakti> {
-        match self {
-            Vibhakti::V1 => Some(PyVibhakti::V1),
-            Vibhakti::V2 => Some(PyVibhakti::V2),
-            Vibhakti::V3 => Some(PyVibhakti::V3),
-            Vibhakti::V4 => Some(PyVibhakti::V4),
-            Vibhakti::V5 => Some(PyVibhakti::V5),
-            Vibhakti::V6 => Some(PyVibhakti::V6),
-            Vibhakti::V7 => Some(PyVibhakti::V7),
-            Vibhakti::Sambodhana => Some(PyVibhakti::Sambodhana),
-            Vibhakti::None => None,
-        }
-    }
-}
-
-impl ToRust<Vibhakti> for Option<PyVibhakti> {
-    fn to_rust(self) -> Vibhakti {
-        use PyVibhakti as Py;
-        use Vibhakti as R;
-
-        match self {
-            Some(x) => match x {
-                Py::V1 => R::V1,
-                Py::V2 => R::V2,
-                Py::V3 => R::V3,
-                Py::V4 => R::V4,
-                Py::V5 => R::V5,
-                Py::V6 => R::V6,
-                Py::V7 => R::V7,
-                Py::Sambodhana => R::Sambodhana,
-            },
-            None => R::None,
-        }
-    }
-}
+py_enum!(
+    PyVibhakti,
+    Vibhakti,
+    [V1, V2, V3, V4, V5, V6, V7, Sambodhana]
+);
 
 /// The tense-mood of a Sanskrit verb.
 #[pyclass(name = "Lakara")]
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub enum PyLakara {
     /// *laṭ-lakāra* (present indicative).
     Lat,
@@ -232,87 +185,25 @@ pub enum PyLakara {
     Lrn,
 }
 
-impl ToPy<Option<PyLakara>> for Lakara {
-    fn to_py(self) -> Option<PyLakara> {
-        use PyLakara::*;
-        match self {
-            Lakara::Lat => Some(Lat),
-            Lakara::Lit => Some(Lit),
-            Lakara::Lut => Some(Lut),
-            Lakara::Lrt => Some(Lrt),
-            Lakara::Let => Some(Let),
-            Lakara::Lot => Some(Lot),
-            Lakara::Lan => Some(Lan),
-            Lakara::AshirLin => Some(AshirLin),
-            Lakara::VidhiLin => Some(VidhiLin),
-            Lakara::Lun => Some(Lun),
-            Lakara::LunNoAgama => Some(LunNoAgama),
-            Lakara::Lrn => Some(Lrn),
-            Lakara::None => None,
-        }
-    }
-}
-
-impl ToRust<Lakara> for Option<PyLakara> {
-    fn to_rust(self) -> Lakara {
-        use Lakara as R;
-        use PyLakara as Py;
-
-        match self {
-            Some(x) => match x {
-                Py::Lat => R::Lat,
-                Py::Lit => R::Lit,
-                Py::Lut => R::Lut,
-                Py::Lrt => R::Lrt,
-                Py::Let => R::Let,
-                Py::Lot => R::Lot,
-                Py::Lan => R::Lan,
-                Py::VidhiLin => R::VidhiLin,
-                Py::AshirLin => R::AshirLin,
-                Py::Lun => R::Lun,
-                Py::LunNoAgama => R::LunNoAgama,
-                Py::Lrn => R::Lrn,
-            },
-            None => R::None,
-        }
-    }
-}
+py_enum!(
+    PyLakara,
+    Lakara,
+    [Lat, Lit, Lut, Lrt, Let, Lot, Lan, AshirLin, VidhiLin, Lun, LunNoAgama, Lrn]
+);
 
 #[pyclass(name = "PadaPrayoga")]
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug, Hash, Eq, PartialEq)]
 pub enum PyPadaPrayoga {
     Parasmaipada,
     AtmanepadaKartari,
     AtmanepadaNotKartari,
 }
 
-impl ToPy<Option<PyPadaPrayoga>> for PadaPrayoga {
-    fn to_py(self) -> Option<PyPadaPrayoga> {
-        use PyPadaPrayoga::*;
-        match self {
-            PadaPrayoga::Parasmaipada => Some(Parasmaipada),
-            PadaPrayoga::AtmanepadaKartari => Some(AtmanepadaKartari),
-            PadaPrayoga::AtmanepadaNotKartari => Some(AtmanepadaNotKartari),
-            PadaPrayoga::None => None,
-        }
-    }
-}
-
-impl ToRust<PadaPrayoga> for Option<PyPadaPrayoga> {
-    fn to_rust(self) -> PadaPrayoga {
-        use PadaPrayoga as R;
-        use PyPadaPrayoga as Py;
-
-        match self {
-            Some(x) => match x {
-                Py::Parasmaipada => R::Parasmaipada,
-                Py::AtmanepadaKartari => R::AtmanepadaKartari,
-                Py::AtmanepadaNotKartari => R::AtmanepadaNotKartari,
-            },
-            None => R::None,
-        }
-    }
-}
+py_enum!(
+    PyPadaPrayoga,
+    PadaPrayoga,
+    [Parasmaipada, AtmanepadaKartari, AtmanepadaNotKartari]
+);
 
 /// A verb root.
 #[pyclass(name = "Dhatu", get_all)]
@@ -351,15 +242,15 @@ impl PyDhatu {
     }
 }
 
-impl ToPy<PyDhatu> for Dhatu {
-    fn to_py(self) -> PyDhatu {
-        PyDhatu { text: self.0 }
+impl From<PyDhatu> for Dhatu {
+    fn from(val: PyDhatu) -> Self {
+        Dhatu(val.text)
     }
 }
 
-impl ToRust<Dhatu> for PyDhatu {
-    fn to_rust(self) -> Dhatu {
-        Dhatu(self.text)
+impl From<Dhatu> for PyDhatu {
+    fn from(val: Dhatu) -> PyDhatu {
+        PyDhatu { text: val.0 }
     }
 }
 
@@ -402,22 +293,24 @@ impl PyPratipadika {
     }
 }
 
-impl ToPy<PyPratipadika> for Dhatu {
-    fn to_py(self) -> PyPratipadika {
-        PyPratipadika { text: self.0 }
-    }
-}
-
-impl ToRust<Pratipadika> for PyPratipadika {
-    fn to_rust(self) -> Pratipadika {
+impl From<PyPratipadika> for Pratipadika {
+    fn from(val: PyPratipadika) -> Self {
         Pratipadika::Basic {
-            text: self.text,
+            text: val.text,
             lingas: vec![],
         }
     }
 }
 
+impl From<Dhatu> for PyPratipadika {
+    fn from(val: Dhatu) -> Self {
+        PyPratipadika { text: val.0 }
+    }
+}
+
 /// Morphological information for a Sanskrit word.
+///
+/// For ease of use in Python, all of these fields are defined on a single type.
 #[pyclass(name = "Pada", get_all)]
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct PyPada {
@@ -605,7 +498,7 @@ impl PyPada {
                 };
                 args.push(format!("is_purvapada={}", is_purvapada));
             }
-            None => {
+            Some(PyPartOfSpeech::Unknown) | None => {
                 args.push("None".to_string());
             }
         };
@@ -626,20 +519,20 @@ impl From<Pada> for PyPada {
             Pada::Subanta(s) => {
                 res.pos = Some(PyPartOfSpeech::Subanta);
                 res.pratipadika = Some(PyPratipadika::new(s.pratipadika.lemma().to_string()));
-                res.linga = s.linga.to_py();
-                res.vibhakti = s.vibhakti.to_py();
-                res.vacana = s.vacana.to_py();
+                res.linga = s.linga.map(|x| x.into());
+                res.vibhakti = s.vibhakti.map(|x| x.into());
+                res.vacana = s.vacana.map(|x| x.into());
                 res.is_purvapada = s.is_purvapada;
             }
             Pada::Tinanta(t) => {
                 res.pos = Some(PyPartOfSpeech::Tinanta);
                 res.dhatu = Some(PyDhatu::new(t.dhatu.text().to_string()));
-                res.lakara = t.lakara.to_py();
-                res.pada_prayoga = t.pada.to_py();
-                res.purusha = t.purusha.to_py();
-                res.vacana = t.vacana.to_py();
+                res.lakara = Some(t.lakara.into());
+                res.pada_prayoga = Some(t.pada.into());
+                res.purusha = Some(t.purusha.into());
+                res.vacana = Some(t.vacana.into());
             }
-            Pada::None => {
+            Pada::Unknown => {
                 res.pos = None;
             }
         };
@@ -653,32 +546,35 @@ impl From<PyPada> for Pada {
         use PyPartOfSpeech as PyPOS;
 
         match val.pos {
-            None => Self::None,
             Some(PyPOS::Tinanta) => Pada::Tinanta(Tinanta {
-                dhatu: val.dhatu.map(|x| x.to_rust()).expect("defined for tinanta"),
-                purusha: val.purusha.to_rust(),
-                vacana: val.vacana.to_rust(),
-                lakara: val.lakara.to_rust(),
-                pada: val.pada_prayoga.to_rust(),
+                dhatu: val.dhatu.map(|x| x.into()).expect("defined for tinanta"),
+                purusha: val.purusha.map(|x| x.into()).expect("defined for tinanta"),
+                vacana: val.vacana.map(|x| x.into()).expect("defined for tinanta"),
+                lakara: val.lakara.map(|x| x.into()).expect("defined for tinanta"),
+                pada: val
+                    .pada_prayoga
+                    .map(|x| x.into())
+                    .expect("defined for tinanta"),
             }),
 
             Some(PyPOS::Subanta) => Pada::Subanta(Subanta {
                 pratipadika: val
                     .pratipadika
-                    .map(|x| x.to_rust())
+                    .map(|x| x.into())
                     .expect("defined for subanta"),
-                vacana: val.vacana.to_rust(),
-                linga: val.linga.to_rust(),
-                vibhakti: val.vibhakti.to_rust(),
+                vacana: val.vacana.map(|x| x.into()),
+                linga: val.linga.map(|x| x.into()),
+                vibhakti: val.vibhakti.map(|x| x.into()),
                 is_purvapada: val.is_purvapada,
             }),
 
             Some(PyPOS::Avyaya) => Pada::Avyaya(Avyaya {
                 pratipadika: val
                     .pratipadika
-                    .map(|x| x.to_rust())
+                    .map(|x| x.into())
                     .expect("defined for avyaya"),
             }),
+            Some(PyPOS::Unknown) | None => Pada::Unknown,
         }
     }
 }

@@ -5,8 +5,70 @@ Pyo3 doesn't allow us to annotate existing enums, and using a wrapping struct ha
 for callers. So instead, redefine our enums of interest.
 */
 use pyo3::basic::CompareOp;
+use pyo3::exceptions::PyNotImplementedError;
 use pyo3::prelude::*;
+use std::collections::hash_map::DefaultHasher;
+use std::hash::{Hash, Hasher};
+use std::str::FromStr;
 use vidyut_prakriya::args::*;
+
+/// Generates the following boilerplate methods:
+/// - `__hash__`
+/// - `__str__`
+/// - `from_string`, which is the inverse of `__str__`
+/// - `From<RustEnum> for PyEnum`
+/// - `From<PyEnum> for RustEnum`
+///
+/// Requirements:
+/// - Enum must derive `Hash`
+macro_rules! py_enum {
+    ($Py:ident, $Rust:ident, [$( $variant:ident ),*]) => {
+        impl From<$Rust> for $Py {
+            fn from(val: $Rust) -> Self {
+                match val {
+                    $(
+                        $Rust::$variant => $Py::$variant,
+                    )*
+                }
+            }
+        }
+
+        impl From<$Py> for $Rust {
+            fn from(val: $Py) -> Self {
+                match val {
+                    $(
+                        $Py::$variant => $Rust::$variant,
+                    )*
+                }
+            }
+        }
+
+        #[pymethods]
+        impl $Py {
+            fn __hash__(&self) -> u64 {
+                let mut hasher = DefaultHasher::new();
+                self.hash(&mut hasher);
+                hasher.finish()
+            }
+
+            fn __str__(&self) -> String {
+                let rust: $Rust = self.clone().into();
+                rust.as_str().to_string()
+            }
+
+            /// Create an enum value from the given string.
+            ///
+            /// This is an inverse of the `__str__` method.
+            #[staticmethod]
+            fn from_string(val: &str) -> PyResult<Self> {
+                match $Rust::from_str(val) {
+                    Ok(x) => Ok(x.into()),
+                    Err(_) => Err(PyNotImplementedError::new_err("Could not parse {val}")),
+                }
+            }
+        }
+    }
+}
 
 /// A verb root.
 #[pyclass(name = "Dhatu", module = "prakriya")]
@@ -79,7 +141,7 @@ impl PyPratipadika {
 }
 
 #[pyclass(name = "Krt", module = "prakriya")]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Hash)]
 #[allow(non_camel_case_types)]
 pub enum PyKrt {
     /// -Alu
@@ -145,6 +207,8 @@ pub enum PyKrt {
     /// -a
     ka,
     /// -i (udaDi, ...)
+    kAnac,
+    /// -Ana
     ki,
     /// -i
     kin,
@@ -232,92 +296,21 @@ pub enum PyKrt {
     zwran,
 }
 
-impl From<PyKrt> for Krt {
-    fn from(val: PyKrt) -> Self {
-        use PyKrt::*;
-        match val {
-            Aluc => Self::Aluc,
-            Aru => Self::Aru,
-            Ga => Self::Ga,
-            GaY => Self::GaY,
-            GinuR => Self::GinuR,
-            Gurac => Self::Gurac,
-            Kal => Self::Kal,
-            Nvanip => Self::Nvanip,
-            Ra => Self::Ra,
-            Rini => Self::Rini,
-            Rvuc => Self::Rvuc,
-            Rvul => Self::Rvul,
-            Ryat => Self::Ryat,
-            Ryuw => Self::Ryuw,
-            SAnac => Self::SAnac,
-            SAnan => Self::SAnan,
-            Sa => Self::Sa,
-            Satf => Self::Satf,
-            Takan => Self::Takan,
-            Tuc => Self::Tuc,
-            Uka => Self::Uka,
-            aR => Self::aR,
-            ac => Self::ac,
-            anIyar => Self::anIyar,
-            ani => Self::ani,
-            atfn => Self::atfn,
-            cAnaS => Self::cAnaS,
-            ini => Self::ini,
-            itra => Self::itra,
-            izRuc => Self::izRuc,
-            ka => Self::ka,
-            // TODO: kAnac => Self::kAnac,
-            ki => Self::ki,
-            kin => Self::kin,
-            klukan => Self::klukan,
-            kmarac => Self::kmarac,
-            knu => Self::knu,
-            kru => Self::kru,
-            kruka => Self::kruka,
-            ksnu => Self::ksnu,
-            kta => Self::kta,
-            ktavatu => Self::ktavatu,
-            ktic => Self::ktic,
-            ktin => Self::ktin,
-            ktri => Self::ktri,
-            ktvA => Self::ktvA,
-            kurac => Self::kurac,
-            kvarap => Self::kvarap,
-            kvasu => Self::kvasu,
-            kvip => Self::kvip,
-            kyap => Self::kyap,
-            lyu => Self::lyu,
-            lyuw => Self::lyuw,
-            naN => Self::naN,
-            najiN => Self::najiN,
-            nan => Self::nan,
-            qu => Self::qu,
-            ra => Self::ra,
-            ru => Self::ru,
-            tavya => Self::tavya,
-            tavyat => Self::tavyat,
-            tfc => Self::tfc,
-            tfn => Self::tfn,
-            tumun => Self::tumun,
-            u => Self::u,
-            ukaY => Self::ukaY,
-            varac => Self::varac,
-            vuY => Self::vuY,
-            vun => Self::vun,
-            wak => Self::wak,
-            yat => Self::yat,
-            yuc => Self::yuc,
-            zAkan => Self::zAkan,
-            zvun => Self::zvun,
-            zwran => Self::zwran,
-        }
-    }
-}
+py_enum!(
+    PyKrt,
+    Krt,
+    [
+        Aluc, Aru, Ga, GaY, GinuR, Gurac, Kal, Nvanip, Ra, Rini, Rvuc, Rvul, Ryat, Ryuw, SAnac,
+        SAnan, Sa, Satf, Takan, Tuc, Uka, aR, ac, anIyar, ani, atfn, cAnaS, ini, itra, izRuc,
+        kAnac, ka, ki, kin, klukan, kmarac, knu, kru, kruka, ksnu, kta, ktavatu, ktic, ktin, ktri,
+        ktvA, kurac, kvarap, kvasu, kvip, kyap, lyu, lyuw, naN, najiN, nan, qu, ra, ru, tavya,
+        tavyat, tfc, tfn, tumun, u, ukaY, varac, vuY, vun, wak, yat, yuc, zAkan, zvun, zwran
+    ]
+);
 
 /// The lakara to use in the derivation.
 #[pyclass(name = "Lakara", module = "prakriya")]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Hash)]
 pub enum PyLakara {
     /// Describes action in the present tense. Ssometimes called the *present indicative*.
     Lat,
@@ -343,28 +336,15 @@ pub enum PyLakara {
     Lrn,
 }
 
-impl From<PyLakara> for Lakara {
-    fn from(val: PyLakara) -> Self {
-        use PyLakara::*;
-        match val {
-            Lat => Self::Lat,
-            Lit => Self::Lit,
-            Lut => Self::Lut,
-            Lrt => Self::Lrt,
-            Let => Self::Let,
-            Lot => Self::Lot,
-            Lan => Self::Lan,
-            VidhiLin => Self::VidhiLin,
-            AshirLin => Self::AshirLin,
-            Lun => Self::Lun,
-            Lrn => Self::Lrn,
-        }
-    }
-}
+py_enum!(
+    PyLakara,
+    Lakara,
+    [Lat, Lit, Lut, Lrt, Let, Lot, Lan, VidhiLin, AshirLin, Lun, Lrn]
+);
 
 /// The linga to use in the derivation.
 #[pyclass(name = "Linga", module = "prakriya")]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Hash)]
 pub enum PyLinga {
     /// The masculine.
     Pum,
@@ -374,20 +354,11 @@ pub enum PyLinga {
     Napumsaka,
 }
 
-impl From<PyLinga> for Linga {
-    fn from(val: PyLinga) -> Self {
-        use PyLinga::*;
-        match val {
-            Pum => Self::Pum,
-            Stri => Self::Stri,
-            Napumsaka => Self::Napumsaka,
-        }
-    }
-}
+py_enum!(PyLinga, Linga, [Pum, Stri, Napumsaka]);
 
 /// The prayoga of some tinanta.
 #[pyclass(name = "Prayoga", module = "prakriya")]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Hash)]
 pub enum PyPrayoga {
     /// Usage coreferent with the agent, e.g. "The horse *goes* to the village."
     Kartari,
@@ -398,20 +369,11 @@ pub enum PyPrayoga {
     Bhave,
 }
 
-impl From<PyPrayoga> for Prayoga {
-    fn from(val: PyPrayoga) -> Self {
-        use PyPrayoga::*;
-        match val {
-            Kartari => Self::Kartari,
-            Karmani => Self::Karmani,
-            Bhave => Self::Bhave,
-        }
-    }
-}
+py_enum!(PyPrayoga, Prayoga, [Kartari, Karmani, Bhave]);
 
 /// The person of some tinanta.
 #[pyclass(name = "Purusha", module = "prakriya")]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Hash)]
 pub enum PyPurusha {
     /// The third person.
     Prathama,
@@ -421,19 +383,10 @@ pub enum PyPurusha {
     Uttama,
 }
 
-impl From<PyPurusha> for Purusha {
-    fn from(val: PyPurusha) -> Self {
-        use PyPurusha::*;
-        match val {
-            Prathama => Self::Prathama,
-            Madhyama => Self::Madhyama,
-            Uttama => Self::Uttama,
-        }
-    }
-}
+py_enum!(PyPurusha, Purusha, [Prathama, Madhyama, Uttama]);
 
 #[pyclass(name = "Sanadi", module = "prakriya")]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Hash)]
 pub enum PySanadi {
     /// `san`, which creates desiderative roots per 3.1.7.
     ///
@@ -447,26 +400,19 @@ pub enum PySanadi {
     /// Constraints: can be used only if the dhatu starts with a consonant and has exactly one
     /// vowel. If this constraint is violated, our APIs will return an `Error`.
     Yan,
+    /// `yaN` with `luk` (unused)
+    YanLuk,
     /// `Nic`, which creates causal roots per 3.1.26.
     ///
     /// Examples: BAvayati, nAyayati.
     Nic,
 }
 
-impl From<PySanadi> for Sanadi {
-    fn from(val: PySanadi) -> Self {
-        use PySanadi::*;
-        match val {
-            San => Self::San,
-            Yan => Self::Yan,
-            Nic => Self::Nic,
-        }
-    }
-}
+py_enum!(PySanadi, Sanadi, [San, Yan, YanLuk, Nic]);
 
 /// The number of some tinanta or subanta.
 #[pyclass(name = "Vacana", module = "prakriya")]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Hash)]
 pub enum PyVacana {
     /// The singular.
     Eka,
@@ -476,20 +422,11 @@ pub enum PyVacana {
     Bahu,
 }
 
-impl From<PyVacana> for Vacana {
-    fn from(val: PyVacana) -> Self {
-        use PyVacana::*;
-        match val {
-            Eka => Self::Eka,
-            Dvi => Self::Dvi,
-            Bahu => Self::Bahu,
-        }
-    }
-}
+py_enum!(PyVacana, Vacana, [Eka, Dvi, Bahu]);
 
 /// The case ending of some subanta.
 #[pyclass(name = "Vibhakti", module = "prakriya")]
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Hash)]
 pub enum PyVibhakti {
     /// The first vibhakti. Sometimes called the *nominative case*.
     Prathama,
@@ -514,18 +451,8 @@ pub enum PyVibhakti {
     Sambodhana,
 }
 
-impl From<PyVibhakti> for Vibhakti {
-    fn from(val: PyVibhakti) -> Self {
-        use PyVibhakti::*;
-        match val {
-            Prathama => Self::Prathama,
-            Dvitiya => Self::Dvitiya,
-            Trtiya => Self::Trtiya,
-            Caturthi => Self::Caturthi,
-            Panchami => Self::Panchami,
-            Sasthi => Self::Sasthi,
-            Saptami => Self::Saptami,
-            Sambodhana => Self::Sambodhana,
-        }
-    }
-}
+py_enum!(
+    PyVibhakti,
+    Vibhakti,
+    [Prathama, Dvitiya, Trtiya, Caturthi, Panchami, Sasthi, Saptami, Sambodhana]
+);

@@ -2,7 +2,40 @@ import pytest
 
 from vidyut.prakriya import (
     Pratipadika,
+    Lakara,
+    Linga,
+    Prayoga,
+    Vibhakti,
 )
+
+
+@pytest.mark.parametrize(
+    "variant",
+    [
+        Lakara.Lat,
+        Linga.Pum,
+        Prayoga.Kartari,
+        Vibhakti.Prathama,
+    ],
+)
+def test_enum__hashable(variant):
+    """Verify that our enums are hashable."""
+    data = {variant: "foo"}
+
+
+@pytest.mark.parametrize(
+    "enum,variant,s",
+    [
+        (Lakara, Lakara.Lat, "lat"),
+        (Linga, Linga.Pum, "pum"),
+        (Prayoga, Prayoga.Kartari, "kartari"),
+        (Vibhakti, Vibhakti.Prathama, "1"),
+    ],
+)
+def test_enum__str(enum, variant, s):
+    """Verify that our enums can round-trip to strings."""
+    assert str(variant) == s
+    assert enum.from_string(s) == variant
 
 
 def test_pratipadika_new():

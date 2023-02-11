@@ -15,6 +15,37 @@ from vidyut.kosha import (
 )
 
 
+@pytest.mark.parametrize(
+    "variant",
+    [
+        Lakara.Lat,
+        Linga.Pum,
+        PadaPrayoga.Parasmaipada,
+        PartOfSpeech.Tinanta,
+        Vibhakti.V1,
+    ],
+)
+def test_enum__hashable(variant):
+    """Verify that our enums are hashable."""
+    data = {variant: "foo"}
+
+
+@pytest.mark.parametrize(
+    "enum,variant,s",
+    [
+        (Lakara, Lakara.Lat, "lat"),
+        (Linga, Linga.Pum, "m"),
+        (PadaPrayoga, PadaPrayoga.Parasmaipada, "para"),
+        (PartOfSpeech, PartOfSpeech.Tinanta, "t"),
+        (Vibhakti, Vibhakti.V1, "1"),
+    ],
+)
+def test_enum__str(enum, variant, s):
+    """Verify that our enums can round-trip to strings."""
+    assert str(variant) == s
+    assert enum.from_string(s) == variant
+
+
 def test_dhatu():
     gam = Dhatu(text="gam")
     assert gam.text == "gam"

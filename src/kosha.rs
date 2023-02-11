@@ -2,7 +2,7 @@ use pyo3::exceptions::PyOSError;
 use pyo3::prelude::*;
 use semantics::PyPada;
 use std::path::PathBuf;
-use vidyut_kosha::{Kosha, Builder};
+use vidyut_kosha::{Builder, Kosha};
 
 pub mod semantics;
 
