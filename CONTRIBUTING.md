@@ -51,7 +51,7 @@ issue][issues]. If the issue seems like a logical error, please file the issue
 in the main Vidyut repo instead.
 
 We are happy to answer more general support questions through GitHub issues as
-well. For the fastest response, we recomend using the `#nlp` channel [on our
+well. For the fastest response, we recomend using the `#vidyut` channel [on our
 Discord server][discord].
 
 [discord]: https://discord.gg/7rGdTyWY7Z
