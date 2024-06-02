@@ -2,7 +2,7 @@
 
 from vidyut.vidyut import prakriya as __mod
 
-Ashtadhyayi = __mod.Ashtadhyayi
+Vyakarana = __mod.Vyakarana
 Dhatupatha = __mod.Dhatupatha
 
 # Input types
