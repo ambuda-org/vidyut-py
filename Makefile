@@ -13,7 +13,7 @@ install:
 	python3 -m venv env
 	. env/bin/activate && pip install -r requirements.txt
 	. env/bin/activate && make develop
-	. env/bin/activate && pytest
+	. env/bin/activate && make test
 	@echo
 	@echo "vidyut-py built successfully."
 
