@@ -2,8 +2,8 @@ use pyo3::basic::CompareOp;
 use pyo3::exceptions::{PyFileNotFoundError, PyKeyError, PyValueError};
 use pyo3::prelude::*;
 use std::path::PathBuf;
-use vidyut_prakriya::args::{Dhatu, Gana, KrdantaArgs, SubantaArgs, TinantaArgs};
-use vidyut_prakriya::{Ashtadhyayi, Dhatupatha};
+use vidyut_prakriya::args::{BaseKrt, Dhatu, Gana, Krdanta, Krt, Subanta, Tinanta};
+use vidyut_prakriya::{Dhatupatha, Vyakarana};
 use vidyut_prakriya::{Prakriya, Step};
 
 pub mod args;
@@ -16,18 +16,18 @@ pub struct PyStep {
     /// The rule that was applied.
     pub rule: String,
     /// The result of applying `rule`.
-    pub result: String,
+    pub result: Vec<String>,
 }
 
 #[pymethods]
 impl PyStep {
     #[new]
-    fn new(rule: String, result: String) -> Self {
+    fn new(rule: String, result: Vec<String>) -> Self {
         Self { rule, result }
     }
 
     fn __repr__(&self) -> String {
-        format!("Step(rule='{}', result='{}')", self.rule, self.result)
+        format!("Step(rule='{}', result='{:?}')", self.rule, self.result)
     }
 
     fn __richcmp__(&self, other: PyRef<PyStep>, op: CompareOp) -> Py<PyAny> {
@@ -55,8 +55,8 @@ fn to_py_history(history: &[Step]) -> Vec<PyStep> {
     history
         .iter()
         .map(|x| PyStep {
-            rule: x.rule().to_string(),
-            result: x.result().clone(),
+            rule: x.rule().code().to_string(),
+            result: x.result().iter().map(|t| t.text().to_string()).collect(),
         })
         .collect()
 }
@@ -126,16 +126,16 @@ impl PyDhatupatha {
 }
 
 /// An interface to the rules of the Ashtadhyayi.
-#[pyclass(name = "Ashtadhyayi")]
+#[pyclass(name = "Vyakarana")]
 #[derive(Default)]
-pub struct PyAshtadhyayi(Ashtadhyayi);
+pub struct PyVyakarana(Vyakarana);
 
 #[pymethods]
-impl PyAshtadhyayi {
+impl PyVyakarana {
     /// Create an interface with sane defaults.
     #[new]
     pub fn new() -> Self {
-        Self(Ashtadhyayi::new())
+        Self(Vyakarana::new())
     }
 
     /// Return all possible tinanta prakriyas that can be derived with the given initial
@@ -150,14 +150,6 @@ impl PyAshtadhyayi {
         lakara: PyLakara,
         sanadi: Option<PySanadi>,
     ) -> Vec<PyPrakriya> {
-        let tin_args = TinantaArgs::builder()
-            .prayoga(prayoga.into())
-            .purusha(purusha.into())
-            .vacana(vacana.into())
-            .lakara(lakara.into())
-            .build()
-            .expect("should have all required fields");
-
         let mut dhatu = Dhatu::builder()
             .upadesha(&dhatu.upadesha())
             // TODO: set gana
@@ -168,7 +160,16 @@ impl PyAshtadhyayi {
         }
         let dhatu = dhatu.build().expect("should have all required fields");
 
-        let results = self.0.derive_tinantas(&dhatu, &tin_args);
+        let tin_args = Tinanta::builder()
+            .dhatu(dhatu)
+            .prayoga(prayoga.into())
+            .purusha(purusha.into())
+            .vacana(vacana.into())
+            .lakara(lakara.into())
+            .build()
+            .expect("should have all required fields");
+
+        let results = self.0.derive_tinantas(&tin_args);
         to_py_prakriyas(results)
     }
 
@@ -176,13 +177,10 @@ impl PyAshtadhyayi {
     /// conditions.
     #[pyo3(signature = (*, dhatu, krt))]
     pub fn derive_krdantas(&self, dhatu: &PyDhatu, krt: PyKrt) -> Vec<PyPrakriya> {
-        let args = KrdantaArgs::builder()
-            .krt(krt.into())
-            .build()
-            .expect("should have all required fields");
+        let base_krt: BaseKrt = krt.into();
+        let args = Krdanta::new(dhatu.as_ref().clone(), Krt::from(base_krt));
 
-        let dhatu = dhatu.as_ref();
-        let results = self.0.derive_krdantas(dhatu, &args);
+        let results = self.0.derive_krdantas(&args);
         to_py_prakriyas(results)
     }
 
@@ -196,15 +194,13 @@ impl PyAshtadhyayi {
         vibhakti: PyVibhakti,
         vacana: PyVacana,
     ) -> Vec<PyPrakriya> {
-        let args = SubantaArgs::builder()
-            .linga(linga.into())
-            .vibhakti(vibhakti.into())
-            .vacana(vacana.into())
-            .build()
-            .expect("should have all required fields");
-
-        let pratipadika = pratipadika.as_ref();
-        let results = self.0.derive_subantas(pratipadika, &args);
+        let args = Subanta::new(
+            pratipadika.as_ref(),
+            linga.into(),
+            vibhakti.into(),
+            vacana.into(),
+        );
+        let results = self.0.derive_subantas(&args);
         to_py_prakriyas(results)
     }
 }

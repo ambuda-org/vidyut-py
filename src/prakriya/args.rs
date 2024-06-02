@@ -85,11 +85,14 @@ impl PyDhatu {
     /// The aupadeshika form of this dhatu.
     #[getter]
     pub fn upadesha(&self) -> String {
-        self.0.upadesha().to_string()
+        match self.0.upadesha() {
+            Some(s) => s.to_string(),
+            None => String::new(),
+        }
     }
 
     fn __repr__(&self) -> String {
-        format!("Dhatu(upadesha='{}')", self.0.upadesha())
+        format!("Dhatu(upadesha='{}')", self.upadesha())
     }
 }
 
@@ -115,22 +118,24 @@ impl PyPratipadika {
     #[new]
     #[pyo3(signature = (*, text))]
     pub fn new(text: String) -> Self {
-        Self(Pratipadika::new(text))
+        Self(Pratipadika::basic(text))
     }
 
+    /*
     /// The text of this stem.
     #[getter]
     pub fn text(&self) -> String {
         self.0.text().to_string()
     }
+    */
 
     fn __repr__(&self) -> String {
-        format!("Pratipadika(text='{}')", self.0.text())
+        format!("Pratipadika()")
     }
 
     fn __richcmp__(&self, other: PyRef<PyPratipadika>, op: CompareOp) -> Py<PyAny> {
         let py = other.py();
-        let is_eq = self.0.text() == other.0.text();
+        let is_eq = self.0 == other.0;
 
         match op {
             CompareOp::Eq => (is_eq).into_py(py),
@@ -144,86 +149,66 @@ impl PyPratipadika {
 #[derive(Copy, Clone, Hash)]
 #[allow(non_camel_case_types)]
 pub enum PyKrt {
+    /// -a
+    a,
+    /// -a,
+    aN,
+    /// -a
+    ac,
+    /// -a
+    aR,
+    /// -at (jarat)
+    atfn,
+    /// -aTu (vepaTu). Allowed only for dhatus that are `qvit`.
+    aTuc,
+    /// -ani
+    ani,
+    /// -anIya (gamanIya, BavanIya, ...)
+    anIyar,
+    /// -a
+    ap,
     /// -Alu
     Aluc,
     /// -Aru
     Aru,
-    /// -a
-    Ga,
-    /// -a
-    GaY,
+    /// -ika
+    ika,
+    /// -ikavaka
+    ikavaka,
+    /// -itra
+    itra,
+    /// -in. The trailing `_` is to avoid colliding with Rust's `in` keyword.
+    in_,
     /// -in
-    GinuR,
-    /// -ura
-    Gurac,
-    /// -a (Izatkara, duzkara, sukara, ...)
-    Kal,
-    /// -van
-    Nvanip,
-    /// -a
-    Ra,
-    /// -in
-    Rini,
-    /// -aka
-    Rvuc,
-    /// -aka
-    Rvul,
-    /// -ya
-    Ryat,
-    /// -ana
-    Ryuw,
-    /// -Ana (laBamAna, sevamAna, ...)
-    SAnac,
-    /// -Ana
-    SAnan,
-    /// -a
-    Sa,
-    /// -at (gacCat, Bavat, ...)
-    Satf,
-    /// -Taka (gATaka)
-    Takan,
-    /// -Tu (vepaTu). Allowed only for dhatus that are `qvit`.
-    Tuc,
+    ini,
+    /// -izRu (alaMkarizRu, prajanizRu, ...)
+    izRuc,
+    /// -u (yuyutsu, Bikzu, ...)
+    u,
+    /// -uka
+    ukaY,
     /// -Uka
     Uka,
     /// -a
-    aR,
-    /// -a
-    ac,
-    /// -anIya (gamanIya, BavanIya, ...)
-    anIyar,
-    /// -ani
-    ani,
-    /// -at (jarat)
-    atfn,
-    /// -Ana
-    cAnaS,
-    /// -in
-    ini,
-    /// -itra
-    itra,
-    /// -izRu (alaMkarizRu, prajanizRu, ...)
-    izRuc,
-    /// -a
     ka,
-    /// -i (udaDi, ...)
+    /// -a
+    kaY,
+    /// -am
+    kamul,
+    /// -as (visfpaH, ...)
+    kasun,
+    /// -a
+    kap,
+    /// -Ana (cakrARa, ...)
     kAnac,
-    /// -Ana
+    /// -i (udaDi, ...)
     ki,
     /// -i
     kin,
-    /// -luka (BIluka)
-    klukan,
-    /// -mara
-    kmarac,
-    /// -nu
-    knu,
-    /// -ru (BIru)
-    kru,
-    /// -ruka (BIruka)
-    kruka,
-    /// -snu (glAsnu, jizRu, ...)
-    ksnu,
+    /// -ura (BaNgura, ...)
+    kurac,
+    /// -elima (pacelima, ...)
+    kelimar,
     /// -ta (gata, bhUta, ...)
     kta,
     /// -tavat (gatavat, bhUtavat, ...)
@@ -236,75 +221,151 @@ pub enum PyKrt {
     ktri,
     /// -tvA (gatvA, bhUtva, ...)
     ktvA,
-    /// -ura (BaNgura, ...)
-    kurac,
+    /// -nu
+    knu,
+    /// -mara
+    kmarac,
+    /// -ya
+    kyap,
+    /// -ru (BIru)
+    kru,
+    /// -ruka (BIruka)
+    kruka,
+    /// -luka (BIluka)
+    klukan,
+    /// -van
+    kvanip,
     /// -vara
     kvarap,
     /// -vas
     kvasu,
+    /// -snu (glAsnu, jizRu, ...)
+    ksnu,
+    /// (empty suffix)
+    kvin,
     /// (empty suffix)
     kvip,
+    /// -a (priyaMvada, vaSaMvada)
+    Kac,
+    /// -a
+    KaS,
+    /// -a (Izatkara, duzkara, sukara, ...)
+    Kal,
+    /// -izRu
+    KizRuc,
+    /// -uka
+    KukaY,
+    /// -ana
+    Kyun,
+    /// -a
+    Ga,
+    /// -a
+    GaY,
+    /// -in
+    GinuR,
+    /// -ura
+    Gurac,
+    /// -van
+    Nvanip,
+    /// -Ana
+    cAnaS,
+    /// -a
+    wa,
+    /// -a
+    wak,
+    /// -a
+    qa,
+    /// -ara,
+    qara,
+    /// -u
+    qu,
+    /// -a
+    Ra,
+    /// -am
+    Ramul,
+    /// -in
+    Rini,
     /// -ya
-    kyap,
+    Ryat,
     /// -ana
-    lyu,
-    /// -ana
-    lyuw,
+    Ryuw,
+    /// (empty)
+    Rvi,
+    /// -aka
+    Rvuc,
+    /// -aka
+    Rvul,
+    /// -tavya (gantavya, bhavitavya, ...)
+    tavya,
+    /// -tavya
+    tavyat,
+    /// -tum (gantum, bhavitum, ...)
+    tumun,
+    /// -tf (gantA, bhavitA, ...)
+    tfc,
+    /// -tf
+    tfn,
+    /// -Taka (gATaka)
+    Takan,
     /// -na
     naN,
     /// -naj
     najiN,
     /// -na (svapna)
     nan,
-    /// -u
-    qu,
-    /// -na (namra, kampra, ...)
-    ra,
-    /// -ru
-    ru,
-    /// -tavya (gantavya, bhavitavya, ...)
-    tavya,
-    /// -tavya
-    tavyat,
-    /// -tf (gantA, bhavitA, ...)
-    tfc,
-    /// -tf
-    tfn,
-    /// -tum (gantum, bhavitum, ...)
-    tumun,
-    /// -u (yuyutsu, Bikzu, ...)
-    u,
-    /// -uka
-    ukaY,
-    /// -vaca
-    varac,
-    /// -aka
-    vuY,
-    /// -aka
-    vun,
+    /// -man
+    manin,
     /// -a
-    wak,
+    Sa,
+    /// -at (gacCat, Bavat, ...)
+    Satf,
+    /// -Ana (laBamAna, sevamAna, ...)
+    SAnac,
+    /// -Ana
+    SAnan,
     /// -ya
     yat,
     /// -ana
     yuc,
+    /// -na (namra, kampra, ...)
+    ra,
+    /// -ru
+    ru,
+    /// -ana
+    lyu,
+    /// -ana
+    lyuw,
+    /// -van
+    vanip,
+    /// -vara
+    varac,
+    /// (empty suffix)
+    vic,
+    /// (none)
+    viw,
+    /// -aka
+    vuY,
+    /// -aka
+    vun,
     /// -Aka
     zAkan,
-    /// -aka
-    zvun,
     /// -tra
     zwran,
+    /// -aka
+    zvun,
 }
 
 py_enum!(
     PyKrt,
-    Krt,
+    BaseKrt,
     [
-        Aluc, Aru, Ga, GaY, GinuR, Gurac, Kal, Nvanip, Ra, Rini, Rvuc, Rvul, Ryat, Ryuw, SAnac,
-        SAnan, Sa, Satf, Takan, Tuc, Uka, aR, ac, anIyar, ani, atfn, cAnaS, ini, itra, izRuc,
-        kAnac, ka, ki, kin, klukan, kmarac, knu, kru, kruka, ksnu, kta, ktavatu, ktic, ktin, ktri,
-        ktvA, kurac, kvarap, kvasu, kvip, kyap, lyu, lyuw, naN, najiN, nan, qu, ra, ru, tavya,
-        tavyat, tfc, tfn, tumun, u, ukaY, varac, vuY, vun, wak, yat, yuc, zAkan, zvun, zwran
+        a, aN, ac, aR, atfn, aTuc, ani, anIyar, ap, Aluc, Aru, ika, ikavaka, itra, in_, ini, izRuc,
+        u, ukaY, Uka, ka, kaY, kamul, kasun, kap, kAnac, ki, kin, kurac, kelimar, kta, ktavatu,
+        ktic, ktin, ktri, ktvA, knu, kmarac, kyap, kru, kruka, klukan, kvanip, kvarap, kvasu, ksnu,
+        kvin, kvip, Kac, KaS, Kal, KizRuc, KukaY, Kyun, Ga, GaY, GinuR, Gurac, Nvanip, cAnaS, wa,
+        wak, qa, qara, qu, Ra, Ramul, Rini, Ryat, Ryuw, Rvi, Rvuc, Rvul, tavya, tavyat, tumun, tfc,
+        tfn, Takan, naN, najiN, nan, manin, Sa, Satf, SAnac, SAnan, yat, yuc, ra, ru, lyu, lyuw,
+        vanip, varac, vic, viw, vuY, vun, zAkan, zwran, zvun
     ]
 );
 
@@ -385,13 +446,14 @@ pub enum PyPurusha {
 
 py_enum!(PyPurusha, Purusha, [Prathama, Madhyama, Uttama]);
 
+#[allow(non_camel_case_types)]
 #[pyclass(name = "Sanadi", module = "prakriya")]
 #[derive(Copy, Clone, Hash)]
 pub enum PySanadi {
     /// `san`, which creates desiderative roots per 3.1.7.
     ///
     /// Examples: buBUzati, ninIzati.
-    San,
+    san,
     /// `yaN`, which creates intensive roots per 3.1.22. For certain dhatus, the semantics are
     /// instead "crooked movement" (by 3.1.23) or "contemptible" action (by 3.1.24).
     ///
@@ -399,16 +461,26 @@ pub enum PySanadi {
     ///
     /// Constraints: can be used only if the dhatu starts with a consonant and has exactly one
     /// vowel. If this constraint is violated, our APIs will return an `Error`.
-    Yan,
+    yaN,
     /// `yaN` with `luk` (unused)
-    YanLuk,
+    yaNluk,
     /// `Nic`, which creates causal roots per 3.1.26.
     ///
     /// Examples: BAvayati, nAyayati.
-    Nic,
+    Ric,
+    /// TODO
+    kAmyac,
+    /// TODO
+    kyaN,
+    /// TODO
+    kyac,
 }
 
-py_enum!(PySanadi, Sanadi, [San, Yan, YanLuk, Nic]);
+py_enum!(
+    PySanadi,
+    Sanadi,
+    [kAmyac, kyaN, kyac, Ric, yaN, yaNluk, san]
+);
 
 /// The number of some tinanta or subanta.
 #[pyclass(name = "Vacana", module = "prakriya")]

@@ -117,7 +117,7 @@ fn py_kosha(_py: Python, m: &PyModule) -> PyResult<()> {
 #[pymodule]
 #[pyo3(name = "prakriya")]
 fn py_prakriya(_py: Python, m: &PyModule) -> PyResult<()> {
-    m.add_class::<prakriya::PyAshtadhyayi>()?;
+    m.add_class::<prakriya::PyVyakarana>()?;
     m.add_class::<prakriya::PyDhatupatha>()?;
     m.add_class::<prakriya::PyPrakriya>()?;
     m.add_class::<prakriya::PyStep>()?;
