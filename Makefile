@@ -34,8 +34,8 @@ test: develop
 
 # NOTE: this command is very slow.
 create_data:
-	git clone https://github.com/ambuda-org/vidyut.git
-	cd vidyut/vidyut-cheda
+	git clone https://github.com/ambuda-org/vidyut.git vidyut-rust
+	cd vidyut-rust/vidyut-cheda
 	make create_all_data
 
 # Runs integration tests against a data directory.
