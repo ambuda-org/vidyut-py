@@ -53,8 +53,8 @@ Getting help
 ------------
 
 To ask for help and file bugs, we encourage you to `create an issue`_ on our
-repo on GitHub. For more casual questions, you can also join the `#vidyut`
-channel on our `Discord`_ server.
+repo on GitHub. For more casual questions, you can also join the `#nlp` channel
+on our `Discord`_ server.
 
 .. _`create an issue`: https://github.com/ambuda-org/vidyut-py/issues
 .. _Discord: https://discord.gg/7rGdTyWY7Z

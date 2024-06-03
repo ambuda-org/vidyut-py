@@ -8,8 +8,9 @@ from vidyut.kosha import Kosha, PartOfSpeech, Purusha, Vacana, Lakara, Linga, Vi
 @pytest.fixture(scope="module")
 def kosha() -> Kosha:
     path = os.environ["VIDYUT_DATA_DIR"]
-    assert path
-    return Kosha(Path(path) / "kosha")
+    kosha_path = Path(path).absolute() / "kosha"
+    assert kosha_path.exists()
+    return Kosha(kosha_path)
 
 
 def test_basic_tinanta(kosha):

@@ -32,6 +32,12 @@ develop: py-venv-check
 test: develop
 	pytest test/unit/
 
+# NOTE: this command is very slow.
+create_data:
+	git clone https://github.com/ambuda-org/vidyut.git
+	cd vidyut/vidyut-cheda
+	make create_all_data
+
 # Runs integration tests against a data directory.
 #
 # Usage:
