@@ -76,7 +76,9 @@ mod sandhi;
 #[pymodule]
 #[pyo3(name = "chandas")]
 fn py_chandas(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_class::<chandas::PyAkshara>()?;
     m.add_class::<chandas::PyChandas>()?;
+    m.add_class::<chandas::PyMatchResult>()?;
     Ok(())
 }
 
