@@ -3,6 +3,11 @@ import pytest
 from vidyut.lipi import transliterate, detect, Scheme
 
 
+def test_enum__hashable():
+    """Verify that our enums are hashable."""
+    _data = {Scheme.Devanagari: "foo"}
+
+
 @pytest.mark.parametrize(
     "input,source,dest,expected",
     [
