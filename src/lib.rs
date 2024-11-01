@@ -74,7 +74,7 @@ mod sandhi;
 /// For usage examples, see `vidyut/cheda.py`.
 #[pymodule]
 #[pyo3(name = "cheda")]
-fn py_cheda(_py: Python, m: &PyModule) -> PyResult<()> {
+fn py_cheda(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<cheda::PyChedaka>()?;
     m.add_class::<cheda::PyToken>()?;
 
@@ -86,7 +86,7 @@ fn py_cheda(_py: Python, m: &PyModule) -> PyResult<()> {
 /// For usage examples, see `vidyut/kosha.py`.
 #[pymodule]
 #[pyo3(name = "kosha")]
-fn py_kosha(_py: Python, m: &PyModule) -> PyResult<()> {
+fn py_kosha(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<kosha::PyKosha>()?;
     m.add_class::<kosha::PyBuilder>()?;
 
@@ -117,7 +117,7 @@ fn py_kosha(_py: Python, m: &PyModule) -> PyResult<()> {
 /// For usage examples, see `vidyut/lipi.py`.
 #[pymodule]
 #[pyo3(name = "lipi")]
-fn py_lipi(_py: Python, m: &PyModule) -> PyResult<()> {
+fn py_lipi(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<lipi::PyScheme>()?;
     m.add_function(wrap_pyfunction!(lipi::detect, m)?)?;
     m.add_function(wrap_pyfunction!(lipi::transliterate, m)?)?;
@@ -130,7 +130,7 @@ fn py_lipi(_py: Python, m: &PyModule) -> PyResult<()> {
 /// For usage examples, see `vidyut/prakriya.py`.
 #[pymodule]
 #[pyo3(name = "prakriya")]
-fn py_prakriya(_py: Python, m: &PyModule) -> PyResult<()> {
+fn py_prakriya(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<prakriya::PyVyakarana>()?;
     m.add_class::<prakriya::PyDhatupatha>()?;
     m.add_class::<prakriya::PyPrakriya>()?;
@@ -156,7 +156,7 @@ fn py_prakriya(_py: Python, m: &PyModule) -> PyResult<()> {
 /// For usage examples, see `vidyut/sandhi.py`.
 #[pymodule]
 #[pyo3(name = "sandhi")]
-fn py_sandhi(_py: Python, m: &PyModule) -> PyResult<()> {
+fn py_sandhi(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<sandhi::PySplitter>()?;
     m.add_class::<sandhi::PySplit>()?;
 
@@ -168,7 +168,7 @@ fn py_sandhi(_py: Python, m: &PyModule) -> PyResult<()> {
 /// In our Python code, this module is made available as `vidyut.vidyut`. For usage examples, see
 /// any of the files in the `vidyut` Python package, e.g. `vidyut/kosha.py`.
 #[pymodule]
-fn vidyut(_py: Python, m: &PyModule) -> PyResult<()> {
+fn vidyut(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_wrapped(wrap_pymodule!(py_cheda))?;
     m.add_wrapped(wrap_pymodule!(py_kosha))?;
     m.add_wrapped(wrap_pymodule!(py_lipi))?;

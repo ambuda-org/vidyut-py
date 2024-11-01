@@ -145,8 +145,8 @@ impl PyPratipadika {
     }
 }
 
-#[pyclass(name = "Krt", module = "prakriya")]
-#[derive(Copy, Clone, Hash)]
+#[pyclass(name = "Krt", module = "prakriya", eq, eq_int)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq)]
 #[allow(non_camel_case_types)]
 pub enum PyKrt {
     /// -a
@@ -370,8 +370,8 @@ py_enum!(
 );
 
 /// The lakara to use in the derivation.
-#[pyclass(name = "Lakara", module = "prakriya")]
-#[derive(Copy, Clone, Hash)]
+#[pyclass(name = "Lakara", module = "prakriya", eq, eq_int)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum PyLakara {
     /// Describes action in the present tense. Ssometimes called the *present indicative*.
     Lat,
@@ -404,8 +404,8 @@ py_enum!(
 );
 
 /// The linga to use in the derivation.
-#[pyclass(name = "Linga", module = "prakriya")]
-#[derive(Copy, Clone, Hash)]
+#[pyclass(name = "Linga", module = "prakriya", eq, eq_int)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum PyLinga {
     /// The masculine.
     Pum,
@@ -418,8 +418,8 @@ pub enum PyLinga {
 py_enum!(PyLinga, Linga, [Pum, Stri, Napumsaka]);
 
 /// The prayoga of some tinanta.
-#[pyclass(name = "Prayoga", module = "prakriya")]
-#[derive(Copy, Clone, Hash)]
+#[pyclass(name = "Prayoga", module = "prakriya", eq, eq_int)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum PyPrayoga {
     /// Usage coreferent with the agent, e.g. "The horse *goes* to the village."
     Kartari,
@@ -433,8 +433,8 @@ pub enum PyPrayoga {
 py_enum!(PyPrayoga, Prayoga, [Kartari, Karmani, Bhave]);
 
 /// The person of some tinanta.
-#[pyclass(name = "Purusha", module = "prakriya")]
-#[derive(Copy, Clone, Hash)]
+#[pyclass(name = "Purusha", module = "prakriya", eq, eq_int)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum PyPurusha {
     /// The third person.
     Prathama,
@@ -447,8 +447,8 @@ pub enum PyPurusha {
 py_enum!(PyPurusha, Purusha, [Prathama, Madhyama, Uttama]);
 
 #[allow(non_camel_case_types)]
-#[pyclass(name = "Sanadi", module = "prakriya")]
-#[derive(Copy, Clone, Hash)]
+#[pyclass(name = "Sanadi", module = "prakriya", eq, eq_int)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum PySanadi {
     /// `san`, which creates desiderative roots per 3.1.7.
     ///
@@ -483,8 +483,8 @@ py_enum!(
 );
 
 /// The number of some tinanta or subanta.
-#[pyclass(name = "Vacana", module = "prakriya")]
-#[derive(Copy, Clone, Hash)]
+#[pyclass(name = "Vacana", module = "prakriya", eq, eq_int)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum PyVacana {
     /// The singular.
     Eka,
@@ -497,8 +497,8 @@ pub enum PyVacana {
 py_enum!(PyVacana, Vacana, [Eka, Dvi, Bahu]);
 
 /// The case ending of some subanta.
-#[pyclass(name = "Vibhakti", module = "prakriya")]
-#[derive(Copy, Clone, Hash)]
+#[pyclass(name = "Vibhakti", module = "prakriya", eq, eq_int)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum PyVibhakti {
     /// The first vibhakti. Sometimes called the *nominative case*.
     Prathama,

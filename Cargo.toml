@@ -15,7 +15,7 @@ vidyut-prakriya = { git = "https://github.com/ambuda-org/vidyut", rev = "ea4112a
 vidyut-sandhi = { git = "https://github.com/ambuda-org/vidyut", rev = "ea4112af" }
 
 [dependencies.pyo3]
-version = "0.18.0"
+version = "0.22.5"
 features = ["extension-module", "abi3-py37"]
 
 [package.metadata.maturin]

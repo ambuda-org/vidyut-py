@@ -4,8 +4,8 @@ use std::hash::{Hash, Hasher};
 use vidyut_lipi as lipi;
 use vidyut_lipi::Scheme;
 
-#[pyclass(name = "Scheme", module = "lipi")]
-#[derive(Copy, Clone, Hash)]
+#[pyclass(name = "Scheme", module = "lipi", eq, eq_int)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum PyScheme {
     /// Assamese script.
     ///

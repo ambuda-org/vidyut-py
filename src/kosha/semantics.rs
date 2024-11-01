@@ -70,7 +70,7 @@ macro_rules! py_enum {
 /// These tags follow the normal distinction of *subanta* (nominal) and *tinanta* (verb). We also
 /// model the *avyaya* (indeclinable) separately since it has different semantics from other
 /// subantas.
-#[pyclass(name = "PartOfSpeech")]
+#[pyclass(name = "PartOfSpeech", eq, eq_int)]
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub enum PyPartOfSpeech {
     /// An indeclinable.
@@ -86,7 +86,7 @@ pub enum PyPartOfSpeech {
 py_enum!(PyPartOfSpeech, POSTag, [Avyaya, Subanta, Tinanta, Unknown]);
 
 /// The person of a Sanskrit verb.
-#[pyclass(name = "Purusha")]
+#[pyclass(name = "Purusha", eq, eq_int)]
 #[derive(Clone, Debug, Hash, Eq, PartialEq)]
 pub enum PyPurusha {
     /// The first *puruṣa* (third person).
@@ -100,7 +100,7 @@ pub enum PyPurusha {
 py_enum!(PyPurusha, Purusha, [Prathama, Madhyama, Uttama]);
 
 /// The gender of a Sanskrit nominal.
-#[pyclass(name = "Linga")]
+#[pyclass(name = "Linga", eq, eq_int)]
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub enum PyLinga {
     /// The masculine gender.
@@ -114,7 +114,7 @@ pub enum PyLinga {
 py_enum!(PyLinga, Linga, [Pum, Stri, Napumsaka]);
 
 /// The number of a Sanskrit word.
-#[pyclass(name = "Vacana")]
+#[pyclass(name = "Vacana", eq, eq_int)]
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub enum PyVacana {
     /// The singular.
@@ -128,7 +128,7 @@ pub enum PyVacana {
 py_enum!(PyVacana, Vacana, [Eka, Dvi, Bahu]);
 
 /// The case of a Sanskrit nominal.
-#[pyclass(name = "Vibhakti")]
+#[pyclass(name = "Vibhakti", eq, eq_int)]
 #[derive(Clone, Debug, Hash, Eq, PartialEq)]
 pub enum PyVibhakti {
     /// The first *vibhakti* (nominative case).
@@ -156,7 +156,7 @@ py_enum!(
 );
 
 /// The tense-mood of a Sanskrit verb.
-#[pyclass(name = "Lakara")]
+#[pyclass(name = "Lakara", eq, eq_int)]
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub enum PyLakara {
     /// *laṭ-lakāra* (present indicative).
@@ -191,7 +191,7 @@ py_enum!(
     [Lat, Lit, Lut, Lrt, Let, Lot, Lan, AshirLin, VidhiLin, Lun, LunNoAgama, Lrn]
 );
 
-#[pyclass(name = "PadaPrayoga")]
+#[pyclass(name = "PadaPrayoga", eq, eq_int)]
 #[derive(Clone, Debug, Hash, Eq, PartialEq)]
 pub enum PyPadaPrayoga {
     Parasmaipada,
