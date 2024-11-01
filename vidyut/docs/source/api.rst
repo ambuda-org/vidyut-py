@@ -55,7 +55,7 @@ Main types
 
 *Main types* define the high-level API.
 
-.. autoclass:: vidyut.prakriya.Ashtadhyayi
+.. autoclass:: vidyut.prakriya.Vyakarana
    :members:
    :undoc-members:
 .. autoclass:: vidyut.prakriya.Dhatupatha

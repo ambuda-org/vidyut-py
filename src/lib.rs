@@ -65,6 +65,7 @@ use pyo3::wrap_pymodule;
 
 mod cheda;
 mod kosha;
+mod lipi;
 mod prakriya;
 mod sandhi;
 
@@ -107,6 +108,19 @@ fn py_kosha(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_class::<kosha::semantics::PyPurusha>()?;
     m.add_class::<kosha::semantics::PyVacana>()?;
     m.add_class::<kosha::semantics::PyVibhakti>()?;
+
+    Ok(())
+}
+
+/// Defines the `vidyut.lipi` native module.
+///
+/// For usage examples, see `vidyut/lipi.py`.
+#[pymodule]
+#[pyo3(name = "lipi")]
+fn py_lipi(_py: Python, m: &PyModule) -> PyResult<()> {
+    m.add_class::<lipi::PyScheme>()?;
+    m.add_function(wrap_pyfunction!(lipi::detect, m)?)?;
+    m.add_function(wrap_pyfunction!(lipi::transliterate, m)?)?;
 
     Ok(())
 }
@@ -157,6 +171,7 @@ fn py_sandhi(_py: Python, m: &PyModule) -> PyResult<()> {
 fn vidyut(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_wrapped(wrap_pymodule!(py_cheda))?;
     m.add_wrapped(wrap_pymodule!(py_kosha))?;
+    m.add_wrapped(wrap_pymodule!(py_lipi))?;
     m.add_wrapped(wrap_pymodule!(py_prakriya))?;
     m.add_wrapped(wrap_pymodule!(py_sandhi))?;
 

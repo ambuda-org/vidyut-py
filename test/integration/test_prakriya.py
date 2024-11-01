@@ -1,8 +1,8 @@
-import os
-import pytest
-from pathlib import Path
+# import os
+# import pytest
+# from pathlib import Path
 
-from vidyut.prakriya import Dhatupatha
+# from vidyut.prakriya import Dhatupatha
 
 
 # @pytest.fixture(scope="module")

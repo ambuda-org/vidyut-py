@@ -20,7 +20,7 @@ from vidyut.prakriya import (
 )
 def test_enum__hashable(variant):
     """Verify that our enums are hashable."""
-    data = {variant: "foo"}
+    _data = {variant: "foo"}
 
 
 @pytest.mark.parametrize(
@@ -46,12 +46,12 @@ def test_pratipadika_new():
 
 def test_pratipadika_new__fails_if_no_args():
     with pytest.raises(TypeError):
-        p = Pratipadika()
+        _p = Pratipadika()
 
 
 def test_pratipadika_new__fails_if_unnamed_args():
     with pytest.raises(TypeError):
-        p = Pratipadika("deva")
+        _p = Pratipadika("deva")
 
 
 def test_pratipadika_eq():
@@ -61,5 +61,5 @@ def test_pratipadika_eq():
     p2 = Pratipadika(text="deva")
     assert p1 == p2
 
-    p2 = Pratipadika(text="eva")
-    assert p1 != p2
+    p3 = Pratipadika(text="eva")
+    assert p1 != p3

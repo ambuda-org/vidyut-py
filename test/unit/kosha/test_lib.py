@@ -52,7 +52,7 @@ def test_init(kosha):
 def test_init_fails_if_file_does_not_exist():
     with pytest.raises(OSError):
         with tempfile.TemporaryDirectory() as tempdir:
-            kosha = Kosha(tempdir)
+            _kosha = Kosha(tempdir)
 
 
 def test_contains(kosha):

@@ -27,7 +27,7 @@ from vidyut.kosha import (
 )
 def test_enum__hashable(variant):
     """Verify that our enums are hashable."""
-    data = {variant: "foo"}
+    _data = {variant: "foo"}
 
 
 @pytest.mark.parametrize(
@@ -129,7 +129,7 @@ def test_pada__make_tinanta__swapped_args():
 
 def test_pada__make_tinanta__missing_args():
     with pytest.raises(TypeError):
-        p = Pada.make_tinanta(
+        _p = Pada.make_tinanta(
             # dhatu=Dhatu(text="gam"),
             purusha=Purusha.Prathama,
             vacana=Vacana.Eka,
@@ -138,7 +138,7 @@ def test_pada__make_tinanta__missing_args():
         )
 
     with pytest.raises(TypeError):
-        p = Pada.make_tinanta(
+        _p = Pada.make_tinanta(
             dhatu=Dhatu(text="gam"),
             # purusha=Purusha.Prathama,
             vacana=Vacana.Eka,
@@ -147,7 +147,7 @@ def test_pada__make_tinanta__missing_args():
         )
 
     with pytest.raises(TypeError):
-        p = Pada.make_tinanta(
+        _p = Pada.make_tinanta(
             dhatu=Dhatu(text="gam"),
             purusha=Purusha.Prathama,
             # vacana=Vacana.Eka,
@@ -156,7 +156,7 @@ def test_pada__make_tinanta__missing_args():
         )
 
     with pytest.raises(TypeError):
-        p = Pada.make_tinanta(
+        _p = Pada.make_tinanta(
             dhatu=Dhatu(text="gam"),
             purusha=Purusha.Prathama,
             vacana=Vacana.Eka,
@@ -165,7 +165,7 @@ def test_pada__make_tinanta__missing_args():
         )
 
     with pytest.raises(TypeError):
-        p = Pada.make_tinanta(
+        _p = Pada.make_tinanta(
             dhatu=Dhatu(text="gam"),
             purusha=Purusha.Prathama,
             vacana=Vacana.Eka,
@@ -176,7 +176,7 @@ def test_pada__make_tinanta__missing_args():
 
 def test_pada__make_tinanta__invalid_args():
     with pytest.raises(TypeError):
-        p = Pada.make_tinanta(
+        _p = Pada.make_tinanta(
             dhatu=Dhatu(text="gam"),
             purusha=Purusha.Prathama,
             vacana="invalid vacana",
@@ -210,7 +210,7 @@ def test_pada__make_subanta():
 
 def test_pada__make_subanta__missing_args():
     with pytest.raises(TypeError):
-        p = Pada.make_subanta(
+        _p = Pada.make_subanta(
             # pratipadika=Pratipadika(text="deva"),
             linga=Linga.Pum,
             vibhakti=Vibhakti.V7,
@@ -218,7 +218,7 @@ def test_pada__make_subanta__missing_args():
         )
 
     with pytest.raises(TypeError):
-        p = Pada.make_subanta(
+        _p = Pada.make_subanta(
             pratipadika=Pratipadika(text="deva"),
             # linga=Linga.Pum,
             vibhakti=Vibhakti.V7,
@@ -226,7 +226,7 @@ def test_pada__make_subanta__missing_args():
         )
 
     with pytest.raises(TypeError):
-        p = Pada.make_subanta(
+        _p = Pada.make_subanta(
             pratipadika=Pratipadika(text="deva"),
             linga=Linga.Pum,
             # vibhakti=Vibhakti.V7,
@@ -234,7 +234,7 @@ def test_pada__make_subanta__missing_args():
         )
 
     with pytest.raises(TypeError):
-        p = Pada.make_subanta(
+        _p = Pada.make_subanta(
             pratipadika=Pratipadika(text="deva"),
             linga=Linga.Pum,
             vibhakti=Vibhakti.V7,

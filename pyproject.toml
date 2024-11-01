@@ -8,7 +8,22 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
 ]
+dependencies = [
+]
 
 [build-system]
-requires = ["maturin>=0.14,<0.15"]
+requires = ["maturin>=1.7.4,<1.8"]
 build-backend = "maturin"
+
+[dependency-groups]
+dev = [
+    "maturin>=1.7.4",
+    "pip>=24.0",
+    "pytest>=7.4.4",
+    "ruff>=0.7.2",
+    "sphinx>=5.3.0",
+    "sphinx-rtd-theme>=2.0.0",
+]
+
+[tool.ruff]
+exclude = ["*.pyi"]

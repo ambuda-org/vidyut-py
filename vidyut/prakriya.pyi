@@ -52,7 +52,7 @@ class Dhatu:
 class Prakriya:
     text: str
 
-class Ashtadhyayi:
+class Vyakarana:
     def __init__(self):
         pass
     def derive_tinantas(
@@ -66,6 +66,13 @@ class Ashtadhyayi:
     ) -> List[Prakriya]:
         pass
     def derive_krdantas(self, dhatu: Dhatu, krt: Krt) -> List[Prakriya]:
+        pass
+    def derive_krdantas(self,
+        pratipadika: Pratipadika,
+        linga: Linga,
+        vibhakti: Vibhakti,
+        vacana: Vacana,
+    ) -> List[Prakriya]:
         pass
 
 class Dhatupatha:

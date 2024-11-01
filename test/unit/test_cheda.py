@@ -85,7 +85,7 @@ def test_init__kosha_invalid():
             f.write("junk data")
 
     with pytest.raises(OSError):
-        c = Chedaka(tempdir)
+        _c = Chedaka(tempdir)
 
 
 def test_run__single_word(chedaka):
@@ -107,5 +107,5 @@ def test_run__unknown_word(chedaka):
 
 
 def test_run__invalid_input(chedaka):
-    with pytest.raises(ValueError, match="ASCII") as e:
-        tokens = chedaka.run("गच्छति")
+    with pytest.raises(ValueError, match="ASCII") as _e:
+        _tokens = chedaka.run("गच्छति")

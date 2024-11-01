@@ -976,7 +976,7 @@ checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
 [[package]]
 name = "vidyut-cheda"
 version = "0.1.0"
-source = "git+https://github.com/ambuda-org/vidyut?rev=69d2b55a#69d2b55ad3ddc3a30daede7b647604f2c21efc71"
+source = "git+https://github.com/ambuda-org/vidyut?rev=ea4112af#ea4112af30918acbd7b1110000e9e052a3505574"
 dependencies = [
  "clap",
  "compact_str",
@@ -997,7 +997,7 @@ dependencies = [
 [[package]]
 name = "vidyut-kosha"
 version = "0.1.0"
-source = "git+https://github.com/ambuda-org/vidyut?rev=69d2b55a#69d2b55ad3ddc3a30daede7b647604f2c21efc71"
+source = "git+https://github.com/ambuda-org/vidyut?rev=ea4112af#ea4112af30918acbd7b1110000e9e052a3505574"
 dependencies = [
  "clap",
  "env_logger 0.9.3",
@@ -1010,7 +1010,7 @@ dependencies = [
 [[package]]
 name = "vidyut-lipi"
 version = "0.1.0"
-source = "git+https://github.com/ambuda-org/vidyut?rev=69d2b55a#69d2b55ad3ddc3a30daede7b647604f2c21efc71"
+source = "git+https://github.com/ambuda-org/vidyut?rev=ea4112af#ea4112af30918acbd7b1110000e9e052a3505574"
 dependencies = [
  "clap",
  "console_error_panic_hook",
@@ -1022,7 +1022,7 @@ dependencies = [
 [[package]]
 name = "vidyut-prakriya"
 version = "0.1.0"
-source = "git+https://github.com/ambuda-org/vidyut?rev=69d2b55a#69d2b55ad3ddc3a30daede7b647604f2c21efc71"
+source = "git+https://github.com/ambuda-org/vidyut?rev=ea4112af#ea4112af30918acbd7b1110000e9e052a3505574"
 dependencies = [
  "clap",
  "compact_str",
@@ -1045,6 +1045,7 @@ dependencies = [
  "pyo3",
  "vidyut-cheda",
  "vidyut-kosha",
+ "vidyut-lipi",
  "vidyut-prakriya",
  "vidyut-sandhi",
 ]
@@ -1052,7 +1053,7 @@ dependencies = [
 [[package]]
 name = "vidyut-sandhi"
 version = "0.1.0"
-source = "git+https://github.com/ambuda-org/vidyut?rev=69d2b55a#69d2b55ad3ddc3a30daede7b647604f2c21efc71"
+source = "git+https://github.com/ambuda-org/vidyut?rev=ea4112af#ea4112af30918acbd7b1110000e9e052a3505574"
 dependencies = [
  "clap",
  "compact_str",
