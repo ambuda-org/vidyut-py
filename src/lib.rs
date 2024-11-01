@@ -63,6 +63,7 @@ the normal Rust style ("Returns" vs. "Return").
 use pyo3::prelude::*;
 use pyo3::wrap_pymodule;
 
+mod chandas;
 mod cheda;
 mod kosha;
 mod lipi;
@@ -74,7 +75,8 @@ mod sandhi;
 /// For usage examples, see `vidyut/chandas.py`.
 #[pymodule]
 #[pyo3(name = "chandas")]
-fn py_chandas(_m: &Bound<'_, PyModule>) -> PyResult<()> {
+fn py_chandas(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_class::<chandas::PyChandas>()?;
     Ok(())
 }
 

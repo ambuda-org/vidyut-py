@@ -10,8 +10,8 @@ releases. That is, versions 0.x.a and 0.x.b will be able to use the same data.
 Released 2024-11-02.
 
 - Add `vidyut-chandas` and `vidyut.lipi`.
-- Various improvements and API changes for `vidyut.prakriya`. For details, see
-  https://crates.io/crates/vidyut-prakriya.
+- Add various improvements and API changes for `vidyut.prakriya`. For details,
+  see https://crates.io/crates/vidyut-prakriya.
 - Enums define many more helper methods, including `__hash__` and `__str__`.
 - `vidyut.__version__` is defined.
 

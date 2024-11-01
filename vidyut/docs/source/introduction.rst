@@ -37,14 +37,14 @@ can download here:
 
 .. code-block:: text
 
-    $ wget https://github.com/ambuda-org/vidyut-py/releases/download/0.2.0/data-0.2.0.zip
-    $ unzip data-0.2.0.zip
+    $ wget https://github.com/ambuda-org/vidyut-py/releases/download/0.3.0/data-0.3.0.zip
+    $ unzip data-0.3.0.zip
 
 You can use this data like so::
 
     from vidyut.cheda import Chedaka
 
-    c = Chedaka("data-0.2.0")
+    c = Chedaka("data-0.3.0")
     for token in c.run("tapaHsvADyAyaniratam"):
         print(token)
 
