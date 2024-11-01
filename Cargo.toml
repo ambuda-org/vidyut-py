@@ -1,6 +1,6 @@
 [package]
 name = "vidyut-py"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 
 [lib]
@@ -8,6 +8,7 @@ name = "vidyut"
 crate-type = ["cdylib"]
 
 [dependencies]
+vidyut-chandas = { git = "https://github.com/ambuda-org/vidyut", rev = "ea4112af" }
 vidyut-cheda = { git = "https://github.com/ambuda-org/vidyut", rev = "ea4112af" }
 vidyut-kosha = { git = "https://github.com/ambuda-org/vidyut", rev = "ea4112af" }
 vidyut-lipi = { git = "https://github.com/ambuda-org/vidyut", rev = "ea4112af" }

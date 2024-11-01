@@ -4,10 +4,22 @@ releases. That is, versions 0.x.a and 0.x.b will be able to use the same data.
 .. _`Semantic Versioning`: https://semver.org/
 
 
+0.3.0
+-----
+
+Released 2024-11-02.
+
+- Add `vidyut-chandas` and `vidyut.lipi`.
+- Various improvements and API changes for `vidyut.prakriya`. For details, see
+  https://crates.io/crates/vidyut-prakriya.
+- Enums define many more helper methods, including `__hash__` and `__str__`.
+- `vidyut.__version__` is defined.
+
+
 0.2.0
 -----
 
-Released 2022-01-22.
+Released 2023-01-22.
 
 - Add `vidyut.prakriya`, `vidyut.sandhi`, `vidyut.kosha`, and `vidyut.cheda`.
 - Add bindings for most of Vidyut's core logic.

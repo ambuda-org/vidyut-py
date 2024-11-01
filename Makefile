@@ -22,9 +22,9 @@ test: develop
 
 # NOTE: this command is very slow.
 create_data:
-	git clone https://github.com/ambuda-org/vidyut.git vidyut-rust
-	cd vidyut-rust/vidyut-cheda
-	make create_all_data
+	rm -rf vidyut-rust
+	git clone --depth 1 https://github.com/ambuda-org/vidyut.git vidyut-rust
+	cd vidyut-rust && make create_all_data
 
 # Runs integration tests against a data directory.
 #
@@ -32,7 +32,7 @@ create_data:
 #
 # VIDYUT_DATA_DIR="/path/to/your/dir" make integration_tests
 integration_tests: develop
-	uv run pytest test/integration/
+	VIDYUT_DATA_DIR="data-0.3.0" uv run pytest test/integration/
 
 # Lints all Rust and Python code.
 lint:

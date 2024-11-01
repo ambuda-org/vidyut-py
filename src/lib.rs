@@ -69,6 +69,15 @@ mod lipi;
 mod prakriya;
 mod sandhi;
 
+/// Defines the `vidyut.chandas` native module.
+///
+/// For usage examples, see `vidyut/chandas.py`.
+#[pymodule]
+#[pyo3(name = "chandas")]
+fn py_chandas(_m: &Bound<'_, PyModule>) -> PyResult<()> {
+    Ok(())
+}
+
 /// Defines the `vidyut.cheda` native module.
 ///
 /// For usage examples, see `vidyut/cheda.py`.
@@ -169,6 +178,9 @@ fn py_sandhi(m: &Bound<'_, PyModule>) -> PyResult<()> {
 /// any of the files in the `vidyut` Python package, e.g. `vidyut/kosha.py`.
 #[pymodule]
 fn vidyut(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add("__version__", env!("CARGO_PKG_VERSION"))?;
+
+    m.add_wrapped(wrap_pymodule!(py_chandas))?;
     m.add_wrapped(wrap_pymodule!(py_cheda))?;
     m.add_wrapped(wrap_pymodule!(py_kosha))?;
     m.add_wrapped(wrap_pymodule!(py_lipi))?;
