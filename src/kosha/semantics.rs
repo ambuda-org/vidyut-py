@@ -132,19 +132,19 @@ py_enum!(PyVacana, Vacana, [Eka, Dvi, Bahu]);
 #[derive(Clone, Debug, Hash, Eq, PartialEq)]
 pub enum PyVibhakti {
     /// The first *vibhakti* (nominative case).
-    V1,
+    Prathama,
     /// The second *vibhakti* (accusative case).
-    V2,
+    Dvitiya,
     /// The third *vibhakti* (instrumental case).
-    V3,
+    Trtiya,
     /// The fourth *vibhakti* (dative case).
-    V4,
+    Caturthi,
     /// The fifth *vibhakti* (ablative case).
-    V5,
+    Panchami,
     /// The sixth *vibhakti* (genitive case).
-    V6,
+    Sasthi,
     /// The seventh *vibhakti* (locative case).
-    V7,
+    Saptami,
     /// The first *vibhakti* in the condition of *sambodhana* (vocative case).
     Sambodhana,
 }
@@ -152,8 +152,30 @@ pub enum PyVibhakti {
 py_enum!(
     PyVibhakti,
     Vibhakti,
-    [V1, V2, V3, V4, V5, V6, V7, Sambodhana]
+    [Prathama, Dvitiya, Trtiya, Caturthi, Panchami, Sasthi, Saptami, Sambodhana]
 );
+
+/*
+/// The number of a Sanskrit word.
+#[allow(non_camel_case_types)]
+#[pyclass(name = "Sanadi", eq, eq_int)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq)]
+pub enum PySanadi {
+    Ric,
+    san,
+    yaN,
+    yaNluk,
+    kAmyac,
+    kyaN,
+    kyac,
+}
+
+py_enum!(
+    PySanadi,
+    Sanadi,
+    [Ric, san, yaN, yaNluk, kAmyac, kyaN, kyac]
+);
+*/
 
 /// The tense-mood of a Sanskrit verb.
 #[pyclass(name = "Lakara", eq, eq_int)]
@@ -209,7 +231,11 @@ py_enum!(
 #[pyclass(name = "Dhatu", get_all)]
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct PyDhatu {
-    /// The text of this dhatu.
+    /// The prefixes that this dhatu uses.
+    prefixes: Vec<String>,
+    /// The sanAdi-pratyayas that this dhatu uses.
+    sanadi: Vec<String>,
+    /// The base text of this dhatu.
     text: String,
 }
 
@@ -217,9 +243,23 @@ pub struct PyDhatu {
 impl PyDhatu {
     /// Create a new `Dhatu`.
     #[new]
-    #[pyo3(signature = (*, text))]
-    fn new(text: String) -> Self {
-        Self { text }
+    #[pyo3(signature = (*, text, prefixes, sanadi))]
+    fn new(text: String, prefixes: Vec<String>, sanadi: Vec<String>) -> Self {
+        Self {
+            prefixes,
+            sanadi,
+            text,
+        }
+    }
+
+    /// Create a new `Dhatu`.
+    #[staticmethod]
+    fn mula(text: &str) -> Self {
+        Self {
+            prefixes: Vec::new(),
+            sanadi: Vec::new(),
+            text: text.to_string(),
+        }
     }
 
     fn __repr__(&self) -> String {
@@ -244,13 +284,21 @@ impl PyDhatu {
 
 impl From<PyDhatu> for Dhatu {
     fn from(val: PyDhatu) -> Self {
-        Dhatu(val.text)
+        Dhatu::mula(val.text)
     }
 }
 
 impl From<Dhatu> for PyDhatu {
     fn from(val: Dhatu) -> PyDhatu {
-        PyDhatu { text: val.0 }
+        PyDhatu {
+            prefixes: val.prefixes().to_vec(),
+            text: val.text().to_string(),
+            sanadi: val
+                .sanadi()
+                .iter()
+                .map(|s| s.as_str().to_string())
+                .collect(),
+        }
     }
 }
 
@@ -304,7 +352,9 @@ impl From<PyPratipadika> for Pratipadika {
 
 impl From<Dhatu> for PyPratipadika {
     fn from(val: Dhatu) -> Self {
-        PyPratipadika { text: val.0 }
+        PyPratipadika {
+            text: val.text().to_string(),
+        }
     }
 }
 
@@ -526,7 +576,7 @@ impl From<Pada> for PyPada {
             }
             Pada::Tinanta(t) => {
                 res.pos = Some(PyPartOfSpeech::Tinanta);
-                res.dhatu = Some(PyDhatu::new(t.dhatu.text().to_string()));
+                res.dhatu = Some(PyDhatu::mula(t.dhatu.text()));
                 res.lakara = Some(t.lakara.into());
                 res.pada_prayoga = Some(t.pada.into());
                 res.purusha = Some(t.purusha.into());

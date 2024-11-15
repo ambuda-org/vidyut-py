@@ -925,7 +925,7 @@ checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
 [[package]]
 name = "vidyut-chandas"
 version = "0.1.0"
-source = "git+https://github.com/ambuda-org/vidyut?rev=ea4112af#ea4112af30918acbd7b1110000e9e052a3505574"
+source = "git+https://github.com/ambuda-org/vidyut?rev=2b5a9805#2b5a9805a9d14eaa1d83d99efb0c261bb8eb2d44"
 dependencies = [
  "console_error_panic_hook",
  "lazy_static",
@@ -938,7 +938,7 @@ dependencies = [
 [[package]]
 name = "vidyut-cheda"
 version = "0.1.0"
-source = "git+https://github.com/ambuda-org/vidyut?rev=ea4112af#ea4112af30918acbd7b1110000e9e052a3505574"
+source = "git+https://github.com/ambuda-org/vidyut?rev=2b5a9805#2b5a9805a9d14eaa1d83d99efb0c261bb8eb2d44"
 dependencies = [
  "clap",
  "compact_str",
@@ -953,13 +953,14 @@ dependencies = [
  "rustc-hash",
  "vidyut-kosha",
  "vidyut-lipi",
+ "vidyut-prakriya",
  "vidyut-sandhi",
 ]
 
 [[package]]
 name = "vidyut-kosha"
 version = "0.1.0"
-source = "git+https://github.com/ambuda-org/vidyut?rev=ea4112af#ea4112af30918acbd7b1110000e9e052a3505574"
+source = "git+https://github.com/ambuda-org/vidyut?rev=2b5a9805#2b5a9805a9d14eaa1d83d99efb0c261bb8eb2d44"
 dependencies = [
  "clap",
  "env_logger 0.9.3",
@@ -967,12 +968,13 @@ dependencies = [
  "log",
  "modular-bitfield",
  "rustc-hash",
+ "vidyut-prakriya",
 ]
 
 [[package]]
 name = "vidyut-lipi"
 version = "0.1.0"
-source = "git+https://github.com/ambuda-org/vidyut?rev=ea4112af#ea4112af30918acbd7b1110000e9e052a3505574"
+source = "git+https://github.com/ambuda-org/vidyut?rev=2b5a9805#2b5a9805a9d14eaa1d83d99efb0c261bb8eb2d44"
 dependencies = [
  "clap",
  "console_error_panic_hook",
@@ -984,7 +986,7 @@ dependencies = [
 [[package]]
 name = "vidyut-prakriya"
 version = "0.1.0"
-source = "git+https://github.com/ambuda-org/vidyut?rev=ea4112af#ea4112af30918acbd7b1110000e9e052a3505574"
+source = "git+https://github.com/ambuda-org/vidyut?rev=2b5a9805#2b5a9805a9d14eaa1d83d99efb0c261bb8eb2d44"
 dependencies = [
  "clap",
  "compact_str",
@@ -1016,7 +1018,7 @@ dependencies = [
 [[package]]
 name = "vidyut-sandhi"
 version = "0.1.0"
-source = "git+https://github.com/ambuda-org/vidyut?rev=ea4112af#ea4112af30918acbd7b1110000e9e052a3505574"
+source = "git+https://github.com/ambuda-org/vidyut?rev=2b5a9805#2b5a9805a9d14eaa1d83d99efb0c261bb8eb2d44"
 dependencies = [
  "clap",
  "compact_str",

@@ -8,12 +8,12 @@ name = "vidyut"
 crate-type = ["cdylib"]
 
 [dependencies]
-vidyut-chandas = { git = "https://github.com/ambuda-org/vidyut", rev = "ea4112af" }
-vidyut-cheda = { git = "https://github.com/ambuda-org/vidyut", rev = "ea4112af" }
-vidyut-kosha = { git = "https://github.com/ambuda-org/vidyut", rev = "ea4112af" }
-vidyut-lipi = { git = "https://github.com/ambuda-org/vidyut", rev = "ea4112af" }
-vidyut-prakriya = { git = "https://github.com/ambuda-org/vidyut", rev = "ea4112af" }
-vidyut-sandhi = { git = "https://github.com/ambuda-org/vidyut", rev = "ea4112af" }
+vidyut-chandas = { git = "https://github.com/ambuda-org/vidyut", rev = "2b5a9805" }
+vidyut-cheda = { git = "https://github.com/ambuda-org/vidyut", rev = "2b5a9805" }
+vidyut-kosha = { git = "https://github.com/ambuda-org/vidyut", rev = "2b5a9805" }
+vidyut-lipi = { git = "https://github.com/ambuda-org/vidyut", rev = "2b5a9805" }
+vidyut-prakriya = { git = "https://github.com/ambuda-org/vidyut", rev = "2b5a9805" }
+vidyut-sandhi = { git = "https://github.com/ambuda-org/vidyut", rev = "2b5a9805" }
 
 [dependencies.pyo3]
 version = "0.22.5"

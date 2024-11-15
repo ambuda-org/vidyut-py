@@ -123,6 +123,40 @@ impl PyDhatupatha {
             None => Err(PyKeyError::new_err(code)),
         }
     }
+
+    /// Returns an iterator over `Dhatupatha`.
+    pub fn __iter__(&self) {}
+}
+
+#[pyclass]
+struct Iter {
+    inner: std::vec::IntoIter<usize>,
+}
+
+#[pymethods]
+impl Iter {
+    fn __iter__(slf: PyRef<'_, Self>) -> PyRef<'_, Self> {
+        slf
+    }
+
+    fn __next__(mut slf: PyRefMut<'_, Self>) -> Option<usize> {
+        slf.inner.next()
+    }
+}
+
+#[pyclass]
+struct Container {
+    iter: Vec<usize>,
+}
+
+#[pymethods]
+impl Container {
+    fn __iter__(slf: PyRef<'_, Self>) -> PyResult<Py<Iter>> {
+        let iter = Iter {
+            inner: slf.iter.clone().into_iter(),
+        };
+        Py::new(slf.py(), iter)
+    }
 }
 
 /// An interface to the rules of the Ashtadhyayi.

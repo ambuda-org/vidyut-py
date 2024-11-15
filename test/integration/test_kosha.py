@@ -39,12 +39,12 @@ def test_basic_subanta(kosha):
     devasya = entries[0]
     assert devasya.lemma == "deva"
     assert devasya.linga == Linga.Pum
-    assert devasya.vibhakti == Vibhakti.V6
+    assert devasya.vibhakti == Vibhakti.Sasthi
     assert devasya.vacana == Vacana.Eka
 
     assert repr(devasya) == (
         "Pada(pos=PartOfSpeech.Subanta, pratipadika=Pratipadika(text='deva'), "
-        "linga=Linga.Pum, vibhakti=Vibhakti.V6, vacana=Vacana.Eka, "
+        "linga=Linga.Pum, vibhakti=Vibhakti.Sasthi, vacana=Vacana.Eka, "
         "is_purvapada=False)"
     )
 
@@ -68,7 +68,7 @@ def test_basic_avyaya(kosha):
         # Basic verb
         "Bavati",
         # Vacana
-        "Bavatas",
+        "BavataH",
         "Bavanti",
         # Purusha
         "Bavasi",

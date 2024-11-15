@@ -60,14 +60,14 @@ impl PyChandas {
     pub fn classify(&self, text: &str) -> PyResult<PyMatchResult> {
         let res = self.chandas.classify(text);
 
-        let vrtta_name = res.vrtta().as_ref().map(|v| v.name().to_string());
+        let padya_name = res.padya().as_ref().map(|v| v.name().to_string());
         let mut aksharas = Vec::new();
         for row in res.aksharas() {
             let new_row: Vec<_> = row.iter().map(|a| a.into()).collect();
             aksharas.push(new_row);
         }
         Ok(PyMatchResult {
-            vrtta: vrtta_name,
+            vrtta: padya_name,
             aksharas,
         })
     }
