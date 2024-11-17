@@ -163,18 +163,21 @@ impl PyVyakarana {
     ///
     /// Options:
     /// - `log_steps` (default: `True`) -- If set, log each step in the prakriya. Disable this if
-    ///    you want extra speed.
+    ///   you want extra speed.
     /// - `is_chandasi` (default: `False`) -- If set, use rules tagged with *chandasi*, *mantre*,
-    ///    etc.
+    ///   etc.
     /// - `use_svaras` (default: `False`) -- If set, use rules that add svaras to the output.
+    /// - `nlp_mode` (default: `False`) -- If set, preserve the final `s`/`r` of words. This
+    ///   behavior is useful for certain applications in natural language processing.
     #[new]
-    #[pyo3(signature = (*, log_steps=true, is_chandasi=false, use_svaras=false))]
-    pub fn new(log_steps: bool, is_chandasi: bool, use_svaras: bool) -> Self {
+    #[pyo3(signature = (*, log_steps=true, is_chandasi=false, use_svaras=false, nlp_mode=false))]
+    pub fn new(log_steps: bool, is_chandasi: bool, use_svaras: bool, nlp_mode: bool) -> Self {
         Self(
             Vyakarana::builder()
                 .log_steps(log_steps)
                 .is_chandasi(is_chandasi)
                 .use_svaras(use_svaras)
+                .nlp_mode(nlp_mode)
                 .build(),
         )
     }
