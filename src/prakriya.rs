@@ -138,12 +138,7 @@ impl PyDhatupatha {
         }
     }
 
-    /// Return the dhatu with the given `code`, if it exists.
-    ///
-    /// If a dhatu is found, it will be returned by value.
-    ///
-    /// Exceptions:
-    /// - `KeyError` if the given `code` is not found.
+    /// Return all entries defined in the Dhatupatha.
     pub fn entries(&self) -> Vec<PyEntry> {
         let mut ret = Vec::new();
         for e in self.0.iter() {

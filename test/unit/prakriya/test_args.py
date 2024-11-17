@@ -23,13 +23,13 @@ from vidyut.prakriya import (
     {"aupadeshika": "BU", "gana": Gana.Bhvadi, "sanadi": [Sanadi.san]},
     {"aupadeshika": "BU", "gana": Gana.Bhvadi, "prefixes": ["aBi"], "sanadi": [Sanadi.san]},
 ])
-def test_dhatu(kwargs):
+def test_dhatu__mula(kwargs):
     d = Dhatu.mula(**kwargs)
     for key, value in kwargs.items():
         assert getattr(d, key) == value
 
 
-def test_dhatu__must_have_aupadeshika_and_gana():
+def test_dhatu__mula_must_have_aupadeshika_and_gana():
     try:
         d = Dhatu.mula(aupadeshika="BU")
         assert False, "Must have gana"
@@ -43,9 +43,8 @@ def test_dhatu__must_have_aupadeshika_and_gana():
         pass
 
 
-    # Enum values are hashable.
-    for val in enum.choices(): 
-        _data = {val: "foo"}
+def test_dhatu__nama():
+    d = Dhatu.nama(pratipadika=Pratipadika(text="putra"), nama_sanadi=Sanadi.kAmyac)
 
 
 @pytest.mark.skip("need to fix pratipadika internal representation")
@@ -94,4 +93,8 @@ def test_enums(enum):
     # Enum values can round-trip through strings
     for val in enum.choices():
         assert enum.from_string(str(val)) == val
+
+    # Enum values are hashable.
+    for val in enum.choices(): 
+        _data = {val: "foo"}
 

@@ -571,6 +571,19 @@ impl PyDhatu {
         PyDhatu(dhatu)
     }
 
+    /// Creates a new namadhatu with its *sanadi pratyaya*.
+    ///
+    /// If `nama_sanadi` is `None`, the program will try finding a sanadi match by appling the
+    /// rules in pada 3.1 of the Ashtadhyayi. If no match is found, the prakriya will abort.
+    #[staticmethod]
+    #[pyo3(signature = (*, pratipadika, nama_sanadi))]
+    pub fn nama(pratipadika: PyPratipadika, nama_sanadi: Option<PySanadi>) -> Self {
+        PyDhatu(Dhatu::nama(
+            pratipadika.as_ref().clone(),
+            nama_sanadi.map(|s| s.into()),
+        ))
+    }
+
     /// Shorthand for modifying an existing dhatu with new prefixes.
     pub fn with_prefixes(&self, prefixes: Vec<String>) -> Self {
         self.0.clone().with_prefixes(&prefixes).into()
@@ -643,6 +656,7 @@ impl From<PyDhatu> for Dhatu {
 
 /// A nominal stem.
 #[pyclass(name = "Pratipadika", module = "prakriya")]
+#[derive(Clone)]
 pub struct PyPratipadika(Pratipadika);
 
 impl PyPratipadika {

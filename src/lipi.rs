@@ -1,9 +1,17 @@
+use pyo3::exceptions::PyNotImplementedError;
 use pyo3::prelude::*;
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
 use vidyut_lipi as lipi;
 use vidyut_lipi::Scheme;
 
+/// A method of encoding text.
+///
+/// Schemes vary on various dimensions, including:
+///
+/// - writing system (alphabet vs. abugida)
+/// - text encoding (ASCII vs. Unicode)
+/// - support for Sanskrit (complete vs. partial)
 #[pyclass(name = "Scheme", module = "lipi", eq, eq_int)]
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum PyScheme {
@@ -341,8 +349,34 @@ macro_rules! py_enum {
             }
 
             fn __str__(&self) -> String {
-                // TODO: use actual string value.
-                String::from("(unknown)")
+                match self {
+                    $(
+                        $Py::$variant => String::from(stringify!($variant)),
+                    )*
+                }
+            }
+
+            /// Returns all options for this enum.
+            #[staticmethod]
+            fn choices() -> Vec<$Py> {
+                vec![
+                    $(
+                        $Py::$variant,
+                    )*
+                ]
+            }
+
+            /// Create an enum value from the given string.
+            ///
+            /// This is the inverse of the `__str__` method.
+            #[staticmethod]
+            fn from_string(val: String) -> PyResult<Self> {
+                match val.as_str() {
+                    $(
+                        stringify!($variant) => Ok($Py::$variant),
+                    )*
+                    _ => Err(PyNotImplementedError::new_err("Could not parse {val}")),
+                }
             }
         }
     }
@@ -405,6 +439,22 @@ py_enum!(
     ]
 );
 
+/// Detects the scheme used by the given text.
+///
+/// `detect` analyzes the input string by applying various heuristic tests. For non-ASCII scripts,
+/// `detect` checks whether characters are in a specific unicode range. For ASCII scripts, `detect`
+/// checks for bigrams and trigrams associated with specific encodings. (For example, `R^i` is
+/// indicative of ITRANS.) Currently, `detect` returns the first match found and does not do any
+/// kind of scoring, ranking, statistical modeling, etc.
+///
+/// `detect` is ideal for interfaces where the user would otherwise need to manually choose which
+/// input encoding to use. `detect` removes some of this user friction by making a reasonable guess
+/// about the user's query.
+///
+/// `detect` is best used on text that is mostly or entirely in one `Scheme`. For text that uses
+/// multiple schemes, we recommend splitting the text into smaller chunks and running `detect` on
+/// these chunks individually. For greater accuracy, we recommend using a more sophisticated
+/// approach than this function provides.
 #[pyfunction]
 pub fn detect(input: &str) -> Option<PyScheme> {
     match lipi::detect(input) {
@@ -413,8 +463,10 @@ pub fn detect(input: &str) -> Option<PyScheme> {
     }
 }
 
+/// Transliterates some text from an input scheme to an output scheme.
 #[pyfunction]
-pub fn transliterate(input: &str, from: PyScheme, to: PyScheme) -> String {
+pub fn transliterate(input: &str, source: PyScheme, dest: PyScheme) -> String {
+    // TODO: this doesn't cache. Add caching to avoid horrible performance.
     let mut lipika = lipi::Lipika::new();
-    lipika.transliterate(input, from.into(), to.into())
+    lipika.transliterate(input, source.into(), dest.into())
 }

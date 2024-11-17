@@ -47,6 +47,13 @@ Builder API
    :undoc-members:
 
 
+`vidyut.lipi`
+--------------
+
+.. automodule:: vidyut.lipi
+    :members: Scheme, detect, transliterate
+
+
 `vidyut.prakriya`
 -----------------
 

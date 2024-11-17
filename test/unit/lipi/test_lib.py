@@ -3,9 +3,14 @@ import pytest
 from vidyut.lipi import transliterate, detect, Scheme
 
 
-def test_enum__hashable():
-    """Verify that our enums are hashable."""
-    _data = {Scheme.Devanagari: "foo"}
+def test_scheme():
+    # Verify that round-tripping through strings works.
+    for val in Scheme.choices():
+        assert Scheme.from_string(str(val)) == val
+
+    # Verify that enums are hashable.
+    for val in Scheme.choices():
+        _data = {val: "foo"}
 
 
 @pytest.mark.parametrize(

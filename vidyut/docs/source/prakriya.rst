@@ -1,7 +1,7 @@
+.. py:currentmodule:: vidyut.prakriya
+
 Generating words with `vidyut.prakriya`
 =======================================
-
-.. py:currentmodule:: vidyut.prakriya
 
 `vidyut.prakriya` generates Sanskrit words with their prakriyās (derivations)
 according to the rules of Paninian grammar. This powerful word generator is

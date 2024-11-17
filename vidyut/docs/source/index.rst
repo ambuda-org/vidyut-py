@@ -14,6 +14,7 @@ project.
    :caption: Contents:
 
    introduction
+   lipi
    prakriya
    quickstart
    api
