@@ -48,4 +48,4 @@ lint-check:
 #
 # To view the docs, open `vidyut/docs/build/html/index.html`.
 docs: develop
-	cd vidyut/docs && make html
+	cd vidyut/docs && uv run make html
