@@ -18,7 +18,7 @@ develop:
 
 # Runs all Python-specific unit tests.
 test: develop
-	pytest test/unit/
+	uv run pytest test/unit/
 
 # NOTE: this command is very slow.
 create_data:

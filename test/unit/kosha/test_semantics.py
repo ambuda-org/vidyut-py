@@ -22,7 +22,7 @@ from vidyut.kosha import (
         Linga.Pum,
         PadaPrayoga.Parasmaipada,
         PartOfSpeech.Tinanta,
-        Vibhakti.V1,
+        Vibhakti.Prathama,
     ],
 )
 def test_enum__hashable(variant):
@@ -37,7 +37,7 @@ def test_enum__hashable(variant):
         (Linga, Linga.Pum, "m"),
         (PadaPrayoga, PadaPrayoga.Parasmaipada, "para"),
         (PartOfSpeech, PartOfSpeech.Tinanta, "t"),
-        (Vibhakti, Vibhakti.V1, "1"),
+        (Vibhakti, Vibhakti.Prathama, "1"),
     ],
 )
 def test_enum__str(enum, variant, s):
@@ -189,7 +189,7 @@ def test_pada__make_subanta():
     p = Pada.make_subanta(
         pratipadika=Pratipadika(text="deva"),
         linga=Linga.Pum,
-        vibhakti=Vibhakti.V7,
+        vibhakti=Vibhakti.Saptami,
         vacana=Vacana.Eka,
     )
 
@@ -197,14 +197,14 @@ def test_pada__make_subanta():
     assert p.pratipadika == Pratipadika(text="deva")
     assert p.linga == Linga.Pum
     assert p.vacana == Vacana.Eka
-    assert p.vibhakti == Vibhakti.V7
+    assert p.vibhakti == Vibhakti.Saptami
     assert p.is_purvapada is False
     assert p.purusha is None
     assert p.lakara is None
 
     assert repr(p) == (
         "Pada(pos=PartOfSpeech.Subanta, pratipadika=Pratipadika(text='deva'), "
-        "linga=Linga.Pum, vibhakti=Vibhakti.V7, vacana=Vacana.Eka, is_purvapada=False)"
+        "linga=Linga.Pum, vibhakti=Vibhakti.Saptami, vacana=Vacana.Eka, is_purvapada=False)"
     )
 
 
@@ -213,7 +213,7 @@ def test_pada__make_subanta__missing_args():
         _p = Pada.make_subanta(
             # pratipadika=Pratipadika(text="deva"),
             linga=Linga.Pum,
-            vibhakti=Vibhakti.V7,
+            vibhakti=Vibhakti.Saptami,
             vacana=Vacana.Eka,
         )
 
@@ -221,7 +221,7 @@ def test_pada__make_subanta__missing_args():
         _p = Pada.make_subanta(
             pratipadika=Pratipadika(text="deva"),
             # linga=Linga.Pum,
-            vibhakti=Vibhakti.V7,
+            vibhakti=Vibhakti.Saptami,
             vacana=Vacana.Eka,
         )
 
@@ -229,7 +229,7 @@ def test_pada__make_subanta__missing_args():
         _p = Pada.make_subanta(
             pratipadika=Pratipadika(text="deva"),
             linga=Linga.Pum,
-            # vibhakti=Vibhakti.V7,
+            # vibhakti=Vibhakti.Saptami,
             vacana=Vacana.Eka,
         )
 
@@ -237,7 +237,7 @@ def test_pada__make_subanta__missing_args():
         _p = Pada.make_subanta(
             pratipadika=Pratipadika(text="deva"),
             linga=Linga.Pum,
-            vibhakti=Vibhakti.V7,
+            vibhakti=Vibhakti.Saptami,
             # vacana=Vacana.Eka,
         )
 

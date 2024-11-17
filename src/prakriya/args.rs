@@ -8,6 +8,7 @@ use pyo3::basic::CompareOp;
 use pyo3::exceptions::PyNotImplementedError;
 use pyo3::prelude::*;
 use std::collections::hash_map::DefaultHasher;
+use std::fmt;
 use std::hash::{Hash, Hasher};
 use std::str::FromStr;
 use vidyut_prakriya::args::*;
@@ -56,6 +57,16 @@ macro_rules! py_enum {
                 rust.as_str().to_string()
             }
 
+            /// Returns all options for this enum.
+            #[staticmethod]
+            fn choices() -> Vec<$Py> {
+                vec![
+                    $(
+                        $Py::$variant,
+                    )*
+                ]
+            }
+
             /// Create an enum value from the given string.
             ///
             /// This is an inverse of the `__str__` method.
@@ -70,80 +81,44 @@ macro_rules! py_enum {
     }
 }
 
-/// A verb root.
-#[pyclass(name = "Dhatu", module = "prakriya")]
-pub struct PyDhatu(Dhatu);
+#[pyclass(name = "Krt", module = "prakriya", eq, eq_int)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq)]
+pub enum PyGana {
+    /// The first gaṇa, whose first dhatu is `BU`.
+    Bhvadi,
+    /// The second gaṇa, whose first dhatu is `ad`.
+    Adadi,
+    /// The third gaṇa, whose first dhatu is `hu`.
+    Juhotyadi,
+    /// The fourth gaṇa, whose first dhatu is `div`.
+    Divadi,
+    /// The fifth gaṇa, whose first dhatu is `su`.
+    Svadi,
+    /// The sixth gaṇa, whose first dhatu is `tud`.
+    Tudadi,
+    /// The seventh gaṇa, whose first dhatu is `ruD`.
+    Rudhadi,
+    /// The eighth gaṇa, whose first dhatu is `tan`.
+    Tanadi,
+    /// The ninth gaṇa, whose first dhatu is `krI`.
+    Kryadi,
+    /// The tenth gaṇa, whose first dhatu is `cur`.
+    Curadi,
+    /// The kandvAdi gaṇa, whose first dhatu is `kaRqU`.
+    Kandvadi,
+}
 
-impl PyDhatu {
-    pub fn new(d: Dhatu) -> Self {
-        Self(d)
+impl fmt::Display for PyGana {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", Gana::from(*self).as_str())
     }
 }
 
-#[pymethods]
-impl PyDhatu {
-    /// The aupadeshika form of this dhatu.
-    #[getter]
-    pub fn upadesha(&self) -> String {
-        match self.0.upadesha() {
-            Some(s) => s.to_string(),
-            None => String::new(),
-        }
-    }
-
-    fn __repr__(&self) -> String {
-        format!("Dhatu(upadesha='{}')", self.upadesha())
-    }
-}
-
-impl PyDhatu {
-    pub fn as_ref(&self) -> &Dhatu {
-        &self.0
-    }
-}
-
-/// A nominal stem.
-#[pyclass(name = "Pratipadika", module = "prakriya")]
-pub struct PyPratipadika(Pratipadika);
-
-impl PyPratipadika {
-    pub fn as_ref(&self) -> &Pratipadika {
-        &self.0
-    }
-}
-
-#[pymethods]
-impl PyPratipadika {
-    /// Create a new pratipadika with the given text.
-    #[new]
-    #[pyo3(signature = (*, text))]
-    pub fn new(text: String) -> Self {
-        Self(Pratipadika::basic(text))
-    }
-
-    /*
-    /// The text of this stem.
-    #[getter]
-    pub fn text(&self) -> String {
-        self.0.text().to_string()
-    }
-    */
-
-    fn __repr__(&self) -> String {
-        format!("Pratipadika()")
-    }
-
-    fn __richcmp__(&self, other: PyRef<PyPratipadika>, op: CompareOp) -> Py<PyAny> {
-        let py = other.py();
-        let is_eq = self.0 == other.0;
-
-        match op {
-            CompareOp::Eq => (is_eq).into_py(py),
-            CompareOp::Ne => (!is_eq).into_py(py),
-            _ => py.NotImplemented(),
-        }
-    }
-}
+py_enum!(
+    PyGana,
+    Gana,
+    [Bhvadi, Adadi, Juhotyadi, Divadi, Svadi, Tudadi, Rudhadi, Tanadi, Kryadi, Curadi, Kandvadi]
+);
 
 #[pyclass(name = "Krt", module = "prakriya", eq, eq_int)]
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
@@ -528,3 +503,88 @@ py_enum!(
     Vibhakti,
     [Prathama, Dvitiya, Trtiya, Caturthi, Panchami, Sasthi, Saptami, Sambodhana]
 );
+
+/// A verb root.
+#[pyclass(name = "Dhatu", module = "prakriya")]
+#[derive(Clone)]
+pub struct PyDhatu(Dhatu);
+
+#[pymethods]
+impl PyDhatu {
+    /// The aupadeshika form of this dhatu.
+    #[getter]
+    pub fn aupadeshika(&self) -> String {
+        match self.0.upadesha() {
+            Some(s) => s.to_string(),
+            None => String::new(),
+        }
+    }
+
+    /// The gana that this dhatu belongs to.
+    #[getter]
+    pub fn gana(&self) -> Option<PyGana> {
+        self.0.gana().map(|g| g.into())
+    }
+
+    pub fn __repr__(&self) -> String {
+        match self.gana() {
+            Some(g) => format!("Dhatu(aupadeshika='{}', gana={})", self.aupadeshika(), g),
+            None => format!("Dhatu(aupadeshika='{}', gana=None)", self.aupadeshika()),
+        }
+    }
+}
+
+impl PyDhatu {
+    pub fn as_ref(&self) -> &Dhatu {
+        &self.0
+    }
+}
+
+impl From<Dhatu> for PyDhatu {
+    fn from(val: Dhatu) -> Self {
+        Self(val)
+    }
+}
+
+/// A nominal stem.
+#[pyclass(name = "Pratipadika", module = "prakriya")]
+pub struct PyPratipadika(Pratipadika);
+
+impl PyPratipadika {
+    pub fn as_ref(&self) -> &Pratipadika {
+        &self.0
+    }
+}
+
+#[pymethods]
+impl PyPratipadika {
+    /// Create a new pratipadika with the given text.
+    #[new]
+    #[pyo3(signature = (*, text))]
+    pub fn new(text: String) -> Self {
+        Self(Pratipadika::basic(text))
+    }
+
+    /*
+    /// The text of this stem.
+    #[getter]
+    pub fn text(&self) -> String {
+        self.0.text().to_string()
+    }
+    */
+
+    fn __repr__(&self) -> String {
+        format!("Pratipadika()")
+    }
+
+    fn __richcmp__(&self, other: PyRef<PyPratipadika>, op: CompareOp) -> Py<PyAny> {
+        let py = other.py();
+        let is_eq = self.0 == other.0;
+
+        match op {
+            CompareOp::Eq => (is_eq).into_py(py),
+            CompareOp::Ne => (!is_eq).into_py(py),
+            _ => py.NotImplemented(),
+        }
+    }
+}

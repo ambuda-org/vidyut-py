@@ -29,7 +29,7 @@ Main methods
 `derive_tinantas` derives verbs::
 
     from vidyut.prakriya import (
-        Ashtadhyayi,
+        Vyakarana,
         Dhatupatha,
         Prayoga,
         Purusha,
@@ -37,15 +37,16 @@ Main methods
         Lakara
     )
 
-    a = Ashtadhyayi()
-    d = Dhatupatha("/path/to/vidyut-data/prakriya/dhatupatha.tsv")
+    v = Vyakarana()
+    dhatupatha = Dhatupatha("/path/to/vidyut-data/prakriya/dhatupatha.tsv")
+    dhatus = {e.code: e for in dhatupatha.entries()}
 
     # Read "BU" from the dhatupatha.
     #
     # These dhatu codes are the same as the codes used on ashtadhyayi.com.
-    dhatu = d["01.0001"]
+    dhatu = dhatus["01.0001"]
 
-    prakriyas = a.derive_tinantas(
+    prakriyas = v.derive_tinantas(
         dhatu=dhatu,
         prayoga=Prayoga.Kartari,
         purusha=Purusha.Prathama,

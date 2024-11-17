@@ -18,15 +18,16 @@ from vidyut.prakriya import (
 
 v = Vyakarana()
 # Path is relative to the project root.
-d = Dhatupatha("test/data/test-dhatupatha.tsv")
+dhatupatha = Dhatupatha("test/data/test-dhatupatha.tsv")
+d = {e.code: e.dhatu for e in dhatupatha.entries()}
 
 
 def test_dhatupatha():
     bhu = d["01.0001"]
-    assert bhu.upadesha == "BU"
+    assert bhu.aupadeshika == "BU"
 
     kr = d["08.0010"]
-    assert kr.upadesha == "qukf\\Y"
+    assert kr.aupadeshika == "qukf\\Y"
 
 
 def test_prakriya():

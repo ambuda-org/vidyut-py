@@ -1,8 +1,8 @@
 use pyo3::basic::CompareOp;
-use pyo3::exceptions::{PyFileNotFoundError, PyKeyError, PyValueError};
+use pyo3::exceptions::{PyFileNotFoundError, PyValueError};
 use pyo3::prelude::*;
 use std::path::PathBuf;
-use vidyut_prakriya::args::{BaseKrt, Dhatu, Gana, Krdanta, Krt, Subanta, Tinanta};
+use vidyut_prakriya::args::{BaseKrt, Dhatu, Krdanta, Krt, Subanta, Tinanta};
 use vidyut_prakriya::{Dhatupatha, Vyakarana};
 use vidyut_prakriya::{Prakriya, Step};
 
@@ -71,8 +71,35 @@ fn to_py_prakriyas(prakriyas: Vec<Prakriya>) -> Vec<PyPrakriya> {
         .collect()
 }
 
+/// An entry in the Dhatupatha.
+#[pyclass(name = "Entry")]
+pub struct PyEntry {
+    /// The numeric code associtaed witht this dhatu.
+    ///
+    /// If using `dhatupatha.tsv`, this code is consistent with the codes used by ashtadhyayi.com.
+    #[pyo3(get)]
+    code: String,
+    /// The
+    #[pyo3(get)]
+    dhatu: PyDhatu,
+    #[pyo3(get)]
+    artha: String,
+}
+
+#[pymethods]
+impl PyEntry {
+    fn __repr__(&self) -> String {
+        format!(
+            "Entry(code='{}', dhatu={:?}, artha=\"{}\")",
+            self.code,
+            self.dhatu.__repr__(),
+            self.artha
+        )
+    }
+}
+
 /// Provides an interface to the Dhatupatha.
-#[pyclass(name = "Dhatupatha")]
+#[pyclass(name = "Dhatupatha", mapping)]
 pub struct PyDhatupatha(Dhatupatha);
 
 #[pymethods]
@@ -117,45 +144,16 @@ impl PyDhatupatha {
     ///
     /// Exceptions:
     /// - `KeyError` if the given `code` is not found.
-    pub fn __getitem__(&self, code: String) -> PyResult<PyDhatu> {
-        match self.0.get(&code) {
-            Some(d) => Ok(PyDhatu::new(d.clone())),
-            None => Err(PyKeyError::new_err(code)),
+    pub fn entries(&self) -> Vec<PyEntry> {
+        let mut ret = Vec::new();
+        for e in self.0.iter() {
+            ret.push(PyEntry {
+                code: e.code().clone(),
+                dhatu: e.dhatu().clone().into(),
+                artha: e.artha().clone(),
+            });
         }
-    }
-
-    /// Returns an iterator over `Dhatupatha`.
-    pub fn __iter__(&self) {}
-}
-
-#[pyclass]
-struct Iter {
-    inner: std::vec::IntoIter<usize>,
-}
-
-#[pymethods]
-impl Iter {
-    fn __iter__(slf: PyRef<'_, Self>) -> PyRef<'_, Self> {
-        slf
-    }
-
-    fn __next__(mut slf: PyRefMut<'_, Self>) -> Option<usize> {
-        slf.inner.next()
-    }
-}
-
-#[pyclass]
-struct Container {
-    iter: Vec<usize>,
-}
-
-#[pymethods]
-impl Container {
-    fn __iter__(slf: PyRef<'_, Self>) -> PyResult<Py<Iter>> {
-        let iter = Iter {
-            inner: slf.iter.clone().into_iter(),
-        };
-        Py::new(slf.py(), iter)
+        ret
     }
 }
 
@@ -166,10 +164,24 @@ pub struct PyVyakarana(Vyakarana);
 
 #[pymethods]
 impl PyVyakarana {
-    /// Create an interface with sane defaults.
+    /// Creates an interface to the system.
+    ///
+    /// Options:
+    /// - `log_steps` (default: `True`) -- If set, log each step in the prakriya. Disable this if
+    ///    you want extra speed.
+    /// - `is_chandasi` (default: `False`) -- If set, use rules tagged with *chandasi*, *mantre*,
+    ///    etc.
+    /// - `use_svaras` (default: `False`) -- If set, use rules that add svaras to the output.
     #[new]
-    pub fn new() -> Self {
-        Self(Vyakarana::new())
+    #[pyo3(signature = (*, log_steps=true, is_chandasi=false, use_svaras=false))]
+    pub fn new(log_steps: bool, is_chandasi: bool, use_svaras: bool) -> Self {
+        Self(
+            Vyakarana::builder()
+                .log_steps(log_steps)
+                .is_chandasi(is_chandasi)
+                .use_svaras(use_svaras)
+                .build(),
+        )
     }
 
     /// Return all possible tinanta prakriyas that can be derived with the given initial
@@ -184,15 +196,15 @@ impl PyVyakarana {
         lakara: PyLakara,
         sanadi: Option<PySanadi>,
     ) -> Vec<PyPrakriya> {
-        let mut dhatu = Dhatu::builder()
-            .upadesha(&dhatu.upadesha())
-            // TODO: set gana
-            .gana(Gana::Bhvadi);
+        let mut builder = Dhatu::builder().upadesha(&dhatu.aupadeshika());
+        if let Some(g) = dhatu.gana() {
+            builder = builder.gana(g.into());
+        }
 
         if let Some(sanadi) = sanadi {
-            dhatu = dhatu.sanadi(&[sanadi.into()]);
+            builder = builder.sanadi(&[sanadi.into()]);
         }
-        let dhatu = dhatu.build().expect("should have all required fields");
+        let dhatu = builder.build().expect("should have all required fields");
 
         let tin_args = Tinanta::builder()
             .dhatu(dhatu)
