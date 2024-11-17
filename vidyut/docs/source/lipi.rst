@@ -5,10 +5,6 @@ Transliterating with `vidyut.lipi`
 
 `vidyut.lipi` transliterates many of the scripts used within the Indosphere.
 
-
-Quickstart
-----------
-
 Transliterate into a target scheme::
 
     from vidyut.lipi import transliterate, detect, Scheme

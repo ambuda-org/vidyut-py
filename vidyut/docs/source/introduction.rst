@@ -45,6 +45,10 @@ require a Rust installation. You can install the `vidyut` package like so:
 
     $ pip install vidyut
 
+
+Linguistic data
+---------------
+
 Vidyut is more interesting when used with our rich linguistic data, which you
 can download here:
 
@@ -60,6 +64,8 @@ You can use this data like so::
     c = Chedaka("data-0.3.0")
     for token in c.run("tapaHsvADyAyaniratam"):
         print(token)
+
+For details on which data files to pass where, see the documentation for specific modules.
 
 
 Getting help

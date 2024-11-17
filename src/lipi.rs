@@ -5,6 +5,96 @@ use std::hash::{Hash, Hasher};
 use vidyut_lipi as lipi;
 use vidyut_lipi::Scheme;
 
+/// Generates the following boilerplate methods:
+/// - `__hash__`
+/// - `__str__`
+/// - `from_string`, which is the inverse of `__str__`
+/// - `From<RustEnum> for PyEnum`
+/// - `From<PyEnum> for RustEnum`
+///
+/// Requirements:
+/// - Enum must derive `Hash`
+macro_rules! py_enum {
+    ($Py:ident, $Rust:ident, [$( $variant:ident ),*]) => {
+        impl From<$Rust> for $Py {
+            fn from(val: $Rust) -> Self {
+                match val {
+                    $(
+                        $Rust::$variant => $Py::$variant,
+                    )*
+                }
+            }
+        }
+
+        impl From<$Py> for $Rust {
+            fn from(val: $Py) -> Self {
+                match val {
+                    $(
+                        $Py::$variant => $Rust::$variant,
+                    )*
+                }
+            }
+        }
+
+        #[pymethods]
+        impl $Py {
+            fn __hash__(&self) -> u64 {
+                let mut hasher = DefaultHasher::new();
+                self.hash(&mut hasher);
+                hasher.finish()
+            }
+
+            fn __str__(&self) -> String {
+                match self {
+                    $(
+                        $Py::$variant => String::from(stringify!($variant)),
+                    )*
+                }
+            }
+
+            /// Returns all options for this enum.
+            #[staticmethod]
+            fn choices() -> Vec<$Py> {
+                vec![
+                    $(
+                        $Py::$variant,
+                    )*
+                ]
+            }
+
+            /// Create an enum value from the given string.
+            ///
+            /// This is the inverse of the `__str__` method.
+            #[staticmethod]
+            fn from_string(val: String) -> PyResult<Self> {
+                match val.as_str() {
+                    $(
+                        stringify!($variant) => Ok($Py::$variant),
+                    )*
+                    _ => Err(PyNotImplementedError::new_err("Could not parse {val}")),
+                }
+            }
+
+            /// Converts the given scheme to its ISO 15924 four-letter code, if one exists.
+            pub fn iso_15924_code(&self) -> String {
+                $Rust::from(*self).iso_15924_code().to_string()
+            }
+
+            /// Converts the given scheme to its ISO 15924 numeric code, if one exists.
+            pub fn iso_15924_numeric_code(&self) -> u16 {
+                $Rust::from(*self).iso_15924_numeric_code()
+            }
+
+            /// Converts the given scheme to its ICU code, if one exists.
+            ///
+            /// ICU codes are defined in conformance with the values in the ICU4X `Script` impl [here][1].
+            pub fn icu_numeric_code(&self) -> u16 {
+                $Rust::from(*self).icu_numeric_code()
+            }
+        }
+    }
+}
+
 /// A method of encoding text.
 ///
 /// Schemes vary on various dimensions, including:
@@ -307,79 +397,6 @@ pub enum PyScheme {
     ///
     /// TODO: find documentation link for WX.
     Wx,
-}
-
-/// Generates the following boilerplate methods:
-/// - `__hash__`
-/// - `__str__`
-/// - `from_string`, which is the inverse of `__str__`
-/// - `From<RustEnum> for PyEnum`
-/// - `From<PyEnum> for RustEnum`
-///
-/// Requirements:
-/// - Enum must derive `Hash`
-macro_rules! py_enum {
-    ($Py:ident, $Rust:ident, [$( $variant:ident ),*]) => {
-        impl From<$Rust> for $Py {
-            fn from(val: $Rust) -> Self {
-                match val {
-                    $(
-                        $Rust::$variant => $Py::$variant,
-                    )*
-                }
-            }
-        }
-
-        impl From<$Py> for $Rust {
-            fn from(val: $Py) -> Self {
-                match val {
-                    $(
-                        $Py::$variant => $Rust::$variant,
-                    )*
-                }
-            }
-        }
-
-        #[pymethods]
-        impl $Py {
-            fn __hash__(&self) -> u64 {
-                let mut hasher = DefaultHasher::new();
-                self.hash(&mut hasher);
-                hasher.finish()
-            }
-
-            fn __str__(&self) -> String {
-                match self {
-                    $(
-                        $Py::$variant => String::from(stringify!($variant)),
-                    )*
-                }
-            }
-
-            /// Returns all options for this enum.
-            #[staticmethod]
-            fn choices() -> Vec<$Py> {
-                vec![
-                    $(
-                        $Py::$variant,
-                    )*
-                ]
-            }
-
-            /// Create an enum value from the given string.
-            ///
-            /// This is the inverse of the `__str__` method.
-            #[staticmethod]
-            fn from_string(val: String) -> PyResult<Self> {
-                match val.as_str() {
-                    $(
-                        stringify!($variant) => Ok($Py::$variant),
-                    )*
-                    _ => Err(PyNotImplementedError::new_err("Could not parse {val}")),
-                }
-            }
-        }
-    }
 }
 
 py_enum!(

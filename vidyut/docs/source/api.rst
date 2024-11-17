@@ -23,6 +23,15 @@ the extensive examples in :doc:`quickstart`.
     :members: Chedaka, Token
 
 
+`vidyut.cheda`
+--------------
+
+.. automodule:: vidyut.chandas
+    :members: Chandas
+
+
+
+
 `vidyut.kosha`
 --------------
 

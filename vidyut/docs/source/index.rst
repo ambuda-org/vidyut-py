@@ -14,8 +14,11 @@ project.
    :caption: Contents:
 
    introduction
+   chandas
+   cheda
+   kosha
    lipi
    prakriya
-   quickstart
+   sandhi
    api
    changes
