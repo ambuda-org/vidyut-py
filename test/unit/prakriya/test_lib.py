@@ -120,13 +120,13 @@ def test_basic_karmani_tinantas(code, expected):
 )
 def test_sannanta_tinantas(code, expected):
     dhatu = d[code]
+    dhatu_san = dhatu.with_sanadi([Sanadi.san])
     prakriyas = v.derive_tinantas(
-        dhatu=dhatu,
+        dhatu=dhatu_san,
         prayoga=Prayoga.Kartari,
         purusha=Purusha.Prathama,
         vacana=Vacana.Eka,
         lakara=Lakara.Lat,
-        sanadi=Sanadi.san,
     )
     expected = set(expected.split("|"))
     actual = {x.text for x in prakriyas}
@@ -142,13 +142,13 @@ def test_sannanta_tinantas(code, expected):
 )
 def test_nijanta_tinantas(code, expected):
     dhatu = d[code]
+    dhatu_nic = dhatu.with_sanadi([Sanadi.Ric])
     prakriyas = v.derive_tinantas(
-        dhatu=dhatu,
+        dhatu=dhatu_nic,
         prayoga=Prayoga.Kartari,
         purusha=Purusha.Prathama,
         vacana=Vacana.Eka,
         lakara=Lakara.Lat,
-        sanadi=Sanadi.Ric,
     )
     expected = set(expected.split("|"))
     actual = {x.text for x in prakriyas}
@@ -164,13 +164,13 @@ def test_nijanta_tinantas(code, expected):
 )
 def test_yananta_tinantas(code, expected):
     dhatu = d[code]
+    dhatu_yan = dhatu.with_sanadi([Sanadi.yaN])
     prakriyas = v.derive_tinantas(
-        dhatu=dhatu,
+        dhatu=dhatu_yan,
         prayoga=Prayoga.Kartari,
         purusha=Purusha.Prathama,
         vacana=Vacana.Eka,
         lakara=Lakara.Lat,
-        sanadi=Sanadi.yaN,
     )
     expected = set(expected.split("|"))
     actual = {x.text for x in prakriyas}

@@ -2,7 +2,7 @@ use pyo3::basic::CompareOp;
 use pyo3::exceptions::{PyFileNotFoundError, PyValueError};
 use pyo3::prelude::*;
 use std::path::PathBuf;
-use vidyut_prakriya::args::{BaseKrt, Dhatu, Krdanta, Krt, Subanta, Tinanta};
+use vidyut_prakriya::args::{BaseKrt, Krdanta, Krt, Subanta, Tinanta};
 use vidyut_prakriya::{Dhatupatha, Vyakarana};
 use vidyut_prakriya::{Prakriya, Step};
 
@@ -186,7 +186,7 @@ impl PyVyakarana {
 
     /// Return all possible tinanta prakriyas that can be derived with the given initial
     /// conditions.
-    #[pyo3(signature = (*, dhatu, prayoga, purusha, vacana, lakara, sanadi = None))]
+    #[pyo3(signature = (*, dhatu, prayoga, purusha, vacana, lakara))]
     pub fn derive_tinantas(
         &self,
         dhatu: &PyDhatu,
@@ -194,20 +194,9 @@ impl PyVyakarana {
         purusha: PyPurusha,
         vacana: PyVacana,
         lakara: PyLakara,
-        sanadi: Option<PySanadi>,
     ) -> Vec<PyPrakriya> {
-        let mut builder = Dhatu::builder().upadesha(&dhatu.aupadeshika());
-        if let Some(g) = dhatu.gana() {
-            builder = builder.gana(g.into());
-        }
-
-        if let Some(sanadi) = sanadi {
-            builder = builder.sanadi(&[sanadi.into()]);
-        }
-        let dhatu = builder.build().expect("should have all required fields");
-
         let tin_args = Tinanta::builder()
-            .dhatu(dhatu)
+            .dhatu(dhatu.as_rust().clone())
             .prayoga(prayoga.into())
             .purusha(purusha.into())
             .vacana(vacana.into())

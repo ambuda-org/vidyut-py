@@ -44,6 +44,13 @@ macro_rules! py_enum {
             }
         }
 
+        impl fmt::Display for $Py {
+            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                write!(f, "{}", $Rust::from(*self).as_str())
+            }
+        }
+
+
         #[pymethods]
         impl $Py {
             fn __hash__(&self) -> u64 {
@@ -69,7 +76,7 @@ macro_rules! py_enum {
 
             /// Create an enum value from the given string.
             ///
-            /// This is an inverse of the `__str__` method.
+            /// This is the inverse of the `__str__` method.
             #[staticmethod]
             fn from_string(val: &str) -> PyResult<Self> {
                 match $Rust::from_str(val) {
@@ -81,7 +88,7 @@ macro_rules! py_enum {
     }
 }
 
-#[pyclass(name = "Krt", module = "prakriya", eq, eq_int)]
+#[pyclass(name = "Gana", module = "prakriya", eq, eq_int)]
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum PyGana {
     /// The first gaṇa, whose first dhatu is `BU`.
@@ -108,16 +115,37 @@ pub enum PyGana {
     Kandvadi,
 }
 
-impl fmt::Display for PyGana {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", Gana::from(*self).as_str())
-    }
-}
-
 py_enum!(
     PyGana,
     Gana,
     [Bhvadi, Adadi, Juhotyadi, Divadi, Svadi, Tudadi, Rudhadi, Tanadi, Kryadi, Curadi, Kandvadi]
+);
+
+#[pyclass(name = "Antargana", module = "prakriya", eq, eq_int)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq)]
+pub enum PyAntargana {
+    /// Antargana of *bhU* gana. A dhatu in this antargana uses a shortened vowel when followed by
+    /// Ric-pratyaya.
+    Ghatadi,
+    /// Antargana of *tud* gana. Pratyayas that follow dhatus in kut-Adi will generally be marked
+    /// Nit per 1.2.1. Required because of duplicates like `juqa~`.
+    Kutadi,
+    /// Antargana of *cur* gana ending with `zvada~` / `svAda~`. A dhatu in this antargana
+    /// optionaly uses Ric-pratyaya when taking an object. Required because of duplicates like
+    /// `tuji~`.
+    Asvadiya,
+    /// Antargana of *cur* gana ending with `Dfza~`. A dhatu in this antargana optionally uses
+    /// Ric-pratyaya. Required because of duplicates like `SraTa~`.
+    Adhrshiya,
+    /// Antargana of *cur* gana ending with `kusma~`. A dhatu in this antargana is always
+    /// ātmanepadī. Required because of duplicates like `daSi~`.
+    Akusmiya,
+}
+
+py_enum!(
+    PyAntargana,
+    Antargana,
+    [Ghatadi, Kutadi, Asvadiya, Adhrshiya, Akusmiya]
 );
 
 #[pyclass(name = "Krt", module = "prakriya", eq, eq_int)]
@@ -509,8 +537,51 @@ py_enum!(
 #[derive(Clone)]
 pub struct PyDhatu(Dhatu);
 
+impl PyDhatu {
+    pub(crate) fn as_rust(&self) -> &Dhatu {
+        &self.0
+    }
+}
+
 #[pymethods]
 impl PyDhatu {
+    /// Creates a new mula-dhatu.
+    #[staticmethod]
+    #[pyo3(signature = (*, aupadeshika, gana, antargana=None, prefixes=None, sanadi=None))]
+    pub fn mula(
+        aupadeshika: String,
+        gana: PyGana,
+        antargana: Option<PyAntargana>,
+        prefixes: Option<Vec<String>>,
+        sanadi: Option<Vec<PySanadi>>,
+    ) -> Self {
+        let mut builder = Dhatu::builder().upadesha(&aupadeshika).gana(gana.into());
+        if let Some(a) = antargana {
+            builder = builder.antargana(a.into());
+        }
+        if let Some(ps) = prefixes {
+            builder = builder.prefixes(&ps);
+        }
+        if let Some(ss) = sanadi {
+            let sanadis: Vec<Sanadi> = ss.iter().map(|s| (*s).into()).collect();
+            builder = builder.sanadi(&sanadis);
+        }
+
+        let dhatu = builder.build().expect("always has aupadeshika and gana");
+        PyDhatu(dhatu)
+    }
+
+    /// Shorthand for modifying an existing dhatu with new prefixes.
+    pub fn with_prefixes(&self, prefixes: Vec<String>) -> Self {
+        self.0.clone().with_prefixes(&prefixes).into()
+    }
+
+    /// Shorthand for modifying an existing dhatu with new sanadis.
+    pub fn with_sanadi(&self, sanadi: Vec<PySanadi>) -> Self {
+        let sanadi: Vec<Sanadi> = sanadi.iter().map(|x| (*x).into()).collect();
+        self.0.clone().with_sanadi(&sanadi).into()
+    }
+
     /// The aupadeshika form of this dhatu.
     #[getter]
     pub fn aupadeshika(&self) -> String {
@@ -524,6 +595,24 @@ impl PyDhatu {
     #[getter]
     pub fn gana(&self) -> Option<PyGana> {
         self.0.gana().map(|g| g.into())
+    }
+
+    /// The antargana that this dhatu belongs to.
+    #[getter]
+    pub fn antargana(&self) -> Option<PyAntargana> {
+        self.0.antargana().map(|g| g.into())
+    }
+
+    /// The prefixes that this dhatu uses.
+    #[getter]
+    pub fn prefixes(&self) -> Vec<String> {
+        self.0.prefixes().clone()
+    }
+
+    /// The sanadi pratyayas that this dhatu uses.
+    #[getter]
+    pub fn sanadi(&self) -> Vec<PySanadi> {
+        self.0.sanadi().iter().map(|x| (*x).into()).collect()
     }
 
     pub fn __repr__(&self) -> String {
@@ -543,6 +632,12 @@ impl PyDhatu {
 impl From<Dhatu> for PyDhatu {
     fn from(val: Dhatu) -> Self {
         Self(val)
+    }
+}
+
+impl From<PyDhatu> for Dhatu {
+    fn from(val: PyDhatu) -> Self {
+        val.0
     }
 }
 

@@ -152,6 +152,8 @@ fn py_prakriya(m: &Bound<'_, PyModule>) -> PyResult<()> {
     // For details on these symbols, see the comments in `py_kosha`.
     m.add_class::<prakriya::args::PyDhatu>()?;
     m.add_class::<prakriya::args::PyPratipadika>()?;
+    m.add_class::<prakriya::args::PyAntargana>()?;
+    m.add_class::<prakriya::args::PyGana>()?;
     m.add_class::<prakriya::args::PyKrt>()?;
     m.add_class::<prakriya::args::PyLakara>()?;
     m.add_class::<prakriya::args::PyLinga>()?;

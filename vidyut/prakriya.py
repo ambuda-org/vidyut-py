@@ -8,6 +8,8 @@ Dhatupatha = __mod.Dhatupatha
 # Input types
 Dhatu = __mod.Dhatu
 Pratipadika = __mod.Pratipadika
+Antargana = __mod.Antargana
+Gana = __mod.Gana
 Krt = __mod.Krt
 Lakara = __mod.Lakara
 Linga = __mod.Linga

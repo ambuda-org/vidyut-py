@@ -63,20 +63,15 @@ Main types
    :undoc-members:
 
 
-Output types
-~~~~~~~~~~~~
-
-*Output types* define the output format of our API.
-
-.. autoclass:: vidyut.prakriya.Prakriya
-   :members:
-   :undoc-members:
-
-
 Input types
 ~~~~~~~~~~~
 
 *Input types* define the input arguments for our API.
+
+Names of suffixes, including the members of `Krt` and `Sanadi`, are written in
+the `SLP1`_ encoding scheme.
+
+.. _SLP1: https://en.wikipedia.org/wiki/SLP1
 
 .. autoclass:: vidyut.prakriya.Dhatu
    :members:
@@ -85,6 +80,12 @@ Input types
    :members:
    :undoc-members:
 
+.. autoclass:: vidyut.prakriya.Gana
+   :members:
+   :undoc-members:
+.. autoclass:: vidyut.prakriya.Krt
+   :members:
+   :undoc-members:
 .. autoclass:: vidyut.prakriya.Lakara
    :members:
    :undoc-members:
@@ -104,6 +105,16 @@ Input types
    :members:
    :undoc-members:
 .. autoclass:: vidyut.prakriya.Vibhakti
+   :members:
+   :undoc-members:
+
+
+Output types
+~~~~~~~~~~~~
+
+*Output types* define the output format of our API.
+
+.. autoclass:: vidyut.prakriya.Prakriya
    :members:
    :undoc-members:
 

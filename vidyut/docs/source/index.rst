@@ -14,6 +14,7 @@ project.
    :caption: Contents:
 
    introduction
+   prakriya
    quickstart
    api
    changes

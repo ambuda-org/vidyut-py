@@ -1,41 +1,51 @@
 import pytest
 
 from vidyut.prakriya import (
+    Dhatu,
     Pratipadika,
+    Antargana,
+    Gana,
+    Krt,
     Lakara,
     Linga,
     Prayoga,
+    Purusha,
+    Sanadi,
+    Vacana,
     Vibhakti,
 )
 
 
-@pytest.mark.parametrize(
-    "variant",
-    [
-        Lakara.Lat,
-        Linga.Pum,
-        Prayoga.Kartari,
-        Vibhakti.Prathama,
-    ],
-)
-def test_enum__hashable(variant):
-    """Verify that our enums are hashable."""
-    _data = {variant: "foo"}
+@pytest.mark.parametrize("kwargs", [
+    {"aupadeshika": "BU", "gana": Gana.Bhvadi},
+    {"aupadeshika": "BU", "gana": Gana.Bhvadi, "antargana": Antargana.Akusmiya},
+    {"aupadeshika": "BU", "gana": Gana.Bhvadi, "prefixes": ["aBi"]},
+    {"aupadeshika": "BU", "gana": Gana.Bhvadi, "sanadi": [Sanadi.san]},
+    {"aupadeshika": "BU", "gana": Gana.Bhvadi, "prefixes": ["aBi"], "sanadi": [Sanadi.san]},
+])
+def test_dhatu(kwargs):
+    d = Dhatu.mula(**kwargs)
+    for key, value in kwargs.items():
+        assert getattr(d, key) == value
 
 
-@pytest.mark.parametrize(
-    "enum,variant,s",
-    [
-        (Lakara, Lakara.Lat, "lat"),
-        (Linga, Linga.Pum, "pum"),
-        (Prayoga, Prayoga.Kartari, "kartari"),
-        (Vibhakti, Vibhakti.Prathama, "1"),
-    ],
-)
-def test_enum__str(enum, variant, s):
-    """Verify that our enums can round-trip to strings."""
-    assert str(variant) == s
-    assert enum.from_string(s) == variant
+def test_dhatu__must_have_aupadeshika_and_gana():
+    try:
+        d = Dhatu.mula(aupadeshika="BU")
+        assert False, "Must have gana"
+    except TypeError:
+        pass
+
+    try:
+        d = Dhatu.mula(gana=Gana.Bhvadi)
+        assert False, "Must have aupadeshika"
+    except TypeError:
+        pass
+
+
+    # Enum values are hashable.
+    for val in enum.choices(): 
+        _data = {val: "foo"}
 
 
 @pytest.mark.skip("need to fix pratipadika internal representation")
@@ -63,3 +73,25 @@ def test_pratipadika_eq():
 
     p3 = Pratipadika(text="eva")
     assert p1 != p3
+
+
+@pytest.mark.parametrize(
+    "enum",
+    [
+        Antargana,
+        Gana,
+        Krt,
+        Lakara,
+        Linga,
+        Prayoga,
+        Purusha,
+        Sanadi,
+        Vacana,
+        Vibhakti,
+    ],
+)
+def test_enums(enum):
+    # Enum values can round-trip through strings
+    for val in enum.choices():
+        assert enum.from_string(str(val)) == val
+

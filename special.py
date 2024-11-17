@@ -1,25 +1,23 @@
-from pathlib import Path
+from vidyut.prakriya import *
 
-import vidyut.prakriya as vp
+# dhatupatha = Dhatupatha("/Users/arun/personal/vidyut/data/build/vidyut-latest/prakriya/dhatupatha.tsv")
+# dhatus = [e.dhatu for e in dhatupatha.entries()]
 
+bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
+bhavaya = bhu.with_sanadi([Sanadi.Ric])
+bubhusha = bhu.with_sanadi([Sanadi.san])
+bubhushaya = bhu.with_sanadi([Sanadi.san, Sanadi.Ric])
+bobhuya = bhu.with_sanadi([Sanadi.yaN])
+bobhu = bhu.with_sanadi([Sanadi.yaNluk])
 
-# base = Path(os.environ["VIDYUT_DATA_DIR"])
-base = Path("/Users/arun/personal/vidyut/data/build/vidyut-latest/")
-dhatupatha = vp.Dhatupatha(base / "prakriya" / "dhatupatha.tsv")
-
-
-v = vp.Vyakarana()
-
-for e in dhatupatha.entries():
-    for lakara in vp.Lakara.choices():
-        for purusha in vp.Purusha.choices():
-            for vacana in vp.Vacana.choices():
-                prakriyas = v.derive_tinantas(
-                    dhatu=e.dhatu,
-                    prayoga=vp.Prayoga.Kartari,
-                    purusha=purusha,
-                    vacana=vacana,
-                    lakara=lakara,
-                )
-                for p in prakriyas:
-                    print(p.text)
+v = Vyakarana()
+for dhatu in [bhu, bhavaya, bubhusha, bubhushaya, bobhuya, bobhu]:
+    prakriyas = v.derive_tinantas(
+        dhatu=dhatu,
+        prayoga=Prayoga.Kartari,
+        purusha=Purusha.Prathama,
+        vacana=Vacana.Eka,
+        lakara=Lakara.Lat,
+    )
+    for p in prakriyas:
+        print(p.text)
