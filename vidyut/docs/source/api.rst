@@ -23,13 +23,11 @@ the extensive examples in :doc:`quickstart`.
     :members: Chedaka, Token
 
 
-`vidyut.cheda`
+`vidyut.chandas`
 --------------
 
 .. automodule:: vidyut.chandas
     :members: Chandas
-
-
 
 
 `vidyut.kosha`

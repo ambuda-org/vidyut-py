@@ -619,7 +619,7 @@ impl PyDhatu {
     /// The prefixes that this dhatu uses.
     #[getter]
     pub fn prefixes(&self) -> Vec<String> {
-        self.0.prefixes().clone()
+        self.0.prefixes().to_vec()
     }
 
     /// The sanadi pratyayas that this dhatu uses.

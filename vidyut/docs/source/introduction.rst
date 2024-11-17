@@ -4,22 +4,20 @@ Introduction
 This package defines Python bindings for `Vidyut`_, a high-performance Sanskrit
 toolkit written in Rust. It contains the following modules:
 
-- `vidyut.chandas` identifies the meter in some piece of Sanskrit text.
+- `vidyut.chandas` identifies the meter of some piece of Sanskrit text.
 
 - `vidyut.cheda` segments and annotates Sanskrit expressions.
 
-- `vidyut.kosha` compactly maps millions of Sanskrit words to their
-  inflectional data. 
+- `vidyut.kosha` compactly stores millions of Sanskrit words.
 
-- `vidyut.lipi` is a transliteration library.
+- `vidyut.lipi` transliterates Sanskrit texts between different encodings.
 
-- `vidyut.prakriya` derives words according to the rules of Paninian grammar.
+- `vidyut.prakriya` derives Sanskrit expressions according to Paninian grammar.
 
-- `vidyut.sandhi` contains various utilities for working with sandhi changes
-  between words.
+- `vidyut.sandhi` has utilities for working with sandhi rules.
 
 Our Python API is lightweight and mirrors the underlying Rust API, with minor
-change to be more Pythonic.
+changes for ergonomics.
 
 .. _Vidyut: https://github.com/ambuda-org/vidyut
 
@@ -65,7 +63,7 @@ You can use this data like so::
     for token in c.run("tapaHsvADyAyaniratam"):
         print(token)
 
-For details on which data files to pass where, see the documentation for specific modules.
+For details on which data files to pass where, see the documentation for our specific modules.
 
 
 Getting help
