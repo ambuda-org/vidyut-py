@@ -146,8 +146,8 @@ The fourth is `derive_taddhitantas`, which adds suffixes to nominal stems::
     assert len(prakriyas) == 1
     assert prakriyas[0].text == "gOrava"
 
-The fifth is `derive_dhatus`, which combines prefixes, suffixes, and dhatus
-from the Dhatupatha to create readable dhatus::
+The fifth is `derive_dhatus`, which processes raw dhatus from the Dhatupatha
+along with any prefixes and suffixes we might wish to add::
 
     from vidyut.prakriya import *
 
@@ -167,19 +167,19 @@ of arguments.
 
 For example, we can modify a `dhatu` argument to use one or more prefixes::
 
-        bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
-        abhibhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi, prefixes=["abhi"])
+    bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
+    abhibhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi, prefixes=["abhi"])
 
-        # Or, use the shorthand method `with_prefixes`:
-        paribhu = bhu.with_prefixes(["abhi"])
+    # Or, use the shorthand method `with_prefixes`:
+    paribhu = bhu.with_prefixes(["abhi"])
 
 Or one or more :class:`Sanadi` suffixes::
 
-        bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
-        bhavaya = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi, sanadi=[Sanadi.Ric])
+    bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
+    bhavaya = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi, sanadi=[Sanadi.Ric])
 
-        # Or, use the shorthand method `with_sanadi`.
-        bubhusha = bhu.with_sanadi([Sanadi.san])
+    # Or, use the shorthand method `with_sanadi`.
+    bubhusha = bhu.with_sanadi([Sanadi.san])
 
 Likewise, we can declare a `pratipadika` as coming from a krdanta::
 

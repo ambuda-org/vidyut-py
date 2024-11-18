@@ -21,8 +21,10 @@ def test_vasantatilaka(chandas):
 
     assert len(result.aksharas) == 1
     row = result.aksharas[0]
-    assert '-'.join(a.text for a in row) == "mA-taH-sa-ma-sta-ja-ga-tAM-ma-Du-kE-wa-BA-reH"
-    assert '-'.join(a.weight for a in row) == "G-G-L-G-L-L-L-G-L-L-G-L-G-G"
+    assert (
+        "-".join(a.text for a in row) == "mA-taH-sa-ma-sta-ja-ga-tAM-ma-Du-kE-wa-BA-reH"
+    )
+    assert "-".join(a.weight for a in row) == "G-G-L-G-L-L-L-G-L-L-G-L-G-G"
 
 
 @pytest.mark.skip(reason="upstream code is buggy")

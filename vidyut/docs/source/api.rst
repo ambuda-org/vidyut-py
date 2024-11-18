@@ -13,7 +13,7 @@ when processing our code. Known issues:
 - Properties and attributes don't have types.
 
 We will fix these issues as soon as we can. In the meantime, please refer to
-the extensive examples in :doc:`quickstart`.
+the extensive examples elsewhere in the docs.
 
 
 `vidyut.cheda`
@@ -24,7 +24,7 @@ the extensive examples in :doc:`quickstart`.
 
 
 `vidyut.chandas`
---------------
+----------------
 
 .. automodule:: vidyut.chandas
     :members: Chandas
@@ -55,7 +55,7 @@ Builder API
 
 
 `vidyut.lipi`
---------------
+-------------
 
 .. automodule:: vidyut.lipi
     :members: Scheme, detect, transliterate

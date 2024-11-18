@@ -17,13 +17,21 @@ from vidyut.prakriya import (
 )
 
 
-@pytest.mark.parametrize("kwargs", [
-    {"aupadeshika": "BU", "gana": Gana.Bhvadi},
-    {"aupadeshika": "BU", "gana": Gana.Bhvadi, "antargana": Antargana.Akusmiya},
-    {"aupadeshika": "BU", "gana": Gana.Bhvadi, "prefixes": ["aBi"]},
-    {"aupadeshika": "BU", "gana": Gana.Bhvadi, "sanadi": [Sanadi.san]},
-    {"aupadeshika": "BU", "gana": Gana.Bhvadi, "prefixes": ["aBi"], "sanadi": [Sanadi.san]},
-])
+@pytest.mark.parametrize(
+    "kwargs",
+    [
+        {"aupadeshika": "BU", "gana": Gana.Bhvadi},
+        {"aupadeshika": "BU", "gana": Gana.Bhvadi, "antargana": Antargana.Akusmiya},
+        {"aupadeshika": "BU", "gana": Gana.Bhvadi, "prefixes": ["aBi"]},
+        {"aupadeshika": "BU", "gana": Gana.Bhvadi, "sanadi": [Sanadi.san]},
+        {
+            "aupadeshika": "BU",
+            "gana": Gana.Bhvadi,
+            "prefixes": ["aBi"],
+            "sanadi": [Sanadi.san],
+        },
+    ],
+)
 def test_dhatu__mula(kwargs):
     d = Dhatu.mula(**kwargs)
     for key, value in kwargs.items():
@@ -97,6 +105,5 @@ def test_enums(enum):
         assert enum.from_string(str(val)) == val
 
     # Enum values are hashable.
-    for val in enum.choices(): 
+    for val in enum.choices():
         _data = {val: "foo"}
-

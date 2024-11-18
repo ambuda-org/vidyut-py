@@ -148,7 +148,7 @@ py_enum!(
     [Ghatadi, Kutadi, Asvadiya, Adhrshiya, Akusmiya]
 );
 
-/// The complete list of ordinary *kṛt pratyaya*s.
+/// The complete list of ordinary *kṛt* pratyayas.
 #[pyclass(name = "Krt", module = "prakriya", eq, eq_int)]
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
 #[allow(non_camel_case_types)]
