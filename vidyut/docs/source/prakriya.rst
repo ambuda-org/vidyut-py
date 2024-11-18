@@ -8,6 +8,10 @@ according to the rules of Paninian grammar. This powerful word generator is
 useful both for creating Sanskrit words and for understanding how those words
 are derived. 
 
+All input text should use the `SLP1`_ encoding scheme.
+
+.. _SLP1: https://en.wikipedia.org/wiki/SLP1
+
 
 Quickstart
 ----------
@@ -83,7 +87,7 @@ This produces the following output:
 Basic methods
 -------------
 
-`vidyut.prakriya` currently exposes three basic methods. The first is
+`vidyut.prakriya` currently exposes four basic methods. The first is
 `derive_tinantas`, which creates verbs::
 
     from vidyut.prakriya import *
@@ -101,20 +105,7 @@ Basic methods
     assert len(prakriyas) == 1
     assert prakriyas[0].text == "Bavati"
 
-
-The second is `derive_krdantas`, which derives verbal adjectives and verbal
-indeclinables::
-
-    from vidyut.prakriya import *
-
-    v = Vyakarana()
-    bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
-    prakriyas = v.derive_krdantas(dhatu=bhu, krt=Krt.ktvA)
-
-    assert len(prakriyas) == 1
-    assert prakriyas[0].text == "BUtvA"
-
-The third is `derive_subantas`, which derives nominals::
+The second is `derive_subantas`, which derives nominals::
 
     from vidyut.prakriya import (
         Pratipadika,
@@ -131,6 +122,28 @@ The third is `derive_subantas`, which derives nominals::
 
     assert len(prakriyas) == 1
     assert prakriyas[0].text == "devaH"
+
+The third is `derive_krdantas`, which adds suffixes to verb roots::
+
+    from vidyut.prakriya import *
+
+    v = Vyakarana()
+    bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
+    prakriyas = v.derive_krdantas(dhatu=bhu, krt=Krt.ktvA)
+
+    assert len(prakriyas) == 1
+    assert prakriyas[0].text == "BUtvA"
+
+The fourth is `derive_taddhitantas`, which adds suffixes to nominal stems::
+
+    from vidyut.prakriya import *
+
+    v = Vyakarana()
+    guru = Pratipadika(text="guru")
+    prakriyas = v.derive_taddhitantas(pratipadika=guru, taddhita=Taddhita.aR)
+
+    assert len(prakriyas) == 1
+    assert prakriyas[0].text == "gOrava"
 
 
 Specifying arguments
@@ -186,8 +199,32 @@ Recipes
 This section contains various recipes that we have found useful.
 
 
-Generate all basic tinantas
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Generate tinantas for a dhatu and prayoga
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    from vidyut.prakriya import *
+
+    v = Vyakarana(log_steps=False)
+    bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
+
+    for lakara in Lakara.choices():
+        for purusha in Purusha.choices():
+            for vacana in Vacana.choices():
+                prakriyas = v.derive_tinantas(
+                    dhatu=bhu,
+                    prayoga=Prayoga.kartari,
+                    purusha=purusha,
+                    vacana=vacana,
+                    lakara=lakara,
+                )
+                for p in prakriyas:
+                    print(p.text)
+
+
+Generate all tinantas for some prayoga
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -214,6 +251,28 @@ Generate all basic tinantas
                             print(p.text)
 
 
+Generate all subantas for some pratipadika
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    from vidyut.prakriya import *
+
+    v = Vyakarana(log_steps=False)
+    nara = Pratipadika(text="nara")
+
+    for vibhakti in Vibhakti.choices():
+        for vacana in Vacana.choices():
+            prakriyas = v.derive_subantas(
+                pratipadika=nara,
+                linga=Linga.Pum,
+                vibhakti=vibhakti,
+                vacana=vacana,
+            )
+            for p in prakriyas:
+                print(vibhakti, vacana, p.text)
+
+
 Generate all krdantas for a dhatu
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -230,6 +289,24 @@ Generate all krdantas for a dhatu
             print(krt, p.text)
         else:
             print(f"- (no results for BU + {krt})")
+
+
+Generate all taddhitantas for a pratipadika
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. code-block:: python
+
+    from vidyut.prakriya import *
+
+    v = Vyakarana()
+    guru = Pratipadika(text="guru")
+
+    for taddhita in Taddhita.choices():
+        prakriyas = v.derive_taddhitantas(pratipadika=guru, taddhita=taddhita)
+        for p in prakriyas:
+            print(taddhita, p.text)
+        else:
+            print(f"- (no results for guru + {taddhita})")
 
 
 Find all rules used by a dhatu's tinantas

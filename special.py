@@ -1,8 +1,13 @@
-from vidyut.lipi import transliterate, detect, Scheme
+from vidyut.prakriya import *
 
-text = "tapaHsvAdhyAyanirataM tapasvI vAgvidAM varam"
-input_scheme = detect(text)
+v = Vyakarana()
+guru = Pratipadika(text="guru")
 
-for scheme in Scheme.choices():
-    output = transliterate(text, input_scheme, scheme)
-    print(f"{scheme}: {output}")
+for taddhita in Taddhita.choices():
+    prakriyas = v.derive_taddhitantas(pratipadika=guru, taddhita=taddhita)
+    for p in prakriyas:
+        print(taddhita, p.text)
+    else:
+        print(f"- (no results for guru + {taddhita})")
+
+

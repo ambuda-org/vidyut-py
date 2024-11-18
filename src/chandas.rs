@@ -1,7 +1,7 @@
 use pyo3::exceptions::{PyIOError, PyOSError};
 use pyo3::prelude::*;
 use std::path::PathBuf;
-use vidyut_chandas::{Akshara, Chandas, Jati, Vrtta, Weight};
+use vidyut_chandas::{Akshara, Chandas, Jati, Pada, Vrtta, Weight};
 
 /// A Sanskrit syllable.
 ///
