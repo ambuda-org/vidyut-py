@@ -87,8 +87,9 @@ This produces the following output:
 Basic methods
 -------------
 
-`vidyut.prakriya` currently exposes four basic methods. The first is
-`derive_tinantas`, which creates verbs::
+`vidyut.prakriya` currently exposes five basic methods.
+
+The first is `derive_tinantas`, which creates verbs::
 
     from vidyut.prakriya import *
 
@@ -145,6 +146,18 @@ The fourth is `derive_taddhitantas`, which adds suffixes to nominal stems::
     assert len(prakriyas) == 1
     assert prakriyas[0].text == "gOrava"
 
+The fifth is `derive_dhatus`, which combines prefixes, suffixes, and dhatus
+from the Dhatupatha to create readable dhatus::
+
+    from vidyut.prakriya import *
+
+    v = Vyakarana()
+    upa_r = Dhatu.mula(aupadeshika="f\\", gana=Gana.Bhvadi).with_prefixes(["upa"])
+    prakriyas = v.derive_dhatus(upa_r)
+
+    assert len(prakriyas) == 1
+    assert prakriyas[0].text == "upAr"
+
 
 Specifying arguments
 --------------------
@@ -167,6 +180,17 @@ Or one or more :class:`Sanadi` suffixes::
 
         # Or, use the shorthand method `with_sanadi`.
         bubhusha = bhu.with_sanadi([Sanadi.san])
+
+Likewise, we can declare a `pratipadika` as coming from a krdanta::
+
+    bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
+    bhavaka = Pratipadika.from_krdanta(bhu, Krt.Rvul)
+
+Or from a taddhitanta::
+
+    guru = Pratipadika(text="guru")
+    gaurava = Pratipadika.from_taddhitanta(guru, Taddhita.aR)
+
 
 
 Using the Dhatupatha

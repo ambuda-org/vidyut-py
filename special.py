@@ -1,13 +1,9 @@
 from vidyut.prakriya import *
 
 v = Vyakarana()
+
+bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
+bhavaka = Pratipadika.from_krdanta(bhu, Krt.Rvul)
+
 guru = Pratipadika(text="guru")
-
-for taddhita in Taddhita.choices():
-    prakriyas = v.derive_taddhitantas(pratipadika=guru, taddhita=taddhita)
-    for p in prakriyas:
-        print(taddhita, p.text)
-    else:
-        print(f"- (no results for guru + {taddhita})")
-
-
+gaurava = Pratipadika.from_taddhitanta(guru, Taddhita.aR)

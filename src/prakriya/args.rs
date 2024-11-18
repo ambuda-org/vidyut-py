@@ -1045,6 +1045,26 @@ impl PyPratipadika {
         Self(Pratipadika::basic(text))
     }
 
+    /// Create a new pratipadika that is a krdanta.
+    #[staticmethod]
+    #[pyo3(signature = (*, dhatu, krt))]
+    pub fn from_krdanta(dhatu: PyDhatu, krt: PyKrt) -> Self {
+        let krdanta = Krdanta::new(dhatu.into(), BaseKrt::from(krt));
+        Self(Pratipadika::Krdanta(krdanta.into()))
+    }
+
+    /// Create a new pratipadika that is a taddhitanta.
+    #[staticmethod]
+    #[pyo3(signature = (*, pratipadika, taddhita))]
+    pub fn from_taddhitanta(pratipadika: PyPratipadika, taddhita: PyTaddhita) -> Self {
+        let taddhitanta = Taddhitanta::builder()
+            .pratipadika(pratipadika.0)
+            .taddhita(taddhita.into())
+            .build()
+            .expect("has both pratipadika and taddhita");
+        Self(Pratipadika::Taddhitanta(taddhitanta.into()))
+    }
+
     /*
     /// The text of this stem.
     #[getter]

@@ -254,4 +254,11 @@ impl PyVyakarana {
         let results = self.0.derive_subantas(&args);
         to_py_prakriyas(results)
     }
+
+    #[pyo3(signature = (*, dhatu))]
+    pub fn derive_dhatus(&self, dhatu: &PyDhatu) -> Vec<PyPrakriya> {
+        let args = dhatu.as_ref();
+        let results = self.0.derive_dhatus(&args);
+        to_py_prakriyas(results)
+    }
 }

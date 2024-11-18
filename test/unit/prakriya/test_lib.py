@@ -6,6 +6,8 @@ from vidyut.prakriya import (
     Krt,
     Lakara,
     Linga,
+    Gana,
+    Dhatu,
     Pratipadika,
     Prayoga,
     Purusha,
@@ -178,6 +180,18 @@ def test_derive_yananta_tinantas(code, expected):
     assert expected == actual
 
 
+def test_derive_subantas():
+    prakriyas = v.derive_subantas(
+        pratipadika=Pratipadika(text="deva"),
+        linga=Linga.Pum,
+        vibhakti=Vibhakti.Prathama,
+        vacana=Vacana.Eka,
+    )
+    expected = {"devaH"}
+    actual = {x.text for x in prakriyas}
+    assert expected == actual
+
+
 @pytest.mark.parametrize(
     "code,expected",
     [
@@ -206,14 +220,8 @@ def test_derive_taddhitantas():
     assert prakriyas[0].text == "gOrava"
 
 
-
-def test_derive_subantas():
-    prakriyas = v.derive_subantas(
-        pratipadika=Pratipadika(text="deva"),
-        linga=Linga.Pum,
-        vibhakti=Vibhakti.Prathama,
-        vacana=Vacana.Eka,
-    )
-    expected = {"devaH"}
-    actual = {x.text for x in prakriyas}
-    assert expected == actual
+def test_derive_dhatus():
+    upa_r = Dhatu.mula(aupadeshika="f\\", gana=Gana.Bhvadi).with_prefixes(["upa"])
+    prakriyas = v.derive_dhatus(dhatu=upa_r)
+    assert len(prakriyas) == 1
+    assert prakriyas[0].text == "upAr"
