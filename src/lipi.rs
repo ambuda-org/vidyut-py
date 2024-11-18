@@ -474,10 +474,7 @@ py_enum!(
 /// approach than this function provides.
 #[pyfunction]
 pub fn detect(input: &str) -> Option<PyScheme> {
-    match lipi::detect(input) {
-        Some(s) => Some(PyScheme::from(s)),
-        None => None,
-    }
+    lipi::detect(input).map(PyScheme::from)
 }
 
 /// Transliterates some text from an input scheme to an output scheme.

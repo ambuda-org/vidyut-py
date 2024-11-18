@@ -65,7 +65,7 @@ fn to_py_prakriyas(prakriyas: Vec<Prakriya>) -> Vec<PyPrakriya> {
     prakriyas
         .into_iter()
         .map(|p| PyPrakriya {
-            text: String::from(p.text()),
+            text: p.text(),
             history: to_py_history(p.history()),
         })
         .collect()
@@ -258,7 +258,7 @@ impl PyVyakarana {
     #[pyo3(signature = (*, dhatu))]
     pub fn derive_dhatus(&self, dhatu: &PyDhatu) -> Vec<PyPrakriya> {
         let args = dhatu.as_ref();
-        let results = self.0.derive_dhatus(&args);
+        let results = self.0.derive_dhatus(args);
         to_py_prakriyas(results)
     }
 }

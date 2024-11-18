@@ -184,7 +184,7 @@ impl PyChandas {
     /// Initialize `Chedaka` by reading the necessary data from the directory at `path`.
     #[new]
     fn new(path: PathBuf) -> PyResult<Self> {
-        match Chandas::from_file(&path) {
+        match Chandas::from_file(path) {
             Ok(chandas) => Ok(PyChandas { chandas }),
             Err(_) => Err(PyOSError::new_err(format!(
                 "Could not read data from path."
@@ -194,7 +194,7 @@ impl PyChandas {
 
     #[staticmethod]
     fn from_text(text: String) -> PyResult<Self> {
-        match Chandas::from_text(&text) {
+        match Chandas::from_text(text) {
             Ok(chandas) => Ok(PyChandas { chandas }),
             Err(_) => Err(PyIOError::new_err(format!("Could not parse text."))),
         }

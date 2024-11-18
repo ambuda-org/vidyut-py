@@ -15,7 +15,7 @@ impl PyKosha {
     /// Load a `Kosha` instance from the given input path.
     #[new]
     fn new(path: PathBuf) -> PyResult<Self> {
-        match Kosha::new(&path) {
+        match Kosha::new(path) {
             Ok(k) => Ok(Self(k)),
             Err(_) => Err(PyOSError::new_err(
                 "Unknown error. Our best guess is that the input file is missing.",
@@ -64,7 +64,7 @@ impl PyBuilder {
     /// If `path` does not exist, the builder will create it.
     #[new]
     fn new(path: PathBuf) -> PyResult<Self> {
-        match Builder::new(&path) {
+        match Builder::new(path) {
             Ok(k) => Ok(Self { builder: Some(k) }),
             Err(_) => Err(PyOSError::new_err(
                 "Unknown error. Our guess is that the input file is missing.",
