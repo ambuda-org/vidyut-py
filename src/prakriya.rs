@@ -2,7 +2,7 @@ use pyo3::basic::CompareOp;
 use pyo3::exceptions::{PyFileNotFoundError, PyValueError};
 use pyo3::prelude::*;
 use std::path::PathBuf;
-use vidyut_prakriya::args::{BaseKrt, Krdanta, Krt, Subanta, Tinanta};
+use vidyut_prakriya::args::{BaseKrt, Krdanta, Krt, Subanta, Taddhitanta, Tinanta};
 use vidyut_prakriya::{Dhatupatha, Vyakarana};
 use vidyut_prakriya::{Prakriya, Step};
 
@@ -214,6 +214,24 @@ impl PyVyakarana {
         let args = Krdanta::new(dhatu.as_ref().clone(), Krt::from(base_krt));
 
         let results = self.0.derive_krdantas(&args);
+        to_py_prakriyas(results)
+    }
+
+    /// Return all possible taddhitanta prakriyas that can be derived with the given initial
+    /// conditions.
+    #[pyo3(signature = (*, pratipadika, taddhita))]
+    pub fn derive_taddhitantas(
+        &self,
+        pratipadika: &PyPratipadika,
+        taddhita: PyTaddhita,
+    ) -> Vec<PyPrakriya> {
+        let args = Taddhitanta::builder()
+            .pratipadika(pratipadika.as_ref().clone())
+            .taddhita(taddhita.into())
+            .build()
+            .expect("has both pratipadika and taddhita");
+
+        let results = self.0.derive_taddhitantas(&args);
         to_py_prakriyas(results)
     }
 

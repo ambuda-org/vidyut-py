@@ -16,6 +16,7 @@ Linga = __mod.Linga
 Prayoga = __mod.Prayoga
 Purusha = __mod.Purusha
 Sanadi = __mod.Sanadi
+Taddhita = __mod.Taddhita
 Vacana = __mod.Vacana
 Vibhakti = __mod.Vibhakti
 

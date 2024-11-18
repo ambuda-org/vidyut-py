@@ -11,6 +11,7 @@ from vidyut.prakriya import (
     Prayoga,
     Purusha,
     Sanadi,
+    Taddhita,
     Vacana,
     Vibhakti,
 )
@@ -85,6 +86,7 @@ def test_pratipadika_eq():
         Prayoga,
         Purusha,
         Sanadi,
+        Taddhita,
         Vacana,
         Vibhakti,
     ],

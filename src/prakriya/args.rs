@@ -148,6 +148,7 @@ py_enum!(
     [Ghatadi, Kutadi, Asvadiya, Adhrshiya, Akusmiya]
 );
 
+/// The complete list of ordinary *kṛt pratyaya*s.
 #[pyclass(name = "Krt", module = "prakriya", eq, eq_int)]
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
 #[allow(non_camel_case_types)]
@@ -369,6 +370,376 @@ py_enum!(
         wak, qa, qara, qu, Ra, Ramul, Rini, Ryat, Ryuw, Rvi, Rvuc, Rvul, tavya, tavyat, tumun, tfc,
         tfn, Takan, naN, najiN, nan, manin, Sa, Satf, SAnac, SAnan, yat, yuc, ra, ru, lyu, lyuw,
         vanip, varac, vic, viw, vuY, vun, zAkan, zwran, zvun
+    ]
+);
+
+/// The complete list of *taddhita pratyaya*s.
+#[pyclass(name = "Taddhita", module = "prakriya", eq, eq_int)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq)]
+#[allow(non_camel_case_types)]
+pub enum PyTaddhita {
+    /// a
+    a,
+    /// -aka
+    akac,
+    /// -a
+    ac,
+    /// -aWa
+    aWac,
+    /// -a
+    aR,
+    /// -a
+    aY,
+    /// -a
+    at,
+    /// -atas
+    atasuc,
+    /// -an
+    anic,
+    /// -a
+    ap,
+    /// -as
+    asic,
+    /// -astAt
+    astAti,
+    /// -Akin,
+    Akinic,
+    /// -Ara
+    Arak,
+    /// -i
+    iY,
+    /// -ita
+    itac,
+    /// -ina
+    inac,
+    /// -in
+    ini,
+    /// -iman
+    imanic,
+    /// -ila
+    ila,
+    /// -ila
+    ilac,
+    /// -izWa
+    izWan,
+    /// -Ika,
+    Ikak,
+    /// -Ika,
+    Ikan,
+    /// -Iyas
+    Iyasun,
+    /// -eRya
+    eRya,
+    /// -Era
+    Erak,
+    /// -ka
+    ka,
+    /// -ka
+    kak,
+    /// -kawa
+    kawac,
+    /// -ka
+    kan,
+    /// -ka
+    kap,
+    /// -kalpa
+    kalpap,
+    /// -kftvas
+    kftvasuc,
+    /// -kuwAra
+    kuwArac,
+    /// -kura,
+    kuRap,
+    /// -Ina
+    Ka,
+    /// -Ina
+    KaY,
+    /// -iya
+    Ga,
+    /// -iya
+    Gac,
+    /// -iya
+    Gan,
+    /// -iya
+    Gas,
+    /// -caRa
+    caRap,
+    /// -cara
+    caraw,
+    /// -cuYcu
+    cuYcup,
+    /// -Ayana
+    cPaY,
+    /// --
+    cvi,
+    /// -Iya
+    Ca,
+    /// -Iya,
+    CaR,
+    /// -Iya,
+    Cas,
+    /// -jAtIya
+    jAtIyar,
+    /// -jAha
+    jAhac,
+    /// -a,
+    Ya,
+    /// -ika
+    YiW,
+    /// -ya
+    Yya,
+    /// -ya,
+    YyaN,
+    /// -ya
+    Yyaw,
+    /// -a
+    wac,
+    /// -a
+    waq,
+    /// -iWa
+    wiWan,
+    /// -wIwa
+    wIwac,
+    /// -eRya
+    weRyaR,
+    /// -ya
+    wyaR,
+    /// -ana
+    wyu,
+    /// -ana
+    wyul,
+    /// -la
+    wlaY,
+    /// -ika
+    Wak,
+    /// -ika
+    Wac,
+    /// -ika
+    WaY,
+    /// -ika
+    Wan,
+    /// -ika
+    Wap,
+    /// -a
+    qaw,
+    /// -ati
+    qati,
+    /// -atara
+    qatarac,
+    /// -atama
+    qatamac,
+    /// -pa
+    qupac,
+    /// -mat
+    qmatup,
+    /// -ya
+    qyaR,
+    /// -vala
+    qvalac,
+    /// -aka
+    qvun,
+    /// -eya
+    Qak,
+    /// -eyaka
+    QakaY,
+    /// -eya
+    Qa,
+    /// -eya
+    QaY,
+    /// -eyin
+    Qinuk,
+    /// -era
+    Qrak,
+    /// -a
+    Ra,
+    /// -in
+    Rini,
+    /// -ya
+    Rya,
+    /// -tama
+    tamap,
+    /// -taya
+    tayap,
+    /// -tara
+    tarap,
+    /// -ta (becomes -tA)
+    tal,
+    /// -tas
+    tasi,
+    /// -tas
+    tasil,
+    /// -ti
+    ti,
+    /// -tika
+    tikan,
+    /// -tIya
+    tIya,
+    /// -tya
+    tyak,
+    /// -tyaka
+    tyakan,
+    /// -tya
+    tyap,
+    /// -tana
+    tyu,
+    /// -tana
+    tyul,
+    /// -tra
+    tral,
+    /// -trA
+    trA,
+    /// -tva
+    tva,
+    /// -Tam
+    Tamu,
+    /// -Tya
+    Tyan,
+    /// -TA
+    TAl,
+    /// -daGna
+    daGnac,
+    /// -dA
+    dA,
+    /// -dAnIm
+    dAnIm,
+    /// -deSya
+    deSya,
+    /// -deSIya
+    deSIyar,
+    /// -dvayasa
+    dvayasac,
+    /// -dhA
+    DA,
+    /// -na
+    na,
+    /// -na
+    naY,
+    /// -nAwa
+    nAwac,
+    /// -Ayana
+    Pak,
+    /// -Ayana
+    PaY,
+    /// -Ayani
+    PiY,
+    /// -bahu
+    bahuc,
+    /// -biqa
+    biqac,
+    /// -birIsa
+    birIsac,
+    /// -Bakta
+    Baktal,
+    /// -Brawa
+    Brawac,
+    /// -ma
+    ma,
+    /// -mat
+    matup,
+    /// -ma
+    map,
+    /// -maya
+    mayaw,
+    /// -mAtra
+    mAtrac,
+    /// -pASa
+    pASap,
+    /// -piwa
+    piwac,
+    /// -ya
+    ya,
+    /// -ya
+    yak,
+    /// -ya
+    yaY,
+    /// -ya
+    yat,
+    /// -ya
+    yan,
+    /// -yu
+    yus,
+    /// -ra
+    ra,
+    /// -rUpa
+    rUpap,
+    /// -rhi
+    rhil,
+    /// -rUpya
+    rUpya,
+    /// -la
+    lac,
+    /// -vat
+    vatup,
+    /// -vaya
+    vaya,
+    /// -vala
+    valac,
+    /// -vin
+    vini,
+    /// -viDu
+    viDal,
+    /// -aka
+    vuk,
+    /// -aka
+    vuY,
+    /// -aka
+    vun,
+    /// -vya
+    vyat,
+    /// -vya
+    vyan,
+    /// -Sa
+    Sa,
+    /// -SaNkawa
+    SaNkawac,
+    /// -SAla
+    SAlac,
+    /// -Sas
+    Sas,
+    /// -za
+    za,
+    /// -ka
+    zkan,
+    /// -tra
+    zwarac,
+    /// -ika
+    zWac,
+    /// -ika
+    zWan,
+    /// -ika
+    zWal,
+    /// Ayana
+    zPak,
+    /// -sa
+    sa,
+    /// -sna
+    sna,
+    /// -sAt
+    sAti,
+    /// -s
+    suc,
+    /// -sna
+    snaY,
+    /// -ha
+    ha,
+}
+
+py_enum!(
+    PyTaddhita,
+    Taddhita,
+    [
+        a, akac, ac, aWac, aR, aY, at, atasuc, anic, ap, asic, astAti, Akinic, Arak, iY, itac,
+        inac, ini, imanic, ila, ilac, izWan, Ikak, Ikan, Iyasun, eRya, Erak, ka, kak, kawac, kan,
+        kap, kalpap, kftvasuc, kuwArac, kuRap, Ka, KaY, Ga, Gac, Gan, Gas, caRap, caraw, cuYcup,
+        cPaY, cvi, Ca, CaR, Cas, jAtIyar, jAhac, Ya, YiW, Yya, YyaN, Yyaw, wac, waq, wiWan, wIwac,
+        weRyaR, wyaR, wyu, wyul, wlaY, Wak, Wac, WaY, Wan, Wap, qaw, qati, qatarac, qatamac, qupac,
+        qmatup, qyaR, qvalac, qvun, Qak, QakaY, Qa, QaY, Qinuk, Qrak, Ra, Rini, Rya, tamap, tayap,
+        tarap, tal, tasi, tasil, ti, tikan, tIya, tyak, tyakan, tyap, tyu, tyul, tral, trA, tva,
+        Tamu, Tyan, TAl, daGnac, dA, dAnIm, deSya, deSIyar, dvayasac, DA, na, naY, nAwac, Pak, PaY,
+        PiY, bahuc, biqac, birIsac, Baktal, Brawac, ma, matup, map, mayaw, mAtrac, pASap, piwac,
+        ya, yak, yaY, yat, yan, yus, ra, rUpap, rhil, rUpya, lac, vatup, vaya, valac, vini, viDal,
+        vuk, vuY, vun, vyat, vyan, Sa, SaNkawac, SAlac, Sas, za, zkan, zwarac, zWac, zWan, zWal,
+        zPak, sa, sna, sAti, suc, snaY, ha
     ]
 );
 
