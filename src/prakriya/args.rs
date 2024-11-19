@@ -10,7 +10,7 @@ use pyo3::prelude::*;
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
 use std::str::FromStr;
-use vidyut_prakriya::args::*;
+use vidyut_prakriya::args::{BaseKrt as Krt, *};
 
 #[pyclass(name = "Gana", module = "prakriya", eq, eq_int, ord)]
 #[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
@@ -285,7 +285,7 @@ pub enum PyKrt {
 
 py_enum!(
     PyKrt,
-    BaseKrt,
+    Krt,
     [
         a, aN, ac, aR, atfn, aTuc, ani, anIyar, ap, Aluc, Aru, ika, ikavaka, itra, in_, ini, izRuc,
         u, ukaY, Uka, ka, kaY, kamul, kasun, kap, kAnac, ki, kin, kurac, kelimar, kta, ktavatu,
@@ -746,7 +746,7 @@ py_enum!(PyPurusha, Purusha, [Prathama, Madhyama, Uttama]);
 
 #[allow(non_camel_case_types)]
 #[pyclass(name = "Sanadi", module = "prakriya", eq, eq_int, ord)]
-#[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
+#[derive(Copy, Clone, Debug, Eq, Hash, PartialEq, PartialOrd)]
 pub enum PySanadi {
     /// `san`, which creates desiderative roots per 3.1.7.
     ///
@@ -777,7 +777,7 @@ pub enum PySanadi {
 py_enum!(
     PySanadi,
     Sanadi,
-    [kAmyac, kyaN, kyac, Ric, yaN, yaNluk, san]
+    [san, yaN, yaNluk, Ric, kAmyac, kyaN, kyac]
 );
 
 /// The number of some tinanta or subanta.
@@ -871,7 +871,7 @@ impl PyDhatu {
     /// If `nama_sanadi` is `None`, the program will try finding a sanadi match by appling the
     /// rules in pada 3.1 of the Ashtadhyayi. If no match is found, the prakriya will abort.
     #[staticmethod]
-    #[pyo3(signature = (*, pratipadika, nama_sanadi))]
+    #[pyo3(signature = (*, pratipadika, nama_sanadi=None))]
     pub fn nama(pratipadika: PyPratipadika, nama_sanadi: Option<PySanadi>) -> Self {
         PyDhatu(Dhatu::nama(
             pratipadika.as_ref().clone(),
@@ -924,14 +924,44 @@ impl PyDhatu {
     }
 
     pub fn __repr__(&self) -> String {
-        match self.gana() {
-            Some(g) => format!(
-                "Dhatu(aupadeshika='{}', gana={})",
-                self.aupadeshika(),
-                g.__repr__()
-            ),
-            None => format!("Dhatu(aupadeshika='{}', gana=None)", self.aupadeshika()),
+        let mut args = String::new();
+        args.push_str(&format!("aupadeshika='{}'", self.aupadeshika()));
+
+        if let Some(g) = self.gana() {
+            args.push_str(&format!(", gana={}", g.__repr__()));
         }
+
+        if let Some(a) = self.antargana() {
+            args.push_str(&format!(", antargana={}", a.__repr__()));
+        }
+
+        if !self.prefixes().is_empty() {
+            args.push_str(", prefixes=[");
+            let mut pushed = false;
+            for p in self.prefixes() {
+                if pushed {
+                    args.push_str(", ");
+                }
+                args.push_str(&format!("'{}'", p));
+                pushed = true;
+            }
+            args.push_str("]");
+        }
+
+        if !self.sanadi().is_empty() {
+            args.push_str(", sanadi=[");
+            let mut pushed = false;
+            for s in self.sanadi() {
+                if pushed {
+                    args.push_str(", ");
+                }
+                args.push_str(&s.__repr__());
+                pushed = true;
+            }
+            args.push_str("]");
+        }
+
+        format!("Dhatu({})", args)
     }
 }
 

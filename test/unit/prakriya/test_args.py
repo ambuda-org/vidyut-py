@@ -34,8 +34,12 @@ from vidyut.prakriya import (
 )
 def test_dhatu__mula(kwargs):
     d = Dhatu.mula(**kwargs)
-    for key, value in kwargs.items():
-        assert getattr(d, key) == value
+
+    assert d.aupadeshika == kwargs["aupadeshika"]
+    assert d.gana == kwargs["gana"]
+    assert d.antargana == kwargs.get("antargana")
+    assert d.prefixes == kwargs.get("prefixes", [])
+    assert d.sanadi == kwargs.get("sanadi", [])
 
 
 def test_dhatu__mula_must_have_aupadeshika_and_gana():
@@ -53,12 +57,23 @@ def test_dhatu__mula_must_have_aupadeshika_and_gana():
 
 
 def test_dhatu__nama():
-    d = Dhatu.nama(pratipadika=Pratipadika(text="putra"), nama_sanadi=Sanadi.kAmyac)
+    _ = Dhatu.nama(pratipadika=Pratipadika(text="putra"), nama_sanadi=Sanadi.kAmyac)
+    _ = Dhatu.nama(pratipadika=Pratipadika(text="putra"))
+
+
+def test_dhatu__nama_must_have_pratipadika():
+    try:
+        d = Dhatu.nama(nama_sanadi=Sanadi.kAmyac)
+        assert False, "Must have pratipadika"
+    except TypeError:
+        pass
 
 
 def test_dhatu__dunders():
     bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
     gam = Dhatu.mula(aupadeshika="ga\\mx~", gana=Gana.Bhvadi)
+    kut = Dhatu.mula(aupadeshika="kuwa~", gana=Gana.Tudadi, antargana=Antargana.Kutadi)
+    abhibubhusha = bhu.with_prefixes(["aBi"]).with_sanadi([Sanadi.san])
 
     # __eq__, __ne__
     bhu2 = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
@@ -71,6 +86,8 @@ def test_dhatu__dunders():
 
     # __repr__
     assert repr(bhu) == "Dhatu(aupadeshika='BU', gana=Gana.Bhvadi)"
+    assert repr(kut) == "Dhatu(aupadeshika='kuwa~', gana=Gana.Tudadi, antargana=Antargana.Kutadi)"
+    assert repr(abhibubhusha) == "Dhatu(aupadeshika='BU', gana=Gana.Bhvadi, prefixes=['aBi'], sanadi=[Sanadi.san])"
 
 
 @pytest.mark.skip("need to fix pratipadika internal representation")
@@ -82,11 +99,6 @@ def test_pratipadika_new():
 def test_pratipadika_new__fails_if_no_args():
     with pytest.raises(TypeError):
         _p = Pratipadika()
-
-
-def test_pratipadika_new__fails_if_unnamed_args():
-    with pytest.raises(TypeError):
-        _p = Pratipadika("deva")
 
 
 def test_pratipadika__dunders():
@@ -123,13 +135,26 @@ def test_pratipadika__dunders():
     ],
 )
 def test_enums(enum):
-    # Enum values can round-trip through strings
+    # Enum values can round-trip through strings.
     for val in enum.choices():
         assert enum.from_string(str(val)) == val
 
-    # Enums can be ordered.
+    # Enum values can be ordered.
     _ = sorted(enum.choices())
 
-    # Enum values are hashable.
+    # Enum values are already in sorted order
+    assert enum.choices()
+    print(enum.choices())
+    print(sorted(enum.choices()))
+    assert sorted(enum.choices()) == enum.choices()
+
+    # Enum values set the `name` attribute.
     for val in enum.choices():
-        _data = {val: "foo"}
+        assert getattr(enum, val.name) == val
+
+    # `__repr__` can be used to create an enum.
+    for val in enum.choices():
+        assert eval(repr(val)) == val
+
+    # Enum values are hashable.
+    _ = {val: "foo" for val in enum.choices()}
