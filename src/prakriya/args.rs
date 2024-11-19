@@ -9,7 +9,6 @@ use pyo3::exceptions::PyNotImplementedError;
 use pyo3::prelude::*;
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
-use std::str::FromStr;
 use vidyut_prakriya::args::{BaseKrt as Krt, *};
 
 #[pyclass(name = "Gana", module = "prakriya", eq, eq_int, ord)]

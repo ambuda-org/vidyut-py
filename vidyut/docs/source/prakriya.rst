@@ -150,19 +150,7 @@ The fourth is `derive_taddhitantas`, which adds suffixes to nominal stems::
     assert len(prakriyas) == 1
     assert prakriyas[0].text == "gOrava"
 
-The fifth is `derive_dhatus`, which combines various terms to create a final
-dhatu::
-
-    from vidyut.prakriya import *
-
-    v = Vyakarana()
-    upa_r = Dhatu.mula(aupadeshika="f\\", gana=Gana.Bhvadi).with_prefixes(["upa"])
-    prakriyas = v.derive_dhatus(upa_r)
-
-    assert len(prakriyas) == 1
-    assert prakriyas[0].text == "upAr"
-
-The sixth is `derive_pratipadikas`, which combines various terms to create a
+The fifth is `derive_pratipadikas`, which combines various terms to create a
 final pratipadika::
 
     from vidyut.prakriya import *
@@ -175,6 +163,17 @@ final pratipadika::
     assert len(prakriyas) == 1
     assert prakriyas[0].text == "aBiBAvaka"
 
+The sixth is `derive_dhatus`, which combines various terms to create a final
+dhatu::
+
+    from vidyut.prakriya import *
+
+    v = Vyakarana()
+    upa_r = Dhatu.mula(aupadeshika="f\\", gana=Gana.Bhvadi).with_prefixes(["upa"])
+    prakriyas = v.derive_dhatus(upa_r)
+
+    assert len(prakriyas) == 1
+    assert prakriyas[0].text == "upAr"
 
 
 Specifying arguments
@@ -198,6 +197,13 @@ Or one or more :class:`Sanadi` suffixes::
 
     # Or, use the shorthand method `with_sanadi`.
     bubhusha = bhu.with_sanadi([Sanadi.san])
+
+    # These can be combined with prefixes.
+    abhibubhusha = bhu.with_prefixes(["aBi"]).with_sanadi([Sanadi.san])
+
+All of these dhatus can be passed to functions that expect dhatus::
+
+
 
 Likewise, we can declare a `pratipadika` as coming from a krdanta::
 

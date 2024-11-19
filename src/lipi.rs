@@ -44,12 +44,25 @@ macro_rules! py_enum {
                 hasher.finish()
             }
 
+            fn __repr__(&self) -> String {
+                format!("{}.{}", stringify!{$Rust}, self.name())
+            }
+
             fn __str__(&self) -> String {
-                match self {
+                self.name()
+            }
+
+            /// The name used to define the `Enum` member.
+            ///
+            /// (Defined for compatibility with Python enums.)
+            #[getter]
+            fn name(&self) -> String {
+                let ret = match self {
                     $(
-                        $Py::$variant => String::from(stringify!($variant)),
+                        $Py::$variant => stringify!($variant),
                     )*
-                }
+                };
+                ret.to_string()
             }
 
             /// Returns all options for this enum.
@@ -102,8 +115,8 @@ macro_rules! py_enum {
 /// - writing system (alphabet vs. abugida)
 /// - text encoding (ASCII vs. Unicode)
 /// - support for Sanskrit (complete vs. partial)
-#[pyclass(name = "Scheme", module = "lipi", eq, eq_int)]
-#[derive(Copy, Clone, Eq, Hash, PartialEq)]
+#[pyclass(name = "Scheme", module = "lipi", eq, eq_int, ord)]
+#[derive(Copy, Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum PyScheme {
     /// Assamese script.
     ///

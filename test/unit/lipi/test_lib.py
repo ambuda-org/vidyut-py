@@ -3,14 +3,32 @@ import pytest
 from vidyut.lipi import transliterate, detect, Scheme
 
 
-def test_scheme():
-    # Verify that round-tripping through strings works.
+def test_scheme_can_be_stringified():
     for val in Scheme.choices():
         assert Scheme.from_string(str(val)) == val
 
-    # Verify that enums are hashable.
+
+def test_scheme_can_be_ordered():
+    _ = sorted(Scheme.choices())
+
+
+def test_scheme_is_in_sorted_order():
+    assert Scheme.choices()
+    assert sorted(Scheme.choices()) == Scheme.choices()
+
+
+def test_scheme_defines_attr_name():
     for val in Scheme.choices():
-        _data = {val: "foo"}
+        assert getattr(Scheme, val.name) == val
+
+
+def test_scheme_repr():
+    for val in Scheme.choices():
+        assert eval(repr(val)) == val
+
+
+def test_scheme_is_hashable():
+    _ = {val: "foo" for val in Scheme.choices()}
 
 
 @pytest.mark.parametrize(

@@ -17,6 +17,21 @@ from vidyut.prakriya import (
 )
 
 
+ENUMS = [
+        Antargana,
+        Gana,
+        Krt,
+        Lakara,
+        Linga,
+        Prayoga,
+        Purusha,
+        Sanadi,
+        Taddhita,
+        Vacana,
+        Vibhakti,
+    ]
+
+
 @pytest.mark.parametrize(
     "kwargs",
     [
@@ -118,41 +133,35 @@ def test_pratipadika__dunders():
     assert repr(deva) == "Pratipadika(text='deva')"
 
 
-@pytest.mark.parametrize(
-    "enum",
-    [
-        Antargana,
-        Gana,
-        Krt,
-        Lakara,
-        Linga,
-        Prayoga,
-        Purusha,
-        Sanadi,
-        Taddhita,
-        Vacana,
-        Vibhakti,
-    ],
-)
-def test_enums(enum):
-    # Enum values can round-trip through strings.
+@pytest.mark.parametrize("enum", ENUMS)
+def test_enums_can_be_stringified(enum):
     for val in enum.choices():
         assert enum.from_string(str(val)) == val
 
-    # Enum values can be ordered.
+
+@pytest.mark.parametrize("enum", ENUMS)
+def test_enums_can_be_ordered(enum):
     _ = sorted(enum.choices())
 
-    # Enum values are already in sorted order.
+
+@pytest.mark.parametrize("enum", ENUMS)
+def test_enums_are_in_sorted_order(enum):
     assert enum.choices()
     assert sorted(enum.choices()) == enum.choices()
 
-    # Enum values set the `name` attribute.
+
+@pytest.mark.parametrize("enum", ENUMS)
+def test_enums_define_attr_name(enum):
     for val in enum.choices():
         assert getattr(enum, val.name) == val
 
-    # `__repr__` can be used to create an enum.
+
+@pytest.mark.parametrize("enum", ENUMS)
+def test_enums_repr(enum):
     for val in enum.choices():
         assert eval(repr(val)) == val
 
-    # Enum values are hashable.
+
+@pytest.mark.parametrize("enum", ENUMS)
+def test_enums_hashable(enum):
     _ = {val: "foo" for val in enum.choices()}

@@ -1,5 +1,6 @@
 /// Generates the following boilerplate methods:
 /// - `__hash__`
+/// - `__repr__`
 /// - `__str__`
 /// - `from_string`, which is the inverse of `__str__`
 /// - `From<RustEnum> for PyEnum`
@@ -10,7 +11,6 @@
 ///
 /// Requirements:
 /// - Enum must derive `Hash`
-/// - Rust enum must implement `FromStr`.
 ///
 /// For enum compat, see: https://github.com/PyO3/pyo3/issues/2887
 macro_rules! py_enum {
@@ -54,8 +54,7 @@ macro_rules! py_enum {
             }
 
             fn __str__(&self) -> String {
-                let rust: $Rust = self.clone().into();
-                rust.as_str().to_string()
+                self.name()
             }
 
             /// The name used to define the `Enum` member.
@@ -87,9 +86,11 @@ macro_rules! py_enum {
             /// This is the inverse of the `__str__` method.
             #[staticmethod]
             fn from_string(val: &str) -> PyResult<Self> {
-                match $Rust::from_str(val) {
-                    Ok(x) => Ok(x.into()),
-                    Err(_) => Err(PyNotImplementedError::new_err("Could not parse {val}")),
+                match val {
+                    $(
+                        stringify!($variant) => Ok($Py::$variant),
+                    )*
+                    _ => Err(PyNotImplementedError::new_err(format!("Could not parse {val}"))),
                 }
             }
         }
