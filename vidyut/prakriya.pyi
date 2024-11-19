@@ -65,9 +65,7 @@ class Vyakarana:
         sanadi: Optional[Sanadi] = None,
     ) -> List[Prakriya]:
         pass
-    def derive_krdantas(self, dhatu: Dhatu, krt: Krt) -> List[Prakriya]:
-        pass
-    def derive_krdantas(self,
+    def derive_subantas(self,
         pratipadika: Pratipadika,
         linga: Linga,
         vibhakti: Vibhakti,

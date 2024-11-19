@@ -50,9 +50,9 @@ To illustrate, let's derive the simple verb ``Bavati``::
     prakriyas = v.derive_tinantas(
         dhatu=bhu,
         prayoga=Prayoga.Kartari,
+        lakara=Lakara.Lat,
         purusha=Purusha.Prathama,
         vacana=Vacana.Eka,
-        lakara=Lakara.Lat,
     )
 
     # 3. Receive a list of prakriyas.
@@ -93,9 +93,11 @@ This produces the following output:
 Basic methods
 -------------
 
+.. py:currentmodule:: vidyut.prakriya.Vyakarana
+
 `vidyut.prakriya` currently exposes four basic methods.
 
-The first is `derive_tinantas`, which creates verbs::
+The first is :meth:`derive_tinantas`, which creates verbs::
 
     from vidyut.prakriya import *
 
@@ -104,15 +106,15 @@ The first is `derive_tinantas`, which creates verbs::
     prakriyas = v.derive_tinantas(
         dhatu=bhu,
         prayoga=Prayoga.Kartari,
+        lakara=Lakara.Lat,
         purusha=Purusha.Prathama,
         vacana=Vacana.Eka,
-        lakara=Lakara.Lat,
     )
 
     assert len(prakriyas) == 1
     assert prakriyas[0].text == "Bavati"
 
-The second is `derive_subantas`, which creates nominals::
+The second is :meth:`derive_subantas`, which creates nominals::
 
     from vidyut.prakriya import (
         Pratipadika,
@@ -131,8 +133,8 @@ The second is `derive_subantas`, which creates nominals::
     assert len(prakriyas) == 1
     assert prakriyas[0].text == "devaH"
 
-The third is `derive_pratipadikas`, which combines various terms to create a
-pratipadika::
+The third is :meth:`derive_pratipadikas`, which combines various terms to
+create a pratipadika::
 
     from vidyut.prakriya import *
 
@@ -150,7 +152,8 @@ pratipadika::
     prakriyas = v.derive_pratipadikas(gaurava)
     assert prakriyas[0].text == "gOrava"
 
-The fourth is `derive_dhatus`, which combines various terms to create a dhatu::
+The fourth is :meth:`derive_dhatus`, which combines various terms to create a
+dhatu::
 
     from vidyut.prakriya import *
 
@@ -164,6 +167,8 @@ The fourth is `derive_dhatus`, which combines various terms to create a dhatu::
 
 Specifying arguments
 --------------------
+
+.. py:currentmodule:: vidyut.prakriya
 
 The real expressive power in this package comes from expressing different kinds
 of arguments.
@@ -192,9 +197,9 @@ These dhatus can be passed to any function that expects a :class:`Dhatu`::
     prakriyas = v.derive_tinantas(
         dhatu=abhibubhusha,
         prayoga=Prayoga.Kartari,
+        lakara=Lakara.Lat,
         purusha=Purusha.Prathama,
         vacana=Vacana.Eka,
-        lakara=Lakara.Lat,
     )
     assert prakriyas[0].text == 'aBibuBUzati'
 
@@ -205,7 +210,7 @@ Likewise, we can declare that a :class:`Pratipadika` is a *krdanta*::
 
 Or a *taddhitanta*::
 
-    guru = Pratipadika.basic(text="guru")
+    guru = Pratipadika.basic("guru")
     gaurava = Pratipadika.taddhitanta(guru, Taddhita.aR)
 
 These pratipadikas can be passed to any function that expects a :class:`Pratipadika`::
@@ -235,9 +240,9 @@ Dhatupatha::
         prakriyas = v.derive_tinantas(
             dhatu=dhatu,
             prayoga=Prayoga.Kartari,
+            lakara=Lakara.Lat,
             purusha=Purusha.Prathama,
             vacana=Vacana.Eka,
-            lakara=Lakara.Lat,
         )
         for prakriya in prakriyas:
             print(prakriya.text)
@@ -253,8 +258,8 @@ This section contains various recipes that show how to use `vidyut.prakriya`
 for different tasks.
 
 
-Generate all tinantas for a dhatu and prayoga
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Generate all tinantas for some dhatu and prayoga
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -269,9 +274,9 @@ Generate all tinantas for a dhatu and prayoga
                 prakriyas = v.derive_tinantas(
                     dhatu=bhu,
                     prayoga=Prayoga.kartari,
+                    lakara=lakara,
                     purusha=purusha,
                     vacana=vacana,
-                    lakara=lakara,
                 )
                 for p in prakriyas:
                     print(p.text)
@@ -297,9 +302,9 @@ Generate all tinantas for some prayoga
                         prakriyas = v.derive_tinantas(
                             dhatu=dhatu,
                             prayoga=prayoga,
+                            lakara=lakara,
                             purusha=purusha,
                             vacana=vacana,
-                            lakara=lakara,
                         )
                         for p in prakriyas:
                             print(p.text)
@@ -313,7 +318,7 @@ Generate all subantas for some pratipadika
     from vidyut.prakriya import *
 
     v = Vyakarana(log_steps=False)
-    nara = Pratipadika.basic(text="nara")
+    nara = Pratipadika.basic("nara")
 
     for vibhakti in Vibhakti.choices():
         for vacana in Vacana.choices():
@@ -327,8 +332,8 @@ Generate all subantas for some pratipadika
                 print(vibhakti, vacana, p.text)
 
 
-Generate all krdantas for a dhatu
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Generate all krdantas for some dhatu
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
@@ -346,15 +351,15 @@ Generate all krdantas for a dhatu
             print(f"- (no results for BU + {krt})")
 
 
-Generate all taddhitantas for a pratipadika
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Generate all taddhitantas for some pratipadika
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
     from vidyut.prakriya import *
 
     v = Vyakarana()
-    guru = Pratipadika.basic(text="guru")
+    guru = Pratipadika.basic("guru")
 
     for taddhita in Taddhita.choices():
         anga = Pratipadika.taddhita(pratipadika=guru, taddhita=taddhita)
@@ -383,9 +388,9 @@ Find all rules used by a dhatu's tinantas
                     prakriyas = v.derive_tinantas(
                         dhatu=bhu,
                         prayoga=prayoga,
+                        lakara=lakara,
                         purusha=purusha,
                         vacana=vacana,
-                        lakara=lakara,
                     )
                     for p in prakriyas:
                         for step in p.history:

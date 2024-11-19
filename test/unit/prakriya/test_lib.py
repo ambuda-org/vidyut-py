@@ -199,23 +199,20 @@ def test_derive_subantas():
         ("08.0010", "kftvA"),
     ],
 )
-def test_derive_krdantas(code, expected):
+def test_derive_pratipadikas_with_krdanta(code, expected):
     dhatu = d[code]
-    prakriyas = v.derive_krdantas(
-        dhatu=dhatu,
-        krt=Krt.ktvA,
-    )
+    anga = Pratipadika.krdanta(dhatu, Krt.ktvA)
+    prakriyas = v.derive_pratipadikas(anga)
+
     expected = set(expected.split("|"))
     actual = {x.text for x in prakriyas}
     assert expected == actual
 
 
-def test_derive_taddhitantas():
-    pratipadika = Pratipadika.basic("guru")
-    prakriyas = v.derive_taddhitantas(
-        pratipadika=pratipadika,
-        taddhita=Taddhita.aR,
-    )
+def test_derive_pratipadikas_with_taddhitanta():
+    guru = Pratipadika.basic("guru")
+    anga = Pratipadika.taddhitanta(guru, Taddhita.aR)
+    prakriyas = v.derive_pratipadikas(anga)
     assert len(prakriyas) == 1
     assert prakriyas[0].text == "gOrava"
 

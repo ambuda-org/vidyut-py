@@ -2,7 +2,7 @@ use pyo3::basic::CompareOp;
 use pyo3::exceptions::{PyFileNotFoundError, PyValueError};
 use pyo3::prelude::*;
 use std::path::PathBuf;
-use vidyut_prakriya::args::{BaseKrt, Krdanta, Krt, Pratipadika, Subanta, Taddhitanta, Tinanta};
+use vidyut_prakriya::args::{Pratipadika, Subanta, Tinanta};
 use vidyut_prakriya::{Dhatupatha, Vyakarana};
 use vidyut_prakriya::{Prakriya, Step};
 
@@ -153,13 +153,22 @@ impl PyDhatupatha {
 }
 
 /// An interface to the rules of the Ashtadhyayi.
+///
+/// Options:
+/// - `log_steps` (default: `True`) -- If set, log each step in the prakriya. Disable this if
+///   you want extra speed.
+/// - `is_chandasi` (default: `False`) -- If set, use rules tagged with *chandasi*, *mantre*,
+///   etc.
+/// - `use_svaras` (default: `False`) -- If set, use rules that add svaras to the output.
+/// - `nlp_mode` (default: `False`) -- If set, preserve the final `s`/`r` of words. This
+///   behavior is useful for certain applications in natural language processing.
 #[pyclass(name = "Vyakarana")]
 #[derive(Default)]
 pub struct PyVyakarana(Vyakarana);
 
 #[pymethods]
 impl PyVyakarana {
-    /// Creates an interface to the system.
+    /// Create an interface to the system.
     ///
     /// Options:
     /// - `log_steps` (default: `True`) -- If set, log each step in the prakriya. Disable this if
@@ -182,16 +191,15 @@ impl PyVyakarana {
         )
     }
 
-    /// Return all possible tinanta prakriyas that can be derived with the given initial
-    /// conditions.
-    #[pyo3(signature = (*, dhatu, prayoga, purusha, vacana, lakara))]
+    /// Return all tinantas that can be derived from the given initial arguments.
+    #[pyo3(signature = (*, dhatu, prayoga, lakara, purusha, vacana))]
     pub fn derive_tinantas(
         &self,
         dhatu: &PyDhatu,
         prayoga: PyPrayoga,
+        lakara: PyLakara,
         purusha: PyPurusha,
         vacana: PyVacana,
-        lakara: PyLakara,
     ) -> Vec<PyPrakriya> {
         let tin_args = Tinanta::builder()
             .dhatu(dhatu.as_rust().clone())
@@ -206,37 +214,7 @@ impl PyVyakarana {
         to_py_prakriyas(results)
     }
 
-    /// Return all possible krdanta prakriyas that can be derived with the given initial
-    /// conditions.
-    #[pyo3(signature = (*, dhatu, krt))]
-    pub fn derive_krdantas(&self, dhatu: &PyDhatu, krt: PyKrt) -> Vec<PyPrakriya> {
-        let base_krt: BaseKrt = krt.into();
-        let args = Krdanta::new(dhatu.as_ref().clone(), Krt::from(base_krt));
-
-        let results = self.0.derive_krdantas(&args);
-        to_py_prakriyas(results)
-    }
-
-    /// Return all possible taddhitanta prakriyas that can be derived with the given initial
-    /// conditions.
-    #[pyo3(signature = (*, pratipadika, taddhita))]
-    pub fn derive_taddhitantas(
-        &self,
-        pratipadika: &PyPratipadika,
-        taddhita: PyTaddhita,
-    ) -> Vec<PyPrakriya> {
-        let args = Taddhitanta::builder()
-            .pratipadika(pratipadika.as_ref().clone())
-            .taddhita(taddhita.into())
-            .build()
-            .expect("has both pratipadika and taddhita");
-
-        let results = self.0.derive_taddhitantas(&args);
-        to_py_prakriyas(results)
-    }
-
-    /// Return all possible krdanta prakriyas that can be derived with the given initial
-    /// conditions.
+    /// Return all subantas that can be derived from the given arguments.
     #[pyo3(signature = (*, pratipadika, linga, vibhakti, vacana))]
     pub fn derive_subantas(
         &self,
@@ -262,7 +240,7 @@ impl PyVyakarana {
         to_py_prakriyas(results)
     }
 
-    /// Creates a pratipadika from the given input.
+    /// Return all pratipadikas that can be derived from the given arguments.
     ///
     /// This function is meant mainly for krdantas and taddhitantas. If a pratipadika cannot be
     /// derived, the function returns an empty list.
