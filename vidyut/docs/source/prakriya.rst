@@ -40,7 +40,7 @@ To illustrate, let's derive the simple verb ``Bavati``::
         Lakara
     )
 
-    # 1. Create a new `Vyakarana` object
+    # 1. Create a new `Vyakarana` object.
     v = Vyakarana()
 
     # 2. Pass arguments to define our derivation.
@@ -53,7 +53,7 @@ To illustrate, let's derive the simple verb ``Bavati``::
         lakara=Lakara.Lat,
     )
 
-    # 3. Receive list of prakriyas.
+    # 3. Receive a list of prakriyas.
     for prakriya in prakriyas:
         print(prakriya.text)
         print('===================')
