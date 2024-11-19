@@ -2,7 +2,7 @@ use pyo3::basic::CompareOp;
 use pyo3::exceptions::{PyFileNotFoundError, PyValueError};
 use pyo3::prelude::*;
 use std::path::PathBuf;
-use vidyut_prakriya::args::{BaseKrt, Krdanta, Krt, Subanta, Taddhitanta, Tinanta};
+use vidyut_prakriya::args::{BaseKrt, Krdanta, Krt, Pratipadika, Subanta, Taddhitanta, Tinanta};
 use vidyut_prakriya::{Dhatupatha, Vyakarana};
 use vidyut_prakriya::{Prakriya, Step};
 
@@ -260,5 +260,25 @@ impl PyVyakarana {
         let args = dhatu.as_ref();
         let results = self.0.derive_dhatus(args);
         to_py_prakriyas(results)
+    }
+
+    /// Creates a pratipadika from the given input.
+    ///
+    /// This function is meant mainly for krdantas and taddhitantas. If a pratipadika cannot be
+    /// derived, the function returns an empty list.
+    #[pyo3(signature = (*, pratipadika))]
+    pub fn derive_pratipadika(&self, pratipadika: &PyPratipadika) -> Vec<PyPrakriya> {
+        let args = pratipadika.as_ref();
+        match args {
+            Pratipadika::Krdanta(k) => {
+                let results = self.0.derive_krdantas(k);
+                to_py_prakriyas(results)
+            }
+            Pratipadika::Taddhitanta(t) => {
+                let results = self.0.derive_taddhitantas(t);
+                to_py_prakriyas(results)
+            }
+            _ => Vec::new(),
+        }
     }
 }

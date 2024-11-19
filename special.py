@@ -1,9 +1,11 @@
 from vidyut.prakriya import *
 
 v = Vyakarana()
+abhibhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi).with_prefixes(["aBi"])
+krdanta = Pratipadika.from_krdanta(dhatu=abhibhu, krt=Krt.Rvul)
+prakriyas = v.derive_pratipadikas(pratipadika=krdanta)
 
-bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
-bhavaka = Pratipadika.from_krdanta(bhu, Krt.Rvul)
+assert len(prakriyas) == 1
+assert prakriyas[0].text == "aBiBAvaka"
+print(prakriyas)
 
-guru = Pratipadika(text="guru")
-gaurava = Pratipadika.from_taddhitanta(guru, Taddhita.aR)

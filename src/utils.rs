@@ -5,9 +5,14 @@
 /// - `From<RustEnum> for PyEnum`
 /// - `From<PyEnum> for RustEnum`
 ///
+/// `__iter__` is not possible since it requires accessing the metaclass.
+/// See https://github.com/PyO3/pyo3/issues/906 and related issues.
+///
 /// Requirements:
 /// - Enum must derive `Hash`
 /// - Rust enum must implement `FromStr`.
+///
+/// For enum compat, see: https://github.com/PyO3/pyo3/issues/2887
 macro_rules! py_enum {
     ($Py:ident, $Rust:ident, [$( $variant:ident ),*]) => {
         impl From<$Rust> for $Py {
@@ -36,13 +41,16 @@ macro_rules! py_enum {
             }
         }
 
-
         #[pymethods]
         impl $Py {
             fn __hash__(&self) -> u64 {
                 let mut hasher = DefaultHasher::new();
                 self.hash(&mut hasher);
                 hasher.finish()
+            }
+
+            fn __repr__(&self) -> String {
+                format!("{}.{}", stringify!{$Rust}, self.name())
             }
 
             fn __str__(&self) -> String {
@@ -66,11 +74,12 @@ macro_rules! py_enum {
             /// Returns all options for this enum.
             #[staticmethod]
             fn choices() -> Vec<$Py> {
-                vec![
+                const CHOICES: &[$Py] = &[
                     $(
                         $Py::$variant,
                     )*
-                ]
+                ];
+                CHOICES.to_vec()
             }
 
             /// Create an enum value from the given string.

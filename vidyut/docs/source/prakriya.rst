@@ -5,8 +5,8 @@ Generating words with `vidyut.prakriya`
 
 `vidyut.prakriya` generates Sanskrit words with their prakriyās (derivations)
 according to the rules of Paninian grammar. This powerful word generator is
-useful both for creating Sanskrit words and for understanding how those words
-are derived. 
+useful both for creating Sanskrit words and for understanding how words are
+derived.
 
 All input text should use the `SLP1`_ encoding scheme.
 
@@ -20,11 +20,12 @@ All usage of `vidyut.prakriya` follows a basic flow:
 
 1. We create a new :class:`Vyakarana` object, which is our main interface to
    the grammar. When we create :class:`Vyakarana`, we can also fine-tune the
-   rules and settings the system will use.
+   rules and settings the system will use. Creating this object is fast and
+   lightweight.
 
-2. We pass various arguments to :class:`Vyakarana` to define our derivation. 
+2. We pass various arguments to :class:`Vyakarana` to define our derivation.
 
-3. We receive a list of :class:`Prakriya` objects, which contain our final
+3. We receive a list of :class:`Prakriya` objects, which contains our final
    results and the rules that produced them.
 
 To illustrate, let's derive the simple verb ``Bavati``::
@@ -39,8 +40,10 @@ To illustrate, let's derive the simple verb ``Bavati``::
         Lakara
     )
 
+    # 1. Create a new `Vyakarana` object
     v = Vyakarana()
 
+    # 2. Pass arguments to define our derivation.
     bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
     prakriyas = v.derive_tinantas(
         dhatu=bhu,
@@ -50,6 +53,7 @@ To illustrate, let's derive the simple verb ``Bavati``::
         lakara=Lakara.Lat,
     )
 
+    # 3. Receive list of prakriyas.
     for prakriya in prakriyas:
         print(prakriya.text)
         print('===================')
@@ -87,7 +91,7 @@ This produces the following output:
 Basic methods
 -------------
 
-`vidyut.prakriya` currently exposes five basic methods.
+`vidyut.prakriya` currently exposes six basic methods.
 
 The first is `derive_tinantas`, which creates verbs::
 
@@ -146,8 +150,8 @@ The fourth is `derive_taddhitantas`, which adds suffixes to nominal stems::
     assert len(prakriyas) == 1
     assert prakriyas[0].text == "gOrava"
 
-The fifth is `derive_dhatus`, which processes raw dhatus from the Dhatupatha
-along with any prefixes and suffixes we might wish to add::
+The fifth is `derive_dhatus`, which combines various terms to create a final
+dhatu::
 
     from vidyut.prakriya import *
 
@@ -157,6 +161,20 @@ along with any prefixes and suffixes we might wish to add::
 
     assert len(prakriyas) == 1
     assert prakriyas[0].text == "upAr"
+
+The sixth is `derive_pratipadikas`, which combines various terms to create a
+final pratipadika::
+
+    from vidyut.prakriya import *
+
+    v = Vyakarana()
+    abhibhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi).with_prefixes(["aBi"])
+    abhibhavaka = Pratipadika.from_krdanta(dhatu=abhibhu, krt=Krt.Rvul)
+    prakriyas = v.derive_pratipadikas(pratipadika=abhibhavaka)
+
+    assert len(prakriyas) == 1
+    assert prakriyas[0].text == "aBiBAvaka"
+
 
 
 Specifying arguments

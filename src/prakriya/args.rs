@@ -5,7 +5,6 @@ Pyo3 doesn't allow us to annotate existing enums, and using a wrapping struct ha
 for callers. So instead, redefine our enums of interest.
 */
 use crate::utils::py_enum;
-use pyo3::basic::CompareOp;
 use pyo3::exceptions::PyNotImplementedError;
 use pyo3::prelude::*;
 use std::collections::hash_map::DefaultHasher;
@@ -13,8 +12,8 @@ use std::hash::{Hash, Hasher};
 use std::str::FromStr;
 use vidyut_prakriya::args::*;
 
-#[pyclass(name = "Gana", module = "prakriya", eq, eq_int)]
-#[derive(Copy, Clone, Eq, Hash, PartialEq)]
+#[pyclass(name = "Gana", module = "prakriya", eq, eq_int, ord)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
 pub enum PyGana {
     /// The first gaṇa, whose first dhatu is `BU`.
     Bhvadi,
@@ -46,8 +45,8 @@ py_enum!(
     [Bhvadi, Adadi, Juhotyadi, Divadi, Svadi, Tudadi, Rudhadi, Tanadi, Kryadi, Curadi, Kandvadi]
 );
 
-#[pyclass(name = "Antargana", module = "prakriya", eq, eq_int)]
-#[derive(Copy, Clone, Eq, Hash, PartialEq)]
+#[pyclass(name = "Antargana", module = "prakriya", eq, eq_int, ord)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
 pub enum PyAntargana {
     /// Antargana of *bhU* gana. A dhatu in this antargana uses a shortened vowel when followed by
     /// Ric-pratyaya.
@@ -74,8 +73,8 @@ py_enum!(
 );
 
 /// The complete list of ordinary *kṛt* pratyayas.
-#[pyclass(name = "Krt", module = "prakriya", eq, eq_int)]
-#[derive(Copy, Clone, Eq, Hash, PartialEq)]
+#[pyclass(name = "Krt", module = "prakriya", eq, eq_int, ord)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
 #[allow(non_camel_case_types)]
 pub enum PyKrt {
     /// -a
@@ -299,8 +298,8 @@ py_enum!(
 );
 
 /// The complete list of *taddhita pratyaya*s.
-#[pyclass(name = "Taddhita", module = "prakriya", eq, eq_int)]
-#[derive(Copy, Clone, Eq, Hash, PartialEq)]
+#[pyclass(name = "Taddhita", module = "prakriya", eq, eq_int, ord)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
 #[allow(non_camel_case_types)]
 pub enum PyTaddhita {
     /// a
@@ -669,8 +668,8 @@ py_enum!(
 );
 
 /// The lakara to use in the derivation.
-#[pyclass(name = "Lakara", module = "prakriya", eq, eq_int)]
-#[derive(Copy, Clone, Eq, Hash, PartialEq)]
+#[pyclass(name = "Lakara", module = "prakriya", eq, eq_int, ord)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
 pub enum PyLakara {
     /// Describes action in the present tense. Ssometimes called the *present indicative*.
     Lat,
@@ -703,8 +702,8 @@ py_enum!(
 );
 
 /// The linga to use in the derivation.
-#[pyclass(name = "Linga", module = "prakriya", eq, eq_int)]
-#[derive(Copy, Clone, Eq, Hash, PartialEq)]
+#[pyclass(name = "Linga", module = "prakriya", eq, eq_int, ord)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
 pub enum PyLinga {
     /// The masculine.
     Pum,
@@ -717,8 +716,8 @@ pub enum PyLinga {
 py_enum!(PyLinga, Linga, [Pum, Stri, Napumsaka]);
 
 /// The prayoga of some tinanta.
-#[pyclass(name = "Prayoga", module = "prakriya", eq, eq_int)]
-#[derive(Copy, Clone, Eq, Hash, PartialEq)]
+#[pyclass(name = "Prayoga", module = "prakriya", eq, eq_int, ord)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
 pub enum PyPrayoga {
     /// Usage coreferent with the agent, e.g. "The horse *goes* to the village."
     Kartari,
@@ -732,8 +731,8 @@ pub enum PyPrayoga {
 py_enum!(PyPrayoga, Prayoga, [Kartari, Karmani, Bhave]);
 
 /// The person of some tinanta.
-#[pyclass(name = "Purusha", module = "prakriya", eq, eq_int)]
-#[derive(Copy, Clone, Eq, Hash, PartialEq)]
+#[pyclass(name = "Purusha", module = "prakriya", eq, eq_int, ord)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
 pub enum PyPurusha {
     /// The third person.
     Prathama,
@@ -746,8 +745,8 @@ pub enum PyPurusha {
 py_enum!(PyPurusha, Purusha, [Prathama, Madhyama, Uttama]);
 
 #[allow(non_camel_case_types)]
-#[pyclass(name = "Sanadi", module = "prakriya", eq, eq_int)]
-#[derive(Copy, Clone, Eq, Hash, PartialEq)]
+#[pyclass(name = "Sanadi", module = "prakriya", eq, eq_int, ord)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
 pub enum PySanadi {
     /// `san`, which creates desiderative roots per 3.1.7.
     ///
@@ -782,8 +781,8 @@ py_enum!(
 );
 
 /// The number of some tinanta or subanta.
-#[pyclass(name = "Vacana", module = "prakriya", eq, eq_int)]
-#[derive(Copy, Clone, Eq, Hash, PartialEq)]
+#[pyclass(name = "Vacana", module = "prakriya", eq, eq_int, ord)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
 pub enum PyVacana {
     /// The singular.
     Eka,
@@ -796,8 +795,8 @@ pub enum PyVacana {
 py_enum!(PyVacana, Vacana, [Eka, Dvi, Bahu]);
 
 /// The case ending of some subanta.
-#[pyclass(name = "Vibhakti", module = "prakriya", eq, eq_int)]
-#[derive(Copy, Clone, Eq, Hash, PartialEq)]
+#[pyclass(name = "Vibhakti", module = "prakriya", eq, eq_int, ord)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
 pub enum PyVibhakti {
     /// The first vibhakti. Sometimes called the *nominative case*.
     Prathama,
@@ -829,8 +828,8 @@ py_enum!(
 );
 
 /// A verb root.
-#[pyclass(name = "Dhatu", module = "prakriya")]
-#[derive(Clone)]
+#[pyclass(name = "Dhatu", module = "prakriya", eq, ord)]
+#[derive(Clone, Eq, Ord, PartialEq, PartialOrd)]
 pub struct PyDhatu(Dhatu);
 
 impl PyDhatu {
@@ -926,7 +925,11 @@ impl PyDhatu {
 
     pub fn __repr__(&self) -> String {
         match self.gana() {
-            Some(g) => format!("Dhatu(aupadeshika='{}', gana={})", self.aupadeshika(), g),
+            Some(g) => format!(
+                "Dhatu(aupadeshika='{}', gana={})",
+                self.aupadeshika(),
+                g.__repr__()
+            ),
             None => format!("Dhatu(aupadeshika='{}', gana=None)", self.aupadeshika()),
         }
     }
@@ -951,13 +954,16 @@ impl From<PyDhatu> for Dhatu {
 }
 
 /// A nominal stem.
-#[pyclass(name = "Pratipadika", module = "prakriya")]
-#[derive(Clone)]
-pub struct PyPratipadika(Pratipadika);
+#[pyclass(name = "Pratipadika", module = "prakriya", eq, ord)]
+#[derive(Clone, Eq, Ord, PartialEq, PartialOrd)]
+pub struct PyPratipadika {
+    pratipadika: Pratipadika,
+    text: String,
+}
 
 impl PyPratipadika {
     pub fn as_ref(&self) -> &Pratipadika {
-        &self.0
+        &self.pratipadika
     }
 }
 
@@ -967,7 +973,17 @@ impl PyPratipadika {
     #[new]
     #[pyo3(signature = (*, text))]
     pub fn new(text: String) -> Self {
-        Self(Pratipadika::basic(text))
+        Self {
+            pratipadika: Pratipadika::basic(text.clone()),
+            text,
+        }
+    }
+
+    pub fn __repr__(&self) -> String {
+        match &self.pratipadika {
+            Pratipadika::Basic(_) => format!("Pratipadika(text='{}')", self.text),
+            _ => "Pratipadika(...)".to_string(),
+        }
     }
 
     /// Create a new pratipadika that is a krdanta.
@@ -975,7 +991,10 @@ impl PyPratipadika {
     #[pyo3(signature = (*, dhatu, krt))]
     pub fn from_krdanta(dhatu: PyDhatu, krt: PyKrt) -> Self {
         let krdanta = Krdanta::new(dhatu.into(), BaseKrt::from(krt));
-        Self(Pratipadika::Krdanta(krdanta.into()))
+        Self {
+            pratipadika: Pratipadika::Krdanta(krdanta.into()),
+            text: "".to_string(),
+        }
     }
 
     /// Create a new pratipadika that is a taddhitanta.
@@ -983,34 +1002,22 @@ impl PyPratipadika {
     #[pyo3(signature = (*, pratipadika, taddhita))]
     pub fn from_taddhitanta(pratipadika: PyPratipadika, taddhita: PyTaddhita) -> Self {
         let taddhitanta = Taddhitanta::builder()
-            .pratipadika(pratipadika.0)
+            .pratipadika(pratipadika.pratipadika)
             .taddhita(taddhita.into())
             .build()
             .expect("has both pratipadika and taddhita");
-        Self(Pratipadika::Taddhitanta(taddhitanta.into()))
+        Self {
+            pratipadika: Pratipadika::Taddhitanta(taddhitanta.into()),
+            text: "".to_string(),
+        }
     }
 
-    /*
     /// The text of this stem.
     #[getter]
-    pub fn text(&self) -> String {
-        self.0.text().to_string()
-    }
-    */
-
-    fn __repr__(&self) -> String {
-        // TODO
-        format!("Pratipadika()")
-    }
-
-    fn __richcmp__(&self, other: PyRef<PyPratipadika>, op: CompareOp) -> Py<PyAny> {
-        let py = other.py();
-        let is_eq = self.0 == other.0;
-
-        match op {
-            CompareOp::Eq => (is_eq).into_py(py),
-            CompareOp::Ne => (!is_eq).into_py(py),
-            _ => py.NotImplemented(),
+    pub fn text(&self) -> Option<String> {
+        match &self.pratipadika {
+            Pratipadika::Basic(_) => Some(self.text.clone()),
+            _ => None,
         }
     }
 }
