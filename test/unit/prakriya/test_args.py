@@ -57,6 +57,12 @@ def test_dhatu__mula(kwargs):
     assert d.sanadi == kwargs.get("sanadi", [])
 
 
+def test_dhatu__mula_with_positional_args():
+    d1 = Dhatu.mula("BU", Gana.Bhvadi)
+    d2 = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
+    assert d1 == d2
+
+
 def test_dhatu__mula_must_have_aupadeshika_and_gana():
     try:
         d = Dhatu.mula(aupadeshika="BU")
@@ -72,7 +78,12 @@ def test_dhatu__mula_must_have_aupadeshika_and_gana():
 
 
 def test_dhatu__nama():
-    _ = Dhatu.nama(pratipadika=Pratipadika.basic("putra"), nama_sanadi=Sanadi.kAmyac)
+    _ = Dhatu.nama(Pratipadika.basic("putra"), nama_sanadi=Sanadi.kAmyac)
+
+    # Missing arg
+    _ = Dhatu.nama(Pratipadika.basic("putra"))
+
+    # By keyword
     _ = Dhatu.nama(pratipadika=Pratipadika.basic("putra"))
 
 

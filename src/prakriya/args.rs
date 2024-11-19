@@ -841,7 +841,7 @@ impl PyDhatu {
 impl PyDhatu {
     /// Creates a new mula-dhatu.
     #[staticmethod]
-    #[pyo3(signature = (*, aupadeshika, gana, antargana=None, prefixes=None, sanadi=None))]
+    #[pyo3(signature = (aupadeshika, gana, *, antargana=None, prefixes=None, sanadi=None))]
     pub fn mula(
         aupadeshika: String,
         gana: PyGana,
@@ -870,7 +870,7 @@ impl PyDhatu {
     /// If `nama_sanadi` is `None`, the program will try finding a sanadi match by appling the
     /// rules in pada 3.1 of the Ashtadhyayi. If no match is found, the prakriya will abort.
     #[staticmethod]
-    #[pyo3(signature = (*, pratipadika, nama_sanadi=None))]
+    #[pyo3(signature = (pratipadika, *, nama_sanadi=None))]
     pub fn nama(pratipadika: PyPratipadika, nama_sanadi: Option<PySanadi>) -> Self {
         PyDhatu(Dhatu::nama(
             pratipadika.as_ref().clone(),

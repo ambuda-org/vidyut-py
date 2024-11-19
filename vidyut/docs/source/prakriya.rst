@@ -8,7 +8,9 @@ according to the rules of Paninian grammar. This powerful word generator is
 useful both for creating Sanskrit words and for understanding how words are
 derived.
 
-All input text should use the `SLP1`_ encoding scheme.
+All inputs to `vidyut.prakriya` should use the `SLP1`_ encoding scheme, and
+output is likewise encoded in SLP1. You can convert to and from SLP1 by using
+`vidyut.lipi` or your favorite transliterator.
 
 .. _SLP1: https://en.wikipedia.org/wiki/SLP1
 
@@ -118,8 +120,9 @@ The second is `derive_subantas`, which creates nominals::
         Vibhakti,
     )
 
-    prakriyas = a.derive_subantas(
-        pratipadika=Pratipadika.basic(text="deva"),
+    deva = Pratipadika.basic("deva")
+    prakriyas = v.derive_subantas(
+        pratipadika=deva,
         linga=Linga.Pum,
         vibhakti=Vibhakti.Prathama,
         vacana=Vacana.Eka,
@@ -137,14 +140,14 @@ pratipadika::
 
     # Krdanta
     abhibhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi).with_prefixes(["aBi"])
-    abhibhavaka = Pratipadika.krdanta(dhatu=abhibhu, krt=Krt.Rvul)
-    prakriyas = v.derive_pratipadikas(pratipadika=abhibhavaka)
+    abhibhavaka = Pratipadika.krdanta(abhibhu, Krt.Rvul)
+    prakriyas = v.derive_pratipadikas(abhibhavaka)
     assert prakriyas[0].text == "aBiBAvaka"
 
     # Taddhitanta
-    guru = Pratipadika(text="guru")
-    gaurava = Pratipadika.taddhitanta(pratipadika=guru, taddhita=Taddhita.aR)
-    prakriyas = v.derive_pratipadikas(pratipadika=gaurava)
+    guru = Pratipadika.basic("guru")
+    gaurava = Pratipadika.taddhitanta(guru, Taddhita.aR)
+    prakriyas = v.derive_pratipadikas(gaurava)
     assert prakriyas[0].text == "gOrava"
 
 The fourth is `derive_dhatus`, which combines various terms to create a dhatu::
@@ -165,18 +168,18 @@ Specifying arguments
 The real expressive power in this package comes from expressing different kinds
 of arguments.
 
-For example, we can modify a `dhatu` argument to use one or more prefixes::
+For example, we can modify a :class:`Dhatu` to use one or more prefixes::
 
-    bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
-    abhibhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi, prefixes=["abhi"])
+    bhu = Dhatu.mula("BU", Gana.Bhvadi)
+    abhibhu = Dhatu.mula("BU", Gana.Bhvadi, prefixes=["abhi"])
 
     # Or, use the shorthand method `with_prefixes`:
     paribhu = bhu.with_prefixes(["abhi"])
 
 Or one or more :class:`Sanadi` suffixes::
 
-    bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
-    bhavaya = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi, sanadi=[Sanadi.Ric])
+    bhu = Dhatu.mula("BU", Gana.Bhvadi)
+    bhavaya = Dhatu.mula("BU", Gana.Bhvadi, sanadi=[Sanadi.Ric])
 
     # Or, use the shorthand method `with_sanadi`.
     bubhusha = bhu.with_sanadi([Sanadi.san])
@@ -184,20 +187,36 @@ Or one or more :class:`Sanadi` suffixes::
     # These can be combined with prefixes.
     abhibubhusha = bhu.with_prefixes(["aBi"]).with_sanadi([Sanadi.san])
 
-All of these dhatus can be passed to functions that expect dhatus::
+These dhatus can be passed to any function that expects a :class:`Dhatu`::
 
+    prakriyas = v.derive_tinantas(
+        dhatu=abhibubhusha,
+        prayoga=Prayoga.Kartari,
+        purusha=Purusha.Prathama,
+        vacana=Vacana.Eka,
+        lakara=Lakara.Lat,
+    )
+    assert prakriyas[0].text == 'aBibuBUzati'
 
-
-Likewise, we can declare a `pratipadika` as coming from a krdanta::
+Likewise, we can declare that a :class:`Pratipadika` is a *krdanta*::
 
     bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
-    bhavaka = Pratipadika.krdanta(bhu, Krt.Rvul)
+    bhavat = Pratipadika.krdanta(bhu, Krt.Satf)
 
-Or from a taddhitanta::
+Or a *taddhitanta*::
 
     guru = Pratipadika.basic(text="guru")
-    gaurava = Pratipadika.taddhitanta(pratipadika=guru, taddhita=Taddhita.aR)
+    gaurava = Pratipadika.taddhitanta(guru, Taddhita.aR)
 
+These pratipadikas can be passed to any function that expects a :class:`Pratipadika`::
+
+    prakriyas = v.derive_subantas(
+        pratipadika=bhavat,
+        linga=Linga.Pum,
+        vibhakti=Vibhakti.Prathama,
+        vacana=Vacana.Dvi,
+    )
+    assert prakriyas[0].text == 'BavantO'
 
 
 Using the Dhatupatha
@@ -223,22 +242,26 @@ Dhatupatha::
         for prakriya in prakriyas:
             print(prakriya.text)
 
+The Dhatupatha provided with `vidyut.prakriya` is essentially the same as the
+one used on `ashtadhyayi.com <https://ashtadhyayi.com>`.
+
 
 Recipes
 -------
 
-This section contains various recipes that we have found useful.
+This section contains various recipes that show how to use `vidyut.prakriya`
+for different tasks.
 
 
-Generate tinantas for a dhatu and prayoga
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Generate all tinantas for a dhatu and prayoga
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block:: python
 
     from vidyut.prakriya import *
 
     v = Vyakarana(log_steps=False)
-    bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
+    bhu = Dhatu.mula("BU", Gana.Bhvadi)
 
     for lakara in Lakara.choices():
         for purusha in Purusha.choices():
@@ -312,7 +335,7 @@ Generate all krdantas for a dhatu
     from vidyut.prakriya import *
 
     v = Vyakarana()
-    bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
+    bhu = Dhatu.mula("BU", Gana.Bhvadi)
 
     for krt in Krt.choices():
         anga = Pratipadika.krdanta(bhu, krt)
@@ -350,7 +373,7 @@ Find all rules used by a dhatu's tinantas
     from vidyut.prakriya import *
 
     v = Vyakarana()
-    bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
+    bhu = Dhatu.mula("BU", Gana.Bhvadi)
 
     rules = set()
     for prayoga in Prayoga.choices():
