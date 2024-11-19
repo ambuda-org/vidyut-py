@@ -182,7 +182,7 @@ def test_derive_yananta_tinantas(code, expected):
 
 def test_derive_subantas():
     prakriyas = v.derive_subantas(
-        pratipadika=Pratipadika(text="deva"),
+        pratipadika=Pratipadika.basic("deva"),
         linga=Linga.Pum,
         vibhakti=Vibhakti.Prathama,
         vacana=Vacana.Eka,
@@ -211,7 +211,7 @@ def test_derive_krdantas(code, expected):
 
 
 def test_derive_taddhitantas():
-    pratipadika = Pratipadika(text="guru")
+    pratipadika = Pratipadika.basic("guru")
     prakriyas = v.derive_taddhitantas(
         pratipadika=pratipadika,
         taddhita=Taddhita.aR,

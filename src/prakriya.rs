@@ -255,7 +255,7 @@ impl PyVyakarana {
         to_py_prakriyas(results)
     }
 
-    #[pyo3(signature = (*, dhatu))]
+    #[pyo3(signature = (dhatu))]
     pub fn derive_dhatus(&self, dhatu: &PyDhatu) -> Vec<PyPrakriya> {
         let args = dhatu.as_ref();
         let results = self.0.derive_dhatus(args);
@@ -266,8 +266,8 @@ impl PyVyakarana {
     ///
     /// This function is meant mainly for krdantas and taddhitantas. If a pratipadika cannot be
     /// derived, the function returns an empty list.
-    #[pyo3(signature = (*, pratipadika))]
-    pub fn derive_pratipadika(&self, pratipadika: &PyPratipadika) -> Vec<PyPrakriya> {
+    #[pyo3(signature = (pratipadika))]
+    pub fn derive_pratipadikas(&self, pratipadika: &PyPratipadika) -> Vec<PyPrakriya> {
         let args = pratipadika.as_ref();
         match args {
             Pratipadika::Krdanta(k) => {

@@ -998,16 +998,6 @@ impl PyPratipadika {
 
 #[pymethods]
 impl PyPratipadika {
-    /// Create a new pratipadika with the given text.
-    #[new]
-    #[pyo3(signature = (*, text))]
-    pub fn new(text: String) -> Self {
-        Self {
-            pratipadika: Pratipadika::basic(text.clone()),
-            text,
-        }
-    }
-
     pub fn __repr__(&self) -> String {
         match &self.pratipadika {
             Pratipadika::Basic(_) => format!("Pratipadika(text='{}')", self.text),
@@ -1015,10 +1005,20 @@ impl PyPratipadika {
         }
     }
 
+    /// Create a new pratipadika that is a simple base.
+    #[staticmethod]
+    #[pyo3(signature = (text))]
+    pub fn basic(text: String) -> Self {
+        Self {
+            pratipadika: Pratipadika::basic(text.clone()),
+            text,
+        }
+    }
+
     /// Create a new pratipadika that is a krdanta.
     #[staticmethod]
-    #[pyo3(signature = (*, dhatu, krt))]
-    pub fn from_krdanta(dhatu: PyDhatu, krt: PyKrt) -> Self {
+    #[pyo3(signature = (dhatu, krt))]
+    pub fn krdanta(dhatu: PyDhatu, krt: PyKrt) -> Self {
         let krdanta = Krdanta::new(dhatu.into(), BaseKrt::from(krt));
         Self {
             pratipadika: Pratipadika::Krdanta(krdanta.into()),
@@ -1028,8 +1028,9 @@ impl PyPratipadika {
 
     /// Create a new pratipadika that is a taddhitanta.
     #[staticmethod]
-    #[pyo3(signature = (*, pratipadika, taddhita))]
-    pub fn from_taddhitanta(pratipadika: PyPratipadika, taddhita: PyTaddhita) -> Self {
+    #[pyo3(signature = (pratipadika, taddhita))]
+    pub fn taddhitanta(pratipadika: PyPratipadika, taddhita: PyTaddhita) -> Self {
+        // TODO: use Taddhitanta::new once available.
         let taddhitanta = Taddhitanta::builder()
             .pratipadika(pratipadika.pratipadika)
             .taddhita(taddhita.into())

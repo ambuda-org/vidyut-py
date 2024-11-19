@@ -91,7 +91,7 @@ This produces the following output:
 Basic methods
 -------------
 
-`vidyut.prakriya` currently exposes six basic methods.
+`vidyut.prakriya` currently exposes four basic methods.
 
 The first is `derive_tinantas`, which creates verbs::
 
@@ -110,7 +110,7 @@ The first is `derive_tinantas`, which creates verbs::
     assert len(prakriyas) == 1
     assert prakriyas[0].text == "Bavati"
 
-The second is `derive_subantas`, which derives nominals::
+The second is `derive_subantas`, which creates nominals::
 
     from vidyut.prakriya import (
         Pratipadika,
@@ -119,7 +119,7 @@ The second is `derive_subantas`, which derives nominals::
     )
 
     prakriyas = a.derive_subantas(
-        pratipadika=Pratipadika(text="deva"),
+        pratipadika=Pratipadika.basic(text="deva"),
         linga=Linga.Pum,
         vibhakti=Vibhakti.Prathama,
         vacana=Vacana.Eka,
@@ -128,43 +128,26 @@ The second is `derive_subantas`, which derives nominals::
     assert len(prakriyas) == 1
     assert prakriyas[0].text == "devaH"
 
-The third is `derive_krdantas`, which adds suffixes to verb roots::
+The third is `derive_pratipadikas`, which combines various terms to create a
+pratipadika::
 
     from vidyut.prakriya import *
 
     v = Vyakarana()
-    bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
-    prakriyas = v.derive_krdantas(dhatu=bhu, krt=Krt.ktvA)
 
-    assert len(prakriyas) == 1
-    assert prakriyas[0].text == "BUtvA"
-
-The fourth is `derive_taddhitantas`, which adds suffixes to nominal stems::
-
-    from vidyut.prakriya import *
-
-    v = Vyakarana()
-    guru = Pratipadika(text="guru")
-    prakriyas = v.derive_taddhitantas(pratipadika=guru, taddhita=Taddhita.aR)
-
-    assert len(prakriyas) == 1
-    assert prakriyas[0].text == "gOrava"
-
-The fifth is `derive_pratipadikas`, which combines various terms to create a
-final pratipadika::
-
-    from vidyut.prakriya import *
-
-    v = Vyakarana()
+    # Krdanta
     abhibhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi).with_prefixes(["aBi"])
-    abhibhavaka = Pratipadika.from_krdanta(dhatu=abhibhu, krt=Krt.Rvul)
+    abhibhavaka = Pratipadika.krdanta(dhatu=abhibhu, krt=Krt.Rvul)
     prakriyas = v.derive_pratipadikas(pratipadika=abhibhavaka)
-
-    assert len(prakriyas) == 1
     assert prakriyas[0].text == "aBiBAvaka"
 
-The sixth is `derive_dhatus`, which combines various terms to create a final
-dhatu::
+    # Taddhitanta
+    guru = Pratipadika(text="guru")
+    gaurava = Pratipadika.taddhitanta(pratipadika=guru, taddhita=Taddhita.aR)
+    prakriyas = v.derive_pratipadikas(pratipadika=gaurava)
+    assert prakriyas[0].text == "gOrava"
+
+The fourth is `derive_dhatus`, which combines various terms to create a dhatu::
 
     from vidyut.prakriya import *
 
@@ -208,12 +191,12 @@ All of these dhatus can be passed to functions that expect dhatus::
 Likewise, we can declare a `pratipadika` as coming from a krdanta::
 
     bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
-    bhavaka = Pratipadika.from_krdanta(bhu, Krt.Rvul)
+    bhavaka = Pratipadika.krdanta(bhu, Krt.Rvul)
 
 Or from a taddhitanta::
 
-    guru = Pratipadika(text="guru")
-    gaurava = Pratipadika.from_taddhitanta(guru, Taddhita.aR)
+    guru = Pratipadika.basic(text="guru")
+    gaurava = Pratipadika.taddhitanta(pratipadika=guru, taddhita=Taddhita.aR)
 
 
 
@@ -307,7 +290,7 @@ Generate all subantas for some pratipadika
     from vidyut.prakriya import *
 
     v = Vyakarana(log_steps=False)
-    nara = Pratipadika(text="nara")
+    nara = Pratipadika.basic(text="nara")
 
     for vibhakti in Vibhakti.choices():
         for vacana in Vacana.choices():
@@ -332,7 +315,8 @@ Generate all krdantas for a dhatu
     bhu = Dhatu.mula(aupadeshika="BU", gana=Gana.Bhvadi)
 
     for krt in Krt.choices():
-        prakriyas = v.derive_krdantas(dhatu=bhu, krt=krt)
+        anga = Pratipadika.krdanta(bhu, krt)
+        prakriyas = v.derive_pratipadikas(anga)
         for p in prakriyas:
             print(krt, p.text)
         else:
@@ -347,10 +331,11 @@ Generate all taddhitantas for a pratipadika
     from vidyut.prakriya import *
 
     v = Vyakarana()
-    guru = Pratipadika(text="guru")
+    guru = Pratipadika.basic(text="guru")
 
     for taddhita in Taddhita.choices():
-        prakriyas = v.derive_taddhitantas(pratipadika=guru, taddhita=taddhita)
+        anga = Pratipadika.taddhita(pratipadika=guru, taddhita=taddhita)
+        prakriyas = v.derive_pratipadikas(anga)
         for p in prakriyas:
             print(taddhita, p.text)
         else:

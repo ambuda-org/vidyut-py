@@ -72,8 +72,8 @@ def test_dhatu__mula_must_have_aupadeshika_and_gana():
 
 
 def test_dhatu__nama():
-    _ = Dhatu.nama(pratipadika=Pratipadika(text="putra"), nama_sanadi=Sanadi.kAmyac)
-    _ = Dhatu.nama(pratipadika=Pratipadika(text="putra"))
+    _ = Dhatu.nama(pratipadika=Pratipadika.basic("putra"), nama_sanadi=Sanadi.kAmyac)
+    _ = Dhatu.nama(pratipadika=Pratipadika.basic("putra"))
 
 
 def test_dhatu__nama_must_have_pratipadika():
@@ -107,7 +107,7 @@ def test_dhatu__dunders():
 
 @pytest.mark.skip("need to fix pratipadika internal representation")
 def test_pratipadika_new():
-    p = Pratipadika(text="deva")
+    p = Pratipadika.basic("deva")
     assert repr(p) == "Pratipadika(text='deva')"
 
 
@@ -117,11 +117,11 @@ def test_pratipadika_new__fails_if_no_args():
 
 
 def test_pratipadika__dunders():
-    deva = Pratipadika(text="deva")
-    eva = Pratipadika(text="eva")
+    deva = Pratipadika.basic("deva")
+    eva = Pratipadika.basic("eva")
 
     # __eq__, __ne__
-    deva2 = Pratipadika(text="deva")
+    deva2 = Pratipadika.basic("deva")
     assert deva == deva
     assert deva == deva2
     assert deva != eva
