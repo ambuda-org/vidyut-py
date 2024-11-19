@@ -186,9 +186,7 @@ impl PyChandas {
     fn new(path: PathBuf) -> PyResult<Self> {
         match Chandas::from_file(path) {
             Ok(chandas) => Ok(PyChandas { chandas }),
-            Err(_) => Err(PyOSError::new_err(format!(
-                "Could not read data from path."
-            ))),
+            Err(_) => Err(PyOSError::new_err("Could not read data from path.")),
         }
     }
 
@@ -196,7 +194,7 @@ impl PyChandas {
     fn from_text(text: String) -> PyResult<Self> {
         match Chandas::from_text(text) {
             Ok(chandas) => Ok(PyChandas { chandas }),
-            Err(_) => Err(PyIOError::new_err(format!("Could not parse text."))),
+            Err(_) => Err(PyIOError::new_err("Could not parse text.")),
         }
     }
 

@@ -944,7 +944,7 @@ impl PyDhatu {
                 args.push_str(&format!("'{}'", p));
                 pushed = true;
             }
-            args.push_str("]");
+            args.push(']');
         }
 
         if !self.sanadi().is_empty() {
@@ -957,7 +957,7 @@ impl PyDhatu {
                 args.push_str(&s.__repr__());
                 pushed = true;
             }
-            args.push_str("]");
+            args.push(']');
         }
 
         format!("Dhatu({})", args)

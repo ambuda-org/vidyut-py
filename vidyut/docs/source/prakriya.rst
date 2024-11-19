@@ -248,7 +248,9 @@ Dhatupatha::
             print(prakriya.text)
 
 The Dhatupatha provided with `vidyut.prakriya` is essentially the same as the
-one used on `ashtadhyayi.com <https://ashtadhyayi.com>`.
+one used on `ashtadhyayi.com`_.
+
+.. _ashtadhyayi.com: https://ashtadhyayi.com
 
 
 Recipes
