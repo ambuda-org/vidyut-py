@@ -50,6 +50,19 @@ macro_rules! py_enum {
                 rust.as_str().to_string()
             }
 
+            /// The name used to define the `Enum` member.
+            ///
+            /// (Defined for compatibility with Python enums.)
+            #[getter]
+            fn name(&self) -> String {
+                let ret = match self {
+                    $(
+                        $Py::$variant => stringify!($variant),
+                    )*
+                };
+                ret.to_string()
+            }
+
             /// Returns all options for this enum.
             #[staticmethod]
             fn choices() -> Vec<$Py> {
