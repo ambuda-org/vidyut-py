@@ -1,4 +1,4 @@
-///! Defines Python bindings for `vidyut_cheda`.
+//! Defines Python bindings for `vidyut_cheda`.
 use vidyut_cheda::{Chedaka, Config, Error};
 
 use crate::kosha::semantics::PyPada;

@@ -1,3 +1,4 @@
+use crate::utils::py_enum;
 use pyo3::basic::CompareOp;
 use pyo3::exceptions::PyNotImplementedError;
 use pyo3::prelude::*;
@@ -7,71 +8,13 @@ use std::str::FromStr;
 
 use vidyut_kosha::morph::*;
 
-/// Generates the following boilerplate methods:
-/// - `__hash__`
-/// - `__str__`
-/// - `from_string`, which is the inverse of `__str__`
-/// - `From<RustEnum> for PyEnum`
-/// - `From<PyEnum> for RustEnum`
-///
-/// Requirements:
-/// - Enum must derive `Hash`
-macro_rules! py_enum {
-    ($Py:ident, $Rust:ident, [$( $variant:ident ),*]) => {
-        impl From<$Rust> for $Py {
-            fn from(val: $Rust) -> Self {
-                match val {
-                    $(
-                        $Rust::$variant => $Py::$variant,
-                    )*
-                }
-            }
-        }
-
-        impl From<$Py> for $Rust {
-            fn from(val: $Py) -> Self {
-                match val {
-                    $(
-                        $Py::$variant => $Rust::$variant,
-                    )*
-                }
-            }
-        }
-
-        #[pymethods]
-        impl $Py {
-            fn __hash__(&self) -> u64 {
-                let mut hasher = DefaultHasher::new();
-                self.hash(&mut hasher);
-                hasher.finish()
-            }
-
-            fn __str__(&self) -> String {
-                let rust: $Rust = self.clone().into();
-                rust.as_str().to_string()
-            }
-
-            /// Create an enum value from the given string.
-            ///
-            /// This is an inverse of the `__str__` method.
-            #[staticmethod]
-            fn from_string(val: &str) -> PyResult<Self> {
-                match $Rust::from_str(val) {
-                    Ok(x) => Ok(x.into()),
-                    Err(_) => Err(PyNotImplementedError::new_err("Could not parse {val}")),
-                }
-            }
-        }
-    }
-}
-
 /// A short part-of-speech tag for some `Pada`.
 ///
 /// These tags follow the normal distinction of *subanta* (nominal) and *tinanta* (verb). We also
 /// model the *avyaya* (indeclinable) separately since it has different semantics from other
 /// subantas.
 #[pyclass(name = "PartOfSpeech", eq, eq_int)]
-#[derive(Clone, Debug, Eq, Hash, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum PyPartOfSpeech {
     /// An indeclinable.
     Avyaya,
@@ -87,7 +30,7 @@ py_enum!(PyPartOfSpeech, POSTag, [Avyaya, Subanta, Tinanta, Unknown]);
 
 /// The person of a Sanskrit verb.
 #[pyclass(name = "Purusha", eq, eq_int)]
-#[derive(Clone, Debug, Hash, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Hash, Eq, PartialEq)]
 pub enum PyPurusha {
     /// The first *puruṣa* (third person).
     Prathama,
@@ -101,7 +44,7 @@ py_enum!(PyPurusha, Purusha, [Prathama, Madhyama, Uttama]);
 
 /// The gender of a Sanskrit nominal.
 #[pyclass(name = "Linga", eq, eq_int)]
-#[derive(Clone, Debug, Eq, Hash, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum PyLinga {
     /// The masculine gender.
     Pum,
@@ -115,7 +58,7 @@ py_enum!(PyLinga, Linga, [Pum, Stri, Napumsaka]);
 
 /// The number of a Sanskrit word.
 #[pyclass(name = "Vacana", eq, eq_int)]
-#[derive(Clone, Debug, Eq, Hash, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum PyVacana {
     /// The singular.
     Eka,
@@ -129,7 +72,7 @@ py_enum!(PyVacana, Vacana, [Eka, Dvi, Bahu]);
 
 /// The case of a Sanskrit nominal.
 #[pyclass(name = "Vibhakti", eq, eq_int)]
-#[derive(Clone, Debug, Hash, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Hash, Eq, PartialEq)]
 pub enum PyVibhakti {
     /// The first *vibhakti* (nominative case).
     Prathama,
@@ -179,7 +122,7 @@ py_enum!(
 
 /// The tense-mood of a Sanskrit verb.
 #[pyclass(name = "Lakara", eq, eq_int)]
-#[derive(Clone, Debug, Eq, Hash, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 pub enum PyLakara {
     /// *laṭ-lakāra* (present indicative).
     Lat,
@@ -214,7 +157,7 @@ py_enum!(
 );
 
 #[pyclass(name = "PadaPrayoga", eq, eq_int)]
-#[derive(Clone, Debug, Hash, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, Hash, Eq, PartialEq)]
 pub enum PyPadaPrayoga {
     Parasmaipada,
     AtmanepadaKartari,
