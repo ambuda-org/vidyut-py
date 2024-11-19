@@ -71,7 +71,7 @@ macro_rules! py_enum {
                 ret.to_string()
             }
 
-            /// Returns all options for this enum.
+            /// Returns all possible values for this enum.
             #[staticmethod]
             fn choices() -> Vec<$Py> {
                 const CHOICES: &[$Py] = &[

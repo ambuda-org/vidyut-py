@@ -142,10 +142,8 @@ def test_enums(enum):
     # Enum values can be ordered.
     _ = sorted(enum.choices())
 
-    # Enum values are already in sorted order
+    # Enum values are already in sorted order.
     assert enum.choices()
-    print(enum.choices())
-    print(sorted(enum.choices()))
     assert sorted(enum.choices()) == enum.choices()
 
     # Enum values set the `name` attribute.
