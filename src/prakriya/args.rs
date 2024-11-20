@@ -840,6 +840,10 @@ impl PyDhatu {
 #[pymethods]
 impl PyDhatu {
     /// Creates a new mula-dhatu.
+    ///
+    /// `aupadeshika` should be an SLP1 string and include anudatta and svarita accents as
+    /// necessary. For examples, see the dhatus in `dhatupatha.tsv`. (If you don't have this file,
+    /// see the `vidyut-py` documentation for information on where to find it.)
     #[staticmethod]
     #[pyo3(signature = (aupadeshika, gana, *, antargana=None, prefixes=None, sanadi=None))]
     pub fn mula(
@@ -1006,6 +1010,8 @@ impl PyPratipadika {
     }
 
     /// Create a new pratipadika that is a simple base.
+    ///
+    /// `text` should be an SLP1 string.
     #[staticmethod]
     #[pyo3(signature = (text))]
     pub fn basic(text: String) -> Self {

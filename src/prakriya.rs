@@ -16,6 +16,8 @@ pub struct PyStep {
     /// The rule that was applied.
     pub rule: String,
     /// The result of applying `rule`.
+    ///
+    /// `result` is a list of SLP1 strings.
     pub result: Vec<String>,
 }
 
@@ -46,6 +48,8 @@ impl PyStep {
 #[pyclass(name = "Prakriya", get_all)]
 pub struct PyPrakriya {
     /// The final output of the derivation.
+    ///
+    /// `text` is an SLP1 string.
     pub text: String,
     /// All of the steps that were applied during the derivation.
     pub history: Vec<PyStep>,

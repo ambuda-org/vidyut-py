@@ -3,6 +3,10 @@
 Analyzing meter with `vidyut.chandas`
 =====================================
 
+.. warning::
+   This package is experimental.
+
+
 `vidyut.chandas` is an experimental classifier for Sanskrit meters.
 
 All input text should use the `SLP1`_ encoding scheme.

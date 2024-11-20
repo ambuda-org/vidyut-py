@@ -199,6 +199,8 @@ impl PyChandas {
     }
 
     /// Classify the input string against an internal list of meters.
+    ///
+    /// `text` should be an SLP1 string.
     pub fn classify(&self, text: &str) -> PyResult<PyMatchResult> {
         let res = self.chandas.classify(text);
 

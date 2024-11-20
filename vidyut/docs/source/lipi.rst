@@ -3,16 +3,27 @@
 Transliterating with `vidyut.lipi`
 ==================================
 
-`vidyut.lipi` transliterates many of the scripts used within the Indosphere.
+`vidyut-lipi` is a transliteration library for Sanskrit and Pali that also
+supports many of the scripts used within the Indosphere.
 
-Transliterate into a target scheme::
+`vidyut-lipi` is generally comparable to other Python-based transliterators
+like `Aksharamukha`_ and `indic_transliteration`_. For details on how
+`vidyut.lipi` differs from these options, see the :ref:`Features` section
+below.
 
-    from vidyut.lipi import transliterate, detect, Scheme
+.. _indic_transliteration: https://github.com/indic-transliteration/indic_transliteration_py
+.. _Aksharamukha: https://github.com/virtualvinodh/aksharamukha-python
+
+
+Quickstart
+----------
+
+Transliteration is simple and straightforward::
+
+    from vidyut.lipi import transliterate, Scheme
 
     text = "tapaHsvAdhyAyanirataM tapasvI vAgvidAM varam"
-    input_scheme = detect(text)
-
-    output = transliterate(text, input_scheme, Scheme.Devanagari)
+    output = transliterate(text, Scheme.HarvardKyoto, Scheme.Devanagari)
     print(output)
 
 Output:
@@ -21,15 +32,21 @@ Output:
 
     तपःस्वाध्यायनिरतं तपस्वी वाग्विदां वरम्
 
-Transliterate into all schemes::
+If the input scheme is not known, you can use :func:`detect` to guess it::
+
+    from vidyut.lipi import detect
+
+    text = "tapaHsvAdhyAyanirataM tapasvI vAgvidAM varam"
+    source = detect(text)
+    output = transliterate(text, source, Scheme.Devanagari)
+
+`vidyut.lipi` supports a wide variety of transliteration schemes. For example::
 
     from vidyut.lipi import transliterate, detect, Scheme
 
     text = "tapaHsvAdhyAyanirataM tapasvI vAgvidAM varam"
-    input_scheme = detect(text)
-
-    for scheme in Scheme.choices():
-        output = transliterate(text, input_scheme, scheme)
+    for dest in Scheme.choices():
+        output = transliterate(text, Scheme.HarvardKyoto, dest)
         print(f"{scheme}: {output}")
 
 Output:
@@ -86,4 +103,31 @@ Output:
     Slp1: tapaHsvADyAyanirataM tapasvI vAgvidAM varam
     Velthuis: tapa.hsvaadhyaayanirata.m tapasvii vaagvidaa.m varam
     Wx: wapaHsvAXyAyanirawaM wapasvI vAgvixAM varam
+
+
+Features
+--------
+
+Transliterators are essentially identical for common use cases, but they tend
+to differ at the edges. Here are some features that distinguish `vidyut.lipi`
+for uncommon use cases:
+
+- `vidyut.lipi` has strong support for Grantha, especially Grantha numerals::
+
+    text = "1 12 123 1234 12345"
+    output = transliterate(text, Scheme.HarvardKyoto, Scheme.Grantha)
+    assert output == "௧ ௰௨ ௱௨௰௩ ௲௨௱௩௰௪ ௰௨௲௩௱௪௰௫"
+
+- `vidyut-lipi` is around 4 times faster than `indic_transliteration` and
+  around 6 times faster than Aksharamukha. This speed-up can matter for heavy
+  workloads like transliterating an entire corpus.
+
+- `vidyut.lipi` is aware of Unicode NFC and NFD forms and normalizes all output
+  to NFC.
+
+- `vidyut.lipi` has strong support for anudatta and svarita accents across a
+  variety of scripts and supports transliteration of Samaveda accent where
+  possible.
+
+- :func:`detect` is especially robust and has high coverage.
 
