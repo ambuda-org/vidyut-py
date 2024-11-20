@@ -882,6 +882,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "tinyvec"
+version = "1.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "445e881f4f6d382d5f27c034e25eb92edd7c784ceab92a0937db7f2e9471b938"
+dependencies = [
+ "tinyvec_macros",
+]
+
+[[package]]
+name = "tinyvec_macros"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
+
+[[package]]
 name = "tokio"
 version = "1.38.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -905,6 +920,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3354b9ac3fae1ff6755cb6db53683adb661634f67557942dea4facebec0fee4b"
 
 [[package]]
+name = "unicode-normalization"
+version = "0.1.24"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5033c97c4262335cded6d6fc3e5c18ab755e1a3dc96376350f3d8e9f009ad956"
+dependencies = [
+ "tinyvec",
+]
+
+[[package]]
 name = "unindent"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -925,7 +949,7 @@ checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
 [[package]]
 name = "vidyut-chandas"
 version = "0.1.0"
-source = "git+https://github.com/ambuda-org/vidyut?rev=60229527#6022952700550bb0a88616b7bbacf470356b5b81"
+source = "git+https://github.com/ambuda-org/vidyut?rev=c426cdf5#c426cdf5db92cda3fad44e9e709768126cf5d625"
 dependencies = [
  "console_error_panic_hook",
  "lazy_static",
@@ -938,7 +962,7 @@ dependencies = [
 [[package]]
 name = "vidyut-cheda"
 version = "0.1.0"
-source = "git+https://github.com/ambuda-org/vidyut?rev=60229527#6022952700550bb0a88616b7bbacf470356b5b81"
+source = "git+https://github.com/ambuda-org/vidyut?rev=c426cdf5#c426cdf5db92cda3fad44e9e709768126cf5d625"
 dependencies = [
  "clap",
  "compact_str",
@@ -960,7 +984,7 @@ dependencies = [
 [[package]]
 name = "vidyut-kosha"
 version = "0.1.0"
-source = "git+https://github.com/ambuda-org/vidyut?rev=60229527#6022952700550bb0a88616b7bbacf470356b5b81"
+source = "git+https://github.com/ambuda-org/vidyut?rev=c426cdf5#c426cdf5db92cda3fad44e9e709768126cf5d625"
 dependencies = [
  "clap",
  "env_logger 0.9.3",
@@ -974,19 +998,20 @@ dependencies = [
 [[package]]
 name = "vidyut-lipi"
 version = "0.1.0"
-source = "git+https://github.com/ambuda-org/vidyut?rev=60229527#6022952700550bb0a88616b7bbacf470356b5b81"
+source = "git+https://github.com/ambuda-org/vidyut?rev=c426cdf5#c426cdf5db92cda3fad44e9e709768126cf5d625"
 dependencies = [
  "clap",
  "console_error_panic_hook",
  "rustc-hash",
  "serde-wasm-bindgen",
+ "unicode-normalization",
  "wasm-bindgen",
 ]
 
 [[package]]
 name = "vidyut-prakriya"
 version = "0.1.0"
-source = "git+https://github.com/ambuda-org/vidyut?rev=60229527#6022952700550bb0a88616b7bbacf470356b5b81"
+source = "git+https://github.com/ambuda-org/vidyut?rev=c426cdf5#c426cdf5db92cda3fad44e9e709768126cf5d625"
 dependencies = [
  "clap",
  "compact_str",
@@ -1018,7 +1043,7 @@ dependencies = [
 [[package]]
 name = "vidyut-sandhi"
 version = "0.1.0"
-source = "git+https://github.com/ambuda-org/vidyut?rev=60229527#6022952700550bb0a88616b7bbacf470356b5b81"
+source = "git+https://github.com/ambuda-org/vidyut?rev=c426cdf5#c426cdf5db92cda3fad44e9e709768126cf5d625"
 dependencies = [
  "clap",
  "compact_str",

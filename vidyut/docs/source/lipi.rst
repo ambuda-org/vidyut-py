@@ -118,9 +118,12 @@ for uncommon use cases:
     output = transliterate(text, Scheme.HarvardKyoto, Scheme.Grantha)
     assert output == "௧ ௰௨ ௱௨௰௩ ௲௨௱௩௰௪ ௰௨௲௩௱௪௰௫"
 
-- `vidyut-lipi` is around 4 times faster than `indic_transliteration` and
-  around 6 times faster than Aksharamukha. This speed-up can matter for heavy
-  workloads like transliterating an entire corpus.
+- `vidyut.lipi` has strong support for ISO 15919, including the ``:``
+  disambiguating separator::
+
+    text = "नरइति"
+    output = transliterate(text, Scheme.Devanagari, Scheme.Iso15919)
+    assert output == "nara:iti"
 
 - `vidyut.lipi` is aware of Unicode NFC and NFD forms and normalizes all output
   to NFC.
@@ -130,4 +133,8 @@ for uncommon use cases:
   possible.
 
 - :func:`detect` is especially robust and has high coverage.
+
+- `vidyut-lipi` is around 6 times faster than `indic_transliteration` and
+  around 8 times faster than Aksharamukha. This speed-up can matter for heavy
+  workloads, such as transliterating an entire corpus.
 
