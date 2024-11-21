@@ -1,5 +1,7 @@
-from vidyut.lipi import *
+from vidyut.sandhi import Splitter
 
-text = "1 12 123 1234 12345"
-output = transliterate(text, Scheme.HarvardKyoto, Scheme.Grantha)
-print(output)
+splitter = Splitter.from_csv("/Users/arun/personal/vidyut/data/build/vidyut-latest/sandhi-rules.csv")
+
+for split in splitter.split_at("ityapi", 2):
+    print(split.first, split.second, split.is_valid)
+
