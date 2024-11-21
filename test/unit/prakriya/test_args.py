@@ -18,18 +18,18 @@ from vidyut.prakriya import (
 
 
 ENUMS = [
-        Antargana,
-        Gana,
-        Krt,
-        Lakara,
-        Linga,
-        Prayoga,
-        Purusha,
-        Sanadi,
-        Taddhita,
-        Vacana,
-        Vibhakti,
-    ]
+    Antargana,
+    Gana,
+    Krt,
+    Lakara,
+    Linga,
+    Prayoga,
+    Purusha,
+    Sanadi,
+    Taddhita,
+    Vacana,
+    Vibhakti,
+]
 
 
 @pytest.mark.parametrize(
@@ -112,8 +112,14 @@ def test_dhatu__dunders():
 
     # __repr__
     assert repr(bhu) == "Dhatu(aupadeshika='BU', gana=Gana.Bhvadi)"
-    assert repr(kut) == "Dhatu(aupadeshika='kuwa~', gana=Gana.Tudadi, antargana=Antargana.Kutadi)"
-    assert repr(abhibubhusha) == "Dhatu(aupadeshika='BU', gana=Gana.Bhvadi, prefixes=['aBi'], sanadi=[Sanadi.san])"
+    assert (
+        repr(kut)
+        == "Dhatu(aupadeshika='kuwa~', gana=Gana.Tudadi, antargana=Antargana.Kutadi)"
+    )
+    assert (
+        repr(abhibubhusha)
+        == "Dhatu(aupadeshika='BU', gana=Gana.Bhvadi, prefixes=['aBi'], sanadi=[Sanadi.san])"
+    )
 
 
 @pytest.mark.skip("need to fix pratipadika internal representation")

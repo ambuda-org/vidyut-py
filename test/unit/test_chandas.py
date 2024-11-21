@@ -34,7 +34,9 @@ def test_init__missing_file():
 
 def test_chandas__attrs():
     c = Chandas.from_text("mandAkrAntA	vrtta	GGGG|LLLLLG|GLGGLGG\n")
-    assert c.vrttas == [Vrtta("mandAkrAntA", [VrttaPada.from_string("GGGG|LLLLLG|GLGGLGG")])]
+    assert c.vrttas == [
+        Vrtta("mandAkrAntA", [VrttaPada.from_string("GGGG|LLLLLG|GLGGLGG")])
+    ]
     assert c.jatis == [
         Jati("vEtAlIyam", [14, 16, 14, 16]),
         Jati("upagIti", [12, 15, 12, 15]),
@@ -83,11 +85,10 @@ def test_classify_jati():
         f.seek(0)
         c = Chandas(f.name)
 
-
-    text = ("yenAmandamarande daladaravinde dinAnyanAyizata |"
-            "kuwaje Kalu tenehA tenehA maDukareRa kaTam ||")
+    text = (
+        "yenAmandamarande daladaravinde dinAnyanAyizata |"
+        "kuwaje Kalu tenehA tenehA maDukareRa kaTam ||"
+    )
 
     result = c.classify(text)
     assert result.padya == "AryA"
-
-

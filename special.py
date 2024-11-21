@@ -8,4 +8,3 @@ assert output == "௧ ௰௨ ௱௨௰௩ ௲௨௱௩௰௪ ௰௨௲௩௱௪�
 text = "नरइति"
 output = transliterate(text, Scheme.Devanagari, Scheme.Iso15919)
 assert output == "nara:iti"
-
