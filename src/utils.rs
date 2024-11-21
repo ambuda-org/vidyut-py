@@ -60,8 +60,6 @@ macro_rules! py_enum {
             }
 
             /// The name used to define the `Enum` member.
-            ///
-            /// (Defined for compatibility with Python enums.)
             #[getter]
             fn name(&self) -> String {
                 let ret = match self {
@@ -72,7 +70,7 @@ macro_rules! py_enum {
                 ret.to_string()
             }
 
-            /// Returns all possible values for this enum.
+            /// Return all possible values for this enum.
             #[staticmethod]
             fn choices() -> Vec<$Py> {
                 const CHOICES: &[$Py] = &[
@@ -85,7 +83,7 @@ macro_rules! py_enum {
 
             /// Create an enum value from the given string.
             ///
-            /// This is the inverse of the `__str__` method.
+            /// This is the inverse of `__str__`.
             #[staticmethod]
             fn from_string(val: &str) -> PyResult<Self> {
                 match val {
@@ -132,7 +130,7 @@ macro_rules! py_only_enum {
                 ret.to_string()
             }
 
-            /// Returns all possible values for this enum.
+            /// Return all possible values for this enum.
             #[staticmethod]
             fn choices() -> Vec<$Py> {
                 const CHOICES: &[$Py] = &[
@@ -145,7 +143,7 @@ macro_rules! py_only_enum {
 
             /// Create an enum value from the given string.
             ///
-            /// This is the inverse of the `__str__` method.
+            /// This is the inverse of `__str__`.
             #[staticmethod]
             fn from_string(val: &str) -> PyResult<Self> {
                 match val {

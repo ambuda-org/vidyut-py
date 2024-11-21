@@ -77,7 +77,7 @@ macro_rules! py_enum {
 
             /// Create an enum value from the given string.
             ///
-            /// This is the inverse of the `__str__` method.
+            /// This is the inverse of `__str__`.
             #[staticmethod]
             fn from_string(val: String) -> PyResult<Self> {
                 match val.as_str() {

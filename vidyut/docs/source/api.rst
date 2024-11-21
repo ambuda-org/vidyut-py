@@ -27,7 +27,7 @@ the extensive examples elsewhere in the docs.
 ----------------
 
 .. automodule:: vidyut.chandas
-    :members: Chandas
+    :members: Chandas, MatchResult, Vrtta, VrttaPada, Jati, Akshara
 
 
 `vidyut.kosha`
@@ -74,8 +74,11 @@ Main types
    :undoc-members:
 
 
-Data types
-~~~~~~~~~~
+Loading data
+~~~~~~~~~~~~
+
+.. autoclass:: vidyut.prakriya.Data
+   :members:
 
 .. autoclass:: vidyut.prakriya.Entry
    :members:
@@ -127,6 +130,9 @@ the `SLP1`_ encoding scheme.
 .. autoclass:: vidyut.prakriya.Sanadi
    :members:
    :undoc-members:
+.. autoclass:: vidyut.prakriya.Taddhita
+   :members:
+   :undoc-members:
 .. autoclass:: vidyut.prakriya.Vacana
    :members:
    :undoc-members:
@@ -141,6 +147,12 @@ Output types
 *Output types* define the output format of our API.
 
 .. autoclass:: vidyut.prakriya.Prakriya
+   :members:
+
+.. autoclass:: vidyut.prakriya.Step
+   :members:
+
+.. autoclass:: vidyut.prakriya.Source
    :members:
    :undoc-members:
 

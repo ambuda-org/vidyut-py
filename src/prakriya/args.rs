@@ -293,7 +293,7 @@ py_enum!(
     ]
 );
 
-/// The complete list of *taddhita pratyaya*s.
+/// The complete list of *taddhita* pratyayas.
 #[pyclass(name = "Taddhita", module = "prakriya", eq, eq_int, ord)]
 #[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
 #[allow(non_camel_case_types)]
@@ -1033,12 +1033,7 @@ impl PyPratipadika {
     #[staticmethod]
     #[pyo3(signature = (pratipadika, taddhita))]
     pub fn taddhitanta(pratipadika: PyPratipadika, taddhita: PyTaddhita) -> Self {
-        // TODO: use Taddhitanta::new once available.
-        let taddhitanta = Taddhitanta::builder()
-            .pratipadika(pratipadika.pratipadika)
-            .taddhita(taddhita.into())
-            .build()
-            .expect("has both pratipadika and taddhita");
+        let taddhitanta = Taddhitanta::new(pratipadika.pratipadika, taddhita.into());
         Self {
             pratipadika: Pratipadika::Taddhitanta(taddhitanta.into()),
             text: "".to_string(),

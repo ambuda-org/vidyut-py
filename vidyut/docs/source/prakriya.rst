@@ -251,8 +251,8 @@ Working with data files
 -----------------------
 
 `vidyut.prakriya` is more interesting when used with the side data provided in
-Vidyut's standard data download. We expose this data through the `Data` object,
-whose main methods are :meth:`~Data.load_dhatu_entries` and
+Vidyut's standard data download. We expose this data through the :class:`Data`
+object, whose main methods are :meth:`~Data.load_dhatu_entries` and
 :meth:`~Data.load_sutras`.
 
 :meth:`~Data.load_dhatu_entries` loads all dhatus from the Dhatupatha along
@@ -279,9 +279,17 @@ The Dhatupatha we provide is essentially identical to the one used on `ashtadhya
 
 .. _ashtadhyayi.com: https://ashtadhyayi.com
 
-:meth:`~Data.load_sutras`, meanwhile, loads all sutras used as part of a derivation::
+:meth:`~Data.load_sutras`, meanwhile, loads all sutras used as part of a derivation:
 
-    from vidyut.prakriya import Source, Sutra
+.. testsetup::
+
+    class MockData:
+        def load_sutras(self):
+            assert hasattr(Data, "load_sutras")
+            return [Sutra(source=Source.Ashtadhyayi, code="1.1.1", text="vfdDirAdEc")]
+    data = MockData()
+
+.. testcode::
 
     sutras = data.load_sutras()
     ashtadhyayi = [s for s in sutras if s.source == Source.Ashtadhyayi]

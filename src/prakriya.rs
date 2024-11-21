@@ -284,6 +284,7 @@ impl PyData {
 /// An interface to the rules of the Ashtadhyayi.
 ///
 /// Options:
+///
 /// - `log_steps` (default: ``True``) -- If set, log each step in the prakriya. Disable this if you
 ///   want extra speed.
 /// - `is_chandasi` (default: ``False``) -- If set, use rules tagged with *chandasi*, *mantre*,
@@ -347,7 +348,7 @@ impl PyVyakarana {
         }
     }
 
-    /// Return all tinantas that can be derived from the given initial arguments.
+    /// Return all tinantas that can be derived from the given arguments.
     #[pyo3(signature = (*, dhatu, prayoga, lakara, purusha, vacana))]
     pub fn derive_tinantas(
         &self,
