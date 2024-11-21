@@ -37,11 +37,13 @@ impl PyAkshara {
         PyAkshara { text, weight }
     }
 
+    /// The text that composes this akshara.
     #[getter]
     fn text(&self) -> &str {
         &self.text
     }
 
+    /// The weight of this akshara.
     #[getter]
     fn weight(&self) -> &str {
         &self.weight
@@ -52,6 +54,7 @@ impl PyAkshara {
     }
 }
 
+/// Represents a weight pattern as part of some Vrtta.
 #[pyclass(name = "VrttaWeight", eq, eq_int)]
 #[derive(Copy, Clone, Debug, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub enum PyVrttaWeight {
@@ -62,6 +65,7 @@ pub enum PyVrttaWeight {
 
 py_enum!(PyVrttaWeight, VrttaWeight, [G, L, Any]);
 
+/// Represents a pada (quarter) of some Vrtta.
 #[pyclass(name = "VrttaPada", eq, ord)]
 #[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
 pub struct PyVrttaPada {
@@ -71,6 +75,9 @@ pub struct PyVrttaPada {
 
 #[pymethods]
 impl PyVrttaPada {
+    /// Create a `VrttaPada` by parsing the input `text`.
+    ///
+    /// Raises `ValueError` if parsing fails.
     #[staticmethod]
     #[pyo3(signature = (text))]
     pub fn from_string(text: String) -> PyResult<Self> {
@@ -111,6 +118,8 @@ impl PyVrtta {
         format!("Vrtta(name=\'{}\', padas={:?})", self.name, self.padas)
     }
 
+    /// The padas thac constitute this vrtta.
+    #[getter]
     pub fn padas(&self) -> Vec<PyVrttaPada> {
         self.padas.clone()
     }
@@ -146,6 +155,7 @@ impl PyJati {
         format!("Jati(name=\'{}\', matras={:?})", self.name, self.matras)
     }
 
+    /// The matras that constitute this jati.
     pub fn matras(&self) -> Vec<i32> {
         self.matras.clone()
     }
@@ -160,6 +170,7 @@ impl From<Jati> for PyJati {
     }
 }
 
+/// Models a match against our database or meters.
 #[pyclass(name = "MatchResult", get_all, eq)]
 #[derive(Clone, Eq, Hash, PartialEq)]
 pub struct PyMatchResult {
@@ -169,11 +180,13 @@ pub struct PyMatchResult {
 
 #[pymethods]
 impl PyMatchResult {
+    /// The name of the matching meter, if one could be found.
     #[getter]
     fn padya(&self) -> Option<String> {
         self.padya.clone()
     }
 
+    /// All of the aksharas of the input text.
     #[getter]
     fn aksharas(&self) -> Vec<Vec<PyAkshara>> {
         self.aksharas.clone()
@@ -195,7 +208,7 @@ pub struct PyChandas {
 
 #[pymethods]
 impl PyChandas {
-    /// Initialize `Chedaka` by reading the necessary data from the directory at `path`.
+    /// Initialize `Chandas` by reading the necessary data from the file at `path`.
     #[new]
     fn new(path: PathBuf) -> PyResult<Self> {
         match Chandas::from_file(path) {
@@ -204,6 +217,14 @@ impl PyChandas {
         }
     }
 
+    /// Initialize `Chandas` from the input string.
+    ///
+    /// `text` should be a TSV with three columns:
+    ///
+    /// 1. The meter name.
+    /// 2. The meter type, e.g. `vrtta` (Currently unused)
+    /// 3. A string containing the characters `G`, `L`, `/`, and `|`, where `G` is guru, `L` is
+    ///    laghu, `/` marks a pada boundary, and `|` marks yati.
     #[staticmethod]
     fn from_text(text: String) -> PyResult<Self> {
         match Chandas::from_text(text) {

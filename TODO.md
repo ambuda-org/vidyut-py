@@ -1,4 +1,4 @@
-- chandas.rst docs
+x chandas.rst docs
 - kosha.rst docs
 - cheda.rst docs
 x prakriya.rst docs

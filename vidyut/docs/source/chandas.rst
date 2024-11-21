@@ -6,10 +6,7 @@ Analyzing meter with `vidyut.chandas`
 .. warning::
    This package is experimental.
 
-
-`vidyut.chandas` is an experimental classifier for Sanskrit meters.
-
-All input text should use the `SLP1`_ encoding scheme.
+`vidyut.chandas` detects the meter used by a piece of Sanskrit text encoded in `SLP1`_.
 
 .. _SLP1: https://en.wikipedia.org/wiki/SLP1
 
@@ -19,3 +16,29 @@ Usage::
 
     c = Chandas("/path/to/meters.tsv")
     match = c.classify("mAtaH samastajagatAM maDukEwaBAreH")
+
+    print(match.padya)
+    print('-' * 20)
+    for akshara in match.aksharas:
+        print(akshara.text, akshara.weight)
+
+Output:
+
+.. code-block:: text
+
+    vasantatilakA
+    --------------------
+    mA G
+    taH G
+    sa L
+    ma G
+    sta L
+    ja L
+    ga L
+    tAM G
+    ma L
+    Du L
+    kE G
+    wa L
+    BA G
+    reH G

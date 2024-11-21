@@ -1,10 +1,10 @@
-from vidyut.lipi import transliterate, detect, Scheme
+from vidyut.chandas import Chandas
 
-text = "1 12 123 1234 12345"
-output = transliterate(text, Scheme.HarvardKyoto, Scheme.Grantha)
-assert output == "௧ ௰௨ ௱௨௰௩ ௲௨௱௩௰௪ ௰௨௲௩௱௪௰௫"
+c = Chandas("/Users/Arun/personal/vidyut/data/build/vidyut-latest/chandas/data/meters.tsv")
+match = c.classify("mAtaH samastajagatAM maDukEwaBAreH")
 
-
-text = "नरइति"
-output = transliterate(text, Scheme.Devanagari, Scheme.Iso15919)
-assert output == "nara:iti"
+print(match.padya)
+print('-' * 20)
+for pada in match.aksharas:
+    for akshara in pada:
+        print(akshara.text, akshara.weight)
