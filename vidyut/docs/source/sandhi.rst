@@ -3,6 +3,10 @@
 Handling sandhi with `vidyut.sandhi`
 ====================================
 
+.. warning::
+   This package is experimental.
+
+
 `vidyut.sandhi` contains various utilities for working with sandhi changes
 between words. It is fast, simple, and appropriate for most use cases.
 
