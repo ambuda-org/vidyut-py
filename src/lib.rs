@@ -148,11 +148,17 @@ fn py_lipi(m: &Bound<'_, PyModule>) -> PyResult<()> {
 #[pymodule]
 #[pyo3(name = "prakriya")]
 fn py_prakriya(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    // API
     m.add_class::<prakriya::PyVyakarana>()?;
-    m.add_class::<prakriya::PyDhatupatha>()?;
+
+    // Data types
+    m.add_class::<prakriya::PyData>()?;
+    m.add_class::<prakriya::PyEntry>()?;
+    m.add_class::<prakriya::PySutra>()?;
     m.add_class::<prakriya::PyPrakriya>()?;
     m.add_class::<prakriya::PyStep>()?;
 
+    // Argument types.
     // For details on these symbols, see the comments in `py_kosha`.
     m.add_class::<prakriya::args::PyDhatu>()?;
     m.add_class::<prakriya::args::PyPratipadika>()?;

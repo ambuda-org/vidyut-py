@@ -9,6 +9,15 @@ use vidyut_prakriya::{Prakriya, Step};
 pub mod args;
 use args::*;
 
+/// Renders a string Pythonically.
+fn py_repr_string(text: &str) -> String {
+    if text.contains('\'') {
+        format!("{:?}", text)
+    } else {
+        format!("'{}'", text)
+    }
+}
+
 /// A step in the derivation.
 #[pyclass(name = "Step", get_all)]
 #[derive(Clone)]
@@ -76,7 +85,8 @@ fn to_py_prakriyas(prakriyas: Vec<Prakriya>) -> Vec<PyPrakriya> {
 }
 
 /// An entry in the Dhatupatha.
-#[pyclass(name = "Entry")]
+#[pyclass(name = "Entry", eq, ord)]
+#[derive(Eq, Ord, PartialEq, PartialOrd)]
 pub struct PyEntry {
     /// The numeric code associtaed witht this dhatu.
     ///
@@ -92,22 +102,52 @@ pub struct PyEntry {
 
 #[pymethods]
 impl PyEntry {
+    #[new]
+    fn new(code: String, dhatu: PyDhatu, artha: String) -> Self {
+        Self { code, dhatu, artha }
+    }
+
     fn __repr__(&self) -> String {
         format!(
-            "Entry(code='{}', dhatu={:?}, artha=\"{}\")",
-            self.code,
+            "Entry(code={}, dhatu={}, artha={})",
+            py_repr_string(&self.code),
             self.dhatu.__repr__(),
-            self.artha
+            py_repr_string(&self.artha)
         )
     }
 }
 
-/// Provides an interface to the Dhatupatha.
-#[pyclass(name = "Dhatupatha", mapping)]
-pub struct PyDhatupatha(Dhatupatha);
+#[pyclass(name = "Sutra", get_all, eq, ord)]
+#[derive(Clone, Eq, Ord, PartialEq, PartialOrd)]
+pub struct PySutra {
+    /// The code of this sutra.
+    code: String,
+    /// The text of this sutra.
+    text: String,
+}
 
 #[pymethods]
-impl PyDhatupatha {
+impl PySutra {
+    #[new]
+    fn new(code: String, text: String) -> Self {
+        Self { code, text }
+    }
+
+    fn __repr__(&self) -> String {
+        format!(
+            "Sutra(code='{}', text={})",
+            self.code,
+            py_repr_string(&self.text)
+        )
+    }
+}
+
+/// Provides an interface to various data files.
+#[pyclass(name = "Data")]
+pub struct PyData(PathBuf);
+
+#[pymethods]
+impl PyData {
     /// Create a new dhatupatha instance from the given `path`.
     ///
     /// `path` should point to a 3-column TSV with columns `code`, `dhatu`, and `artha`.
@@ -128,9 +168,24 @@ impl PyDhatupatha {
             let message = format!("No such file: '{}'", path.display());
             return Err(PyFileNotFoundError::new_err(message));
         }
+        Ok(Self(path))
+    }
 
+    /// Return all entries defined in the Dhatupatha.
+    pub fn load_dhatupatha(&self) -> PyResult<Vec<PyEntry>> {
+        let path = self.0.join("dhatupatha.tsv");
         match Dhatupatha::from_path(&path) {
-            Ok(d) => Ok(Self(d)),
+            Ok(dhatupatha) => {
+                let mut ret = Vec::new();
+                for entry in dhatupatha.iter() {
+                    ret.push(PyEntry {
+                        code: entry.code().clone(),
+                        dhatu: entry.dhatu().clone().into(),
+                        artha: entry.artha().clone(),
+                    });
+                }
+                Ok(ret)
+            }
             Err(e) => {
                 let message = format!(
                     "Could not parse file '{}'. Error was: `{}`",
@@ -142,17 +197,40 @@ impl PyDhatupatha {
         }
     }
 
-    /// Return all entries defined in the Dhatupatha.
-    pub fn entries(&self) -> Vec<PyEntry> {
-        let mut ret = Vec::new();
-        for e in self.0.iter() {
-            ret.push(PyEntry {
-                code: e.code().clone(),
-                dhatu: e.dhatu().clone().into(),
-                artha: e.artha().clone(),
-            });
+    /// Return all gana-sutras from the Dhatupatha.
+    pub fn load_dhatupatha_ganasutras(&self) -> PyResult<Vec<PySutra>> {
+        self.load_sutras("dhatupatha-ganasutras.tsv")
+    }
+
+    /// Return all sutras from the Ashtadhyayi (a.k.a. Sutrapatha).
+    pub fn load_sutrapatha(&self) -> PyResult<Vec<PySutra>> {
+        self.load_sutras("sutrapatha.tsv")
+    }
+
+    /// Return all varttikas used in the system.
+    pub fn load_varttikas(&self) -> PyResult<Vec<PySutra>> {
+        self.load_sutras("varttikas.tsv")
+    }
+
+    /// Return all sutras from the Unadipatha.
+    pub fn load_unadipatha(&self) -> PyResult<Vec<PySutra>> {
+        self.load_sutras("unadipatha.tsv")
+    }
+
+    fn load_sutras(&self, name: &str) -> PyResult<Vec<PySutra>> {
+        let path = self.0.join(name);
+        let text = std::fs::read_to_string(path)?;
+
+        let mut sutras = Vec::new();
+        for line in text.lines() {
+            let fields: Vec<_> = line.split('\t').collect();
+            if let &[code, text] = &fields[..] {
+                sutras.push(PySutra::new(code.to_string(), text.to_string()));
+            } else {
+                return Err(PyValueError::new_err("Could not parse"));
+            }
         }
-        ret
+        Ok(sutras)
     }
 }
 

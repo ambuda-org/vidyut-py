@@ -2,7 +2,7 @@ import pytest
 
 from vidyut.prakriya import (
     Vyakarana,
-    Dhatupatha,
+    Data,
     Krt,
     Lakara,
     Linga,
@@ -21,8 +21,7 @@ from vidyut.prakriya import (
 
 v = Vyakarana()
 # Path is relative to the project root.
-dhatupatha = Dhatupatha("test/data/test-dhatupatha.tsv")
-d = {e.code: e.dhatu for e in dhatupatha.entries()}
+d = {e.code: e.dhatu for e in Data("test/data").load_dhatupatha()}
 
 
 def test_dhatupatha():

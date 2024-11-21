@@ -3,7 +3,11 @@
 from vidyut.vidyut import prakriya as __mod
 
 Vyakarana = __mod.Vyakarana
-Dhatupatha = __mod.Dhatupatha
+
+# Data types
+Data = __mod.Data
+Entry = __mod.Entry
+Sutra = __mod.Sutra
 
 # Input types
 Dhatu = __mod.Dhatu
