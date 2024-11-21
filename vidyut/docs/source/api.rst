@@ -72,7 +72,16 @@ Main types
 .. autoclass:: vidyut.prakriya.Vyakarana
    :members:
    :undoc-members:
-.. autoclass:: vidyut.prakriya.Dhatupatha
+
+
+Data types
+~~~~~~~~~~
+
+.. autoclass:: vidyut.prakriya.Entry
+   :members:
+   :undoc-members:
+
+.. autoclass:: vidyut.prakriya.Sutra
    :members:
    :undoc-members:
 
@@ -94,6 +103,9 @@ the `SLP1`_ encoding scheme.
    :members:
    :undoc-members:
 
+.. autoclass:: vidyut.prakriya.Antargana
+   :members:
+   :undoc-members:
 .. autoclass:: vidyut.prakriya.Gana
    :members:
    :undoc-members:

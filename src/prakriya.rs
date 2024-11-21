@@ -77,11 +77,14 @@ impl PySutra {
 #[pyclass(name = "Step", eq, get_all, ord)]
 #[derive(Clone, Eq, Ord, PartialEq, PartialOrd)]
 pub struct PyStep {
-    /// The source of the rule that was applied.
+    /// The source of the rule that was applied. This is almost always `Source.Ashtadhyayi`, but
+    /// some derivations may use rules from other sources (e.g. the Dhatupatha).
     pub source: PySource,
-    /// The rule that was applied.
+    /// The ID of the rule that was applied, e.g. "3.1.68". Most rules are from the Ashtadhyayi,
+    /// but a small number of rules are from other sources. See the `source` attribute to learn
+    /// where a rule has come from.
     pub code: String,
-    /// The result of applying `rule`.
+    /// The result of applying the given rule to the derivation.
     ///
     /// `result` is a list of SLP1 strings.
     pub result: Vec<String>,
@@ -281,13 +284,13 @@ impl PyData {
 /// An interface to the rules of the Ashtadhyayi.
 ///
 /// Options:
-/// - `log_steps` (default: `True`) -- If set, log each step in the prakriya. Disable this if
-///   you want extra speed.
-/// - `is_chandasi` (default: `False`) -- If set, use rules tagged with *chandasi*, *mantre*,
+/// - `log_steps` (default: ``True``) -- If set, log each step in the prakriya. Disable this if you
+///   want extra speed.
+/// - `is_chandasi` (default: ``False``) -- If set, use rules tagged with *chandasi*, *mantre*,
 ///   etc.
-/// - `use_svaras` (default: `False`) -- If set, use rules that add svaras to the output.
-/// - `nlp_mode` (default: `False`) -- If set, preserve the final `s`/`r` of words. This
-///   behavior is useful for certain applications in natural language processing.
+/// - `use_svaras` (default: ``False``) -- If set, use rules that add svaras to the output.
+/// - `nlp_mode` (default: ``False``) -- If set, preserve the final `s`/`r` of words. This behavior
+///   is useful for certain applications in natural language processing.
 #[pyclass(name = "Vyakarana")]
 #[derive(Default)]
 pub struct PyVyakarana(Vyakarana);
@@ -298,12 +301,12 @@ impl PyVyakarana {
     ///
     /// Options:
     /// - `log_steps` (default: `True`) -- If set, log each step in the prakriya. Disable this if
-    ///   you want extra speed.
+    ///     you want extra speed.
     /// - `is_chandasi` (default: `False`) -- If set, use rules tagged with *chandasi*, *mantre*,
-    ///   etc.
+    ///     etc.
     /// - `use_svaras` (default: `False`) -- If set, use rules that add svaras to the output.
     /// - `nlp_mode` (default: `False`) -- If set, preserve the final `s`/`r` of words. This
-    ///   behavior is useful for certain applications in natural language processing.
+    ///     behavior is useful for certain applications in natural language processing.
     #[new]
     #[pyo3(signature = (*, log_steps=true, is_chandasi=false, use_svaras=false, nlp_mode=false))]
     pub fn new(log_steps: bool, is_chandasi: bool, use_svaras: bool, nlp_mode: bool) -> Self {

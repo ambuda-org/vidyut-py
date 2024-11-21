@@ -28,6 +28,7 @@ release = "0.3.0"
 # ones.
 extensions = [
     "sphinx.ext.autodoc",
+    "sphinx.ext.doctest",
     "sphinx_rtd_theme",
 ]
 
@@ -51,3 +52,22 @@ html_theme = "sphinx_rtd_theme"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+
+
+# -- Logic for sphinx.ext.doctest --------------------------------------------
+
+import doctest
+
+IGNORE_RESULT = doctest.register_optionflag("IGNORE_RESULT")
+
+OutputChecker = doctest.OutputChecker
+
+class CustomOutputChecker(OutputChecker):
+    def check_output(self, want, got, optionflags):
+        if IGNORE_RESULT & optionflags:
+            return True
+        return OutputChecker.check_output(self, want, got, optionflags)
+
+
+doctest.OutputChecker = CustomOutputChecker
+

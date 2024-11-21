@@ -17,7 +17,6 @@ def all_sutras(data):
 
 def test_dhatupatha(data):
     entries = data.load_dhatu_entries()
-
     assert len(entries) == 2229
     assert entries[0] == Entry(
         code="01.0001", dhatu=Dhatu.mula("BU", Gana.Bhvadi), artha="sattAyAm"
@@ -56,3 +55,8 @@ def test_varttikas(all_sutras):
         code="1.1.33.1",
         text="viBAzAprakaraRe tIyasya NitsUpasaNKyAnam",
     )
+
+
+def test_sutra_repr(all_sutras):
+    for s in all_sutras:
+        assert eval(repr(s)) == s

@@ -18,7 +18,9 @@ below.
 Quickstart
 ----------
 
-Transliteration is simple and straightforward::
+Transliteration is simple and straightforward:
+
+.. testcode::
 
     from vidyut.lipi import transliterate, Scheme
 
@@ -28,23 +30,25 @@ Transliteration is simple and straightforward::
 
 Output:
 
-.. code-block:: text
+.. testoutput::
 
     तपःस्वाध्यायनिरतं तपस्वी वाग्विदां वरम्
 
-If the input scheme is not known, you can use :func:`detect` to guess it::
+If the input scheme is not known, you can use :func:`detect` to guess it:
+
+.. testcode::
 
     from vidyut.lipi import detect, transliterate, Scheme
 
     text = "tapaHsvAdhyAyanirataM tapasvI vAgvidAM varam"
     source = detect(text)
-    assert source == Source.HarvardKyoto
+    assert source == Scheme.HarvardKyoto
 
     output = transliterate(text, source, Scheme.Devanagari)
 
-`vidyut.lipi` supports a wide variety of transliteration schemes. For example::
+`vidyut.lipi` supports a wide variety of transliteration schemes. For example:
 
-    from vidyut.lipi import transliterate, detect, Scheme
+.. testcode::
 
     text = "tapaHsvAdhyAyanirataM tapasvI vAgvidAM varam"
     for dest in Scheme.choices():
@@ -53,7 +57,7 @@ If the input scheme is not known, you can use :func:`detect` to guess it::
 
 Output:
 
-.. code-block:: text
+.. testoutput::
 
     Assamese: তপঃস্ৱাধ্যায়নিৰতং তপস্ৱী ৱাগ্ৱিদাং ৱৰম্
     Balinese: ᬢᬧᬄᬲ᭄ᬯᬵᬥ᭄ᬬᬵᬬᬦᬶᬭᬢᬂ ᬢᬧᬲ᭄ᬯᬷ ᬯᬵᬕ᭄ᬯᬶᬤᬵᬂ ᬯᬭᬫ᭄
@@ -114,14 +118,18 @@ Transliterators are essentially identical for common use cases, but they tend
 to differ at the edges. Here are some features that distinguish `vidyut.lipi`
 for uncommon use cases:
 
-- `vidyut.lipi` has strong support for Grantha, especially Grantha numerals::
+- `vidyut.lipi` has strong support for Grantha, especially Grantha numerals:
+
+.. testcode::
 
     text = "1 12 123 1234 12345"
     output = transliterate(text, Scheme.HarvardKyoto, Scheme.Grantha)
     assert output == "௧ ௰௨ ௱௨௰௩ ௲௨௱௩௰௪ ௰௨௲௩௱௪௰௫"
 
 - `vidyut.lipi` has strong support for ISO 15919, including the ``:``
-  disambiguating separator::
+  disambiguating separator:
+
+.. code-block:: text
 
     text = "नरइति"
     output = transliterate(text, Scheme.Devanagari, Scheme.Iso15919)

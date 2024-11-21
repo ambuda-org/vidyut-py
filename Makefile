@@ -49,3 +49,8 @@ lint-check:
 # To view the docs, open `vidyut/docs/build/html/index.html`.
 docs: develop
 	cd vidyut/docs && uv run make html
+
+doctest: 
+	# Run on release build to avoid debug printouts.
+	uv run maturin develop --release
+	cd vidyut/docs && uv run sphinx-build -b doctest source build/doctest
