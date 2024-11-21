@@ -1,4 +1,4 @@
-use pyo3::basic::CompareOp;
+use crate::utils::py_only_enum;
 use pyo3::exceptions::{PyFileNotFoundError, PyValueError};
 use pyo3::prelude::*;
 use std::path::PathBuf;
@@ -18,12 +18,69 @@ fn py_repr_string(text: &str) -> String {
     }
 }
 
+/// Defines the source of some rule.
+#[pyclass(name = "Source", eq, ord, frozen, hash)]
+#[derive(Copy, Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]
+pub enum PySource {
+    Ashtadhyayi,
+    Dhatupatha,
+    Kashika,
+    Kaumudi,
+    Linganushasana,
+    Phit,
+    Unadipatha,
+    Varttika,
+}
+py_only_enum!(
+    PySource,
+    Source,
+    [
+        Ashtadhyayi,
+        Dhatupatha,
+        Kashika,
+        Kaumudi,
+        Linganushasana,
+        Phit,
+        Unadipatha,
+        Varttika
+    ]
+);
+
+#[pyclass(name = "Sutra", get_all, eq, ord)]
+#[derive(Clone, Eq, Ord, PartialEq, PartialOrd)]
+pub struct PySutra {
+    source: PySource,
+    /// The code of this sutra.
+    code: String,
+    /// The text of this sutra.
+    text: String,
+}
+
+#[pymethods]
+impl PySutra {
+    #[new]
+    fn new(source: PySource, code: String, text: String) -> Self {
+        Self { source, code, text }
+    }
+
+    fn __repr__(&self) -> String {
+        format!(
+            "Sutra(source={}, code={}, text={})",
+            self.source.__repr__(),
+            py_repr_string(&self.code),
+            py_repr_string(&self.text)
+        )
+    }
+}
+
 /// A step in the derivation.
-#[pyclass(name = "Step", get_all)]
-#[derive(Clone)]
+#[pyclass(name = "Step", eq, get_all, ord)]
+#[derive(Clone, Eq, Ord, PartialEq, PartialOrd)]
 pub struct PyStep {
+    /// The source of the rule that was applied.
+    pub source: PySource,
     /// The rule that was applied.
-    pub rule: String,
+    pub code: String,
     /// The result of applying `rule`.
     ///
     /// `result` is a list of SLP1 strings.
@@ -33,23 +90,21 @@ pub struct PyStep {
 #[pymethods]
 impl PyStep {
     #[new]
-    fn new(rule: String, result: Vec<String>) -> Self {
-        Self { rule, result }
+    fn new(source: PySource, code: String, result: Vec<String>) -> Self {
+        Self {
+            source,
+            code,
+            result,
+        }
     }
 
     fn __repr__(&self) -> String {
-        format!("Step(rule='{}', result='{:?}')", self.rule, self.result)
-    }
-
-    fn __richcmp__(&self, other: PyRef<PyStep>, op: CompareOp) -> Py<PyAny> {
-        let py = other.py();
-        let is_eq = self.rule == other.rule && self.result == other.result;
-
-        match op {
-            CompareOp::Eq => (is_eq).into_py(py),
-            CompareOp::Ne => (!is_eq).into_py(py),
-            _ => py.NotImplemented(),
-        }
+        format!(
+            "Step(source={}, code={}, result='{:?}')",
+            self.source.__repr__(),
+            self.code,
+            self.result
+        )
     }
 }
 
@@ -65,11 +120,27 @@ pub struct PyPrakriya {
 }
 
 fn to_py_history(history: &[Step]) -> Vec<PyStep> {
+    use vidyut_prakriya::Rule;
+
     history
         .iter()
-        .map(|x| PyStep {
-            rule: x.rule().code().to_string(),
-            result: x.result().iter().map(|t| t.text().to_string()).collect(),
+        .map(|x| {
+            let (source, code) = match x.rule() {
+                Rule::Ashtadhyayi(s) => (PySource::Ashtadhyayi, s),
+                Rule::Dhatupatha(s) => (PySource::Dhatupatha, s),
+                Rule::Kashika(s) => (PySource::Kashika, s),
+                Rule::Kaumudi(s) => (PySource::Kaumudi, s),
+                Rule::Linganushasana(s) => (PySource::Linganushasana, s),
+                Rule::Phit(s) => (PySource::Phit, s),
+                Rule::Unadipatha(s) => (PySource::Unadipatha, s),
+                Rule::Varttika(s) => (PySource::Varttika, s),
+            };
+
+            PyStep {
+                source,
+                code: code.to_string(),
+                result: x.result().iter().map(|t| t.text().to_string()).collect(),
+            }
         })
         .collect()
 }
@@ -117,31 +188,6 @@ impl PyEntry {
     }
 }
 
-#[pyclass(name = "Sutra", get_all, eq, ord)]
-#[derive(Clone, Eq, Ord, PartialEq, PartialOrd)]
-pub struct PySutra {
-    /// The code of this sutra.
-    code: String,
-    /// The text of this sutra.
-    text: String,
-}
-
-#[pymethods]
-impl PySutra {
-    #[new]
-    fn new(code: String, text: String) -> Self {
-        Self { code, text }
-    }
-
-    fn __repr__(&self) -> String {
-        format!(
-            "Sutra(code='{}', text={})",
-            self.code,
-            py_repr_string(&self.text)
-        )
-    }
-}
-
 /// Provides an interface to various data files.
 #[pyclass(name = "Data")]
 pub struct PyData(PathBuf);
@@ -172,7 +218,7 @@ impl PyData {
     }
 
     /// Return all entries defined in the Dhatupatha.
-    pub fn load_dhatupatha(&self) -> PyResult<Vec<PyEntry>> {
+    pub fn load_dhatu_entries(&self) -> PyResult<Vec<PyEntry>> {
         let path = self.0.join("dhatupatha.tsv");
         match Dhatupatha::from_path(&path) {
             Ok(dhatupatha) => {
@@ -197,37 +243,35 @@ impl PyData {
         }
     }
 
-    /// Return all gana-sutras from the Dhatupatha.
-    pub fn load_dhatupatha_ganasutras(&self) -> PyResult<Vec<PySutra>> {
-        self.load_sutras("dhatupatha-ganasutras.tsv")
-    }
-
-    /// Return all sutras from the Ashtadhyayi (a.k.a. Sutrapatha).
-    pub fn load_sutrapatha(&self) -> PyResult<Vec<PySutra>> {
-        self.load_sutras("sutrapatha.tsv")
-    }
-
-    /// Return all varttikas used in the system.
-    pub fn load_varttikas(&self) -> PyResult<Vec<PySutra>> {
-        self.load_sutras("varttikas.tsv")
-    }
-
-    /// Return all sutras from the Unadipatha.
-    pub fn load_unadipatha(&self) -> PyResult<Vec<PySutra>> {
-        self.load_sutras("unadipatha.tsv")
-    }
-
-    fn load_sutras(&self, name: &str) -> PyResult<Vec<PySutra>> {
-        let path = self.0.join(name);
-        let text = std::fs::read_to_string(path)?;
-
+    /// Return all sutras used as rules.
+    ///
+    /// Sutras come from various sources, including:
+    /// - the gana-sutras in the Dhatupatha
+    /// - the Ashtadhyayi
+    /// - the Unadipatha
+    /// - various varttikas
+    pub fn load_sutras(&self) -> PyResult<Vec<PySutra>> {
         let mut sutras = Vec::new();
-        for line in text.lines() {
-            let fields: Vec<_> = line.split('\t').collect();
-            if let &[code, text] = &fields[..] {
-                sutras.push(PySutra::new(code.to_string(), text.to_string()));
-            } else {
-                return Err(PyValueError::new_err("Could not parse"));
+
+        for (filename, source) in &[
+            ("dhatupatha-ganasutras.tsv", PySource::Dhatupatha),
+            ("sutrapatha.tsv", PySource::Ashtadhyayi),
+            ("varttikas.tsv", PySource::Varttika),
+            ("unadipatha.tsv", PySource::Unadipatha),
+        ] {
+            let path = self.0.join(filename);
+            let text = std::fs::read_to_string(path)?;
+
+            for line in text.lines() {
+                let fields: Vec<_> = line.split('\t').collect();
+                if let &[code, text] = &fields[..] {
+                    sutras.push(PySutra::new(*source, code.to_string(), text.to_string()))
+                } else {
+                    return Err(PyValueError::new_err(format!(
+                        "Could not parse `{}`",
+                        filename
+                    )));
+                }
             }
         }
         Ok(sutras)

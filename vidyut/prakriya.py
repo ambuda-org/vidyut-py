@@ -8,6 +8,7 @@ Vyakarana = __mod.Vyakarana
 Data = __mod.Data
 Entry = __mod.Entry
 Sutra = __mod.Sutra
+Source = __mod.Source
 
 # Input types
 Dhatu = __mod.Dhatu

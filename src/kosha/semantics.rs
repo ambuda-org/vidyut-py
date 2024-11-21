@@ -1,5 +1,4 @@
 use crate::utils::py_enum;
-use pyo3::basic::CompareOp;
 use pyo3::prelude::*;
 
 use vidyut_kosha::morph::*;
@@ -9,8 +8,8 @@ use vidyut_kosha::morph::*;
 /// These tags follow the normal distinction of *subanta* (nominal) and *tinanta* (verb). We also
 /// model the *avyaya* (indeclinable) separately since it has different semantics from other
 /// subantas.
-#[pyclass(name = "PartOfSpeech", eq, eq_int)]
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[pyclass(name = "PartOfSpeech", eq, eq_int, ord)]
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum PyPartOfSpeech {
     /// An indeclinable.
     Avyaya,
@@ -25,8 +24,8 @@ pub enum PyPartOfSpeech {
 py_enum!(PyPartOfSpeech, POSTag, [Avyaya, Subanta, Tinanta, Unknown]);
 
 /// The person of a Sanskrit verb.
-#[pyclass(name = "Purusha", eq, eq_int)]
-#[derive(Clone, Copy, Debug, Hash, Eq, PartialEq)]
+#[pyclass(name = "Purusha", eq, eq_int, ord)]
+#[derive(Clone, Copy, Debug, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub enum PyPurusha {
     /// The first *puruṣa* (third person).
     Prathama,
@@ -39,8 +38,8 @@ pub enum PyPurusha {
 py_enum!(PyPurusha, Purusha, [Prathama, Madhyama, Uttama]);
 
 /// The gender of a Sanskrit nominal.
-#[pyclass(name = "Linga", eq, eq_int)]
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[pyclass(name = "Linga", eq, eq_int, ord)]
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum PyLinga {
     /// The masculine gender.
     Pum,
@@ -53,8 +52,8 @@ pub enum PyLinga {
 py_enum!(PyLinga, Linga, [Pum, Stri, Napumsaka]);
 
 /// The number of a Sanskrit word.
-#[pyclass(name = "Vacana", eq, eq_int)]
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[pyclass(name = "Vacana", eq, eq_int, ord)]
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum PyVacana {
     /// The singular.
     Eka,
@@ -67,8 +66,8 @@ pub enum PyVacana {
 py_enum!(PyVacana, Vacana, [Eka, Dvi, Bahu]);
 
 /// The case of a Sanskrit nominal.
-#[pyclass(name = "Vibhakti", eq, eq_int)]
-#[derive(Clone, Copy, Debug, Hash, Eq, PartialEq)]
+#[pyclass(name = "Vibhakti", eq, eq_int, ord)]
+#[derive(Clone, Copy, Debug, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub enum PyVibhakti {
     /// The first *vibhakti* (nominative case).
     Prathama,
@@ -117,8 +116,8 @@ py_enum!(
 */
 
 /// The tense-mood of a Sanskrit verb.
-#[pyclass(name = "Lakara", eq, eq_int)]
-#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+#[pyclass(name = "Lakara", eq, eq_int, ord)]
+#[derive(Clone, Copy, Debug, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub enum PyLakara {
     /// *laṭ-lakāra* (present indicative).
     Lat,
@@ -152,8 +151,8 @@ py_enum!(
     [Lat, Lit, Lut, Lrt, Let, Lot, Lan, AshirLin, VidhiLin, Lun, LunNoAgama, Lrn]
 );
 
-#[pyclass(name = "PadaPrayoga", eq, eq_int)]
-#[derive(Clone, Copy, Debug, Hash, Eq, PartialEq)]
+#[pyclass(name = "PadaPrayoga", eq, eq_int, ord)]
+#[derive(Clone, Copy, Debug, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub enum PyPadaPrayoga {
     Parasmaipada,
     AtmanepadaKartari,
@@ -167,8 +166,8 @@ py_enum!(
 );
 
 /// A verb root.
-#[pyclass(name = "Dhatu", get_all)]
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[pyclass(name = "Dhatu", get_all, eq, ord)]
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct PyDhatu {
     /// The prefixes that this dhatu uses.
     prefixes: Vec<String>,
@@ -205,17 +204,6 @@ impl PyDhatu {
         format!("Dhatu(text='{}')", self.text)
     }
 
-    fn __richcmp__(&self, other: PyRef<PyDhatu>, op: CompareOp) -> Py<PyAny> {
-        let py = other.py();
-        let is_eq = self.text == other.text;
-
-        match op {
-            CompareOp::Eq => (is_eq).into_py(py),
-            CompareOp::Ne => (!is_eq).into_py(py),
-            _ => py.NotImplemented(),
-        }
-    }
-
     fn __str__(&self) -> String {
         self.text.clone()
     }
@@ -242,8 +230,8 @@ impl From<Dhatu> for PyDhatu {
 }
 
 /// A nominal stem.
-#[pyclass(name = "Pratipadika", get_all)]
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[pyclass(name = "Pratipadika", get_all, eq, ord)]
+#[derive(Clone, Debug, Eq, Ord, PartialEq, PartialOrd)]
 pub struct PyPratipadika {
     /// The text of this pratipadika.
     text: String,
@@ -262,17 +250,6 @@ impl PyPratipadika {
 
     fn __repr__(&self) -> String {
         format!("Pratipadika(text='{}')", self.text)
-    }
-
-    fn __richcmp__(&self, other: PyRef<PyPratipadika>, op: CompareOp) -> Py<PyAny> {
-        let py = other.py();
-        let is_eq = self.text == other.text;
-
-        match op {
-            CompareOp::Eq => (is_eq).into_py(py),
-            CompareOp::Ne => (!is_eq).into_py(py),
-            _ => py.NotImplemented(),
-        }
     }
 
     fn __str__(&self) -> String {
@@ -300,8 +277,8 @@ impl From<Dhatu> for PyPratipadika {
 /// Morphological information for a Sanskrit word.
 ///
 /// For ease of use in Python, all of these fields are defined on a single type.
-#[pyclass(name = "Pada", get_all)]
-#[derive(Clone, Debug, Default, Eq, PartialEq)]
+#[pyclass(name = "Pada", get_all, eq, ord)]
+#[derive(Clone, Debug, Default, Eq, Ord, PartialEq, PartialOrd)]
 pub struct PyPada {
     /// The part-of-speech.
     pos: Option<PyPartOfSpeech>,
@@ -416,29 +393,6 @@ impl PyPada {
             Some(d.text.to_string())
         } else {
             self.pratipadika.as_ref().map(|p| p.text.to_string())
-        }
-    }
-
-    fn __richcmp__(&self, other: PyRef<PyPada>, op: CompareOp) -> Py<PyAny> {
-        let py = other.py();
-
-        // TODO: this is messy and can easily become buggy.
-        let is_eq = self.pos == other.pos
-            /*
-            && self.dhatu == other.dhatu;
-            */
-            && self.vacana == other.vacana
-            && self.lakara == other.lakara
-            && self.purusha == other.purusha
-            && self.pada_prayoga == other.pada_prayoga
-            && self.vibhakti == other.vibhakti
-            && self.linga == other.linga
-            && self.is_purvapada == other.is_purvapada;
-
-        match op {
-            CompareOp::Eq => (is_eq).into_py(py),
-            CompareOp::Ne => (!is_eq).into_py(py),
-            _ => py.NotImplemented(),
         }
     }
 

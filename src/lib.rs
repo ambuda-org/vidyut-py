@@ -155,6 +155,9 @@ fn py_prakriya(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<prakriya::PyData>()?;
     m.add_class::<prakriya::PyEntry>()?;
     m.add_class::<prakriya::PySutra>()?;
+    m.add_class::<prakriya::PySource>()?;
+
+    // Prakriya types
     m.add_class::<prakriya::PyPrakriya>()?;
     m.add_class::<prakriya::PyStep>()?;
 

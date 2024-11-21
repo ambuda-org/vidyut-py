@@ -100,3 +100,63 @@ macro_rules! py_enum {
 }
 
 pub(crate) use py_enum;
+
+macro_rules! py_only_enum {
+    ($Py:ident, $Name:ident, [$( $variant:ident ),*]) => {
+        impl std::fmt::Display for $Py {
+            fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+                write!(f, "{}", self.name())
+            }
+        }
+
+        #[pymethods]
+        impl $Py {
+            fn __repr__(&self) -> String {
+                format!("{}.{}", stringify!{$Name}, self.name())
+            }
+
+            fn __str__(&self) -> String {
+                self.name()
+            }
+
+            /// The name used to define the `Enum` member.
+            ///
+            /// (Defined for compatibility with Python enums.)
+            #[getter]
+            fn name(&self) -> String {
+                let ret = match self {
+                    $(
+                        $Py::$variant => stringify!($variant),
+                    )*
+                };
+                ret.to_string()
+            }
+
+            /// Returns all possible values for this enum.
+            #[staticmethod]
+            fn choices() -> Vec<$Py> {
+                const CHOICES: &[$Py] = &[
+                    $(
+                        $Py::$variant,
+                    )*
+                ];
+                CHOICES.to_vec()
+            }
+
+            /// Create an enum value from the given string.
+            ///
+            /// This is the inverse of the `__str__` method.
+            #[staticmethod]
+            fn from_string(val: &str) -> PyResult<Self> {
+                match val {
+                    $(
+                        stringify!($variant) => Ok($Py::$variant),
+                    )*
+                    _ => Err(pyo3::exceptions::PyNotImplementedError::new_err(format!("Could not parse {val}"))),
+                }
+            }
+        }
+    }
+}
+
+pub(crate) use py_only_enum;

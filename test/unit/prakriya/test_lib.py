@@ -21,7 +21,7 @@ from vidyut.prakriya import (
 
 v = Vyakarana()
 # Path is relative to the project root.
-d = {e.code: e.dhatu for e in Data("test/data").load_dhatupatha()}
+d = {e.code: e.dhatu for e in Data("test/data").load_dhatu_entries()}
 
 
 def test_dhatupatha():

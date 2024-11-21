@@ -22,7 +22,7 @@ vidyut-prakriya = { path = "../vidyut/vidyut-prakriya" }
 vidyut-sandhi = { path = "../vidyut/vidyut-sandhi" }
 
 [dependencies.pyo3]
-version = "0.22.5"
+version = "0.23.1"
 features = ["extension-module", "abi3-py37"]
 
 [package.metadata.maturin]
