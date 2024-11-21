@@ -5,7 +5,8 @@ use std::path::PathBuf;
 use vidyut_sandhi::{Split, Splitter};
 
 /// Models a sandhi split.
-#[pyclass(name = "Split")]
+#[pyclass(name = "Split", eq, hash, frozen, ord)]
+#[derive(Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct PySplit(Split);
 
 #[pymethods]

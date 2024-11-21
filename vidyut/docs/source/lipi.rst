@@ -34,10 +34,12 @@ Output:
 
 If the input scheme is not known, you can use :func:`detect` to guess it::
 
-    from vidyut.lipi import detect
+    from vidyut.lipi import detect, transliterate, Scheme
 
     text = "tapaHsvAdhyAyanirataM tapasvI vAgvidAM varam"
     source = detect(text)
+    assert source == Source.HarvardKyoto
+
     output = transliterate(text, source, Scheme.Devanagari)
 
 `vidyut.lipi` supports a wide variety of transliteration schemes. For example::
@@ -47,7 +49,7 @@ If the input scheme is not known, you can use :func:`detect` to guess it::
     text = "tapaHsvAdhyAyanirataM tapasvI vAgvidAM varam"
     for dest in Scheme.choices():
         output = transliterate(text, Scheme.HarvardKyoto, dest)
-        print(f"{scheme}: {output}")
+        print(f"{dest}: {output}")
 
 Output:
 
@@ -129,8 +131,7 @@ for uncommon use cases:
   to NFC.
 
 - `vidyut.lipi` has strong support for anudatta and svarita accents across a
-  variety of scripts and supports transliteration of Samaveda accent where
-  possible.
+  variety of schemes.
 
 - :func:`detect` is especially robust and has high coverage.
 

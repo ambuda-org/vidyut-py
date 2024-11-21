@@ -1,7 +1,11 @@
-from vidyut.sandhi import Splitter
+from vidyut.lipi import transliterate, detect, Scheme
 
-splitter = Splitter.from_csv("/Users/arun/personal/vidyut/data/build/vidyut-latest/sandhi-rules.csv")
+text = "1 12 123 1234 12345"
+output = transliterate(text, Scheme.HarvardKyoto, Scheme.Grantha)
+assert output == "௧ ௰௨ ௱௨௰௩ ௲௨௱௩௰௪ ௰௨௲௩௱௪௰௫"
 
-for split in splitter.split_at("ityapi", 2):
-    print(split.first, split.second, split.is_valid)
+
+text = "नरइति"
+output = transliterate(text, Scheme.Devanagari, Scheme.Iso15919)
+assert output == "nara:iti"
 

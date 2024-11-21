@@ -44,3 +44,16 @@ def test_split_at(splitter):
     assert s.first == "itI"
     assert s.second == "api"
     assert s.is_valid
+
+
+def test_split__dunders(splitter):
+    splits = splitter.split_at("ityapi", 2)
+    assert len(splits) == 3
+
+    s1 = splits[0]
+    s2 = splits[1]
+
+    assert s1 == s1
+    assert s1 != s2
+    _ = sorted(splits)
+    _ = {s: "foo" for s in splits}
