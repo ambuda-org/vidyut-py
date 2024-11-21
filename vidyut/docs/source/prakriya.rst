@@ -247,11 +247,16 @@ These pratipadikas can be passed to any function that expects a :class:`Pratipad
     assert prakriyas[0].text == 'BavantO'
 
 
-Using the Dhatupatha
---------------------
+Working with data files
+-----------------------
 
-Rather than define dhatus manually, it is simpler and easier to use an existing
-Dhatupatha::
+`vidyut.prakriya` is more interesting when used with the side data provided in
+Vidyut's standard data download. We expose this data through the `Data` object,
+whose main methods are :meth:`~Data.load_dhatu_entries` and
+:meth:`~Data.load_sutras`.
+
+:meth:`~Data.load_dhatu_entries` loads all dhatus from the Dhatupatha along
+with their meanings::
 
     from vidyut.prakriya import *
 
@@ -270,10 +275,23 @@ Dhatupatha::
         for prakriya in prakriyas:
             print(prakriya.text)
 
-The Dhatupatha provided with `vidyut.prakriya` is essentially the same as the
-one used on `ashtadhyayi.com`_.
+The Dhatupatha we provide is essentially identical to the one used on `ashtadhyayi.com`_.
 
 .. _ashtadhyayi.com: https://ashtadhyayi.com
+
+:meth:`~Data.load_sutras`, meanwhile, loads all sutras used as part of a derivation::
+
+    from vidyut.prakriya import Source, Sutra
+
+    sutras = data.load_sutras()
+    ashtadhyayi = [s for s in sutras if s.source == Source.Ashtadhyayi]
+
+    assert ashtadhyayi[0].source == Source.Ashtadhyayi
+    assert ashtadhyayi[0].code == "1.1.1"
+    assert ashtadhyayi[0].text == "vfdDirAdEc"
+
+:meth:`~Data.load_sutras` includes data from the Ashtadhyayi, the Unadipatha,
+ganasutras from the Dhatupatha, various Varttikas, and other smaller sources.
 
 
 Recipes

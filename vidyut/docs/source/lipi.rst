@@ -111,12 +111,15 @@ Output:
     Wx: wapaHsvAXyAyanirawaM wapasvI vAgvixAM varam
 
 
+
+.. _features:
+
 Features
 --------
 
 Transliterators are essentially identical for common use cases, but they tend
 to differ at the edges. Here are some features that distinguish `vidyut.lipi`
-for uncommon use cases:
+for uncommon use cases.
 
 - `vidyut.lipi` has strong support for Grantha, especially Grantha numerals:
 
@@ -129,7 +132,7 @@ for uncommon use cases:
 - `vidyut.lipi` has strong support for ISO 15919, including the ``:``
   disambiguating separator:
 
-.. code-block:: text
+.. testcode::
 
     text = "नरइति"
     output = transliterate(text, Scheme.Devanagari, Scheme.Iso15919)
@@ -139,7 +142,13 @@ for uncommon use cases:
   to NFC.
 
 - `vidyut.lipi` has strong support for anudatta and svarita accents across a
-  variety of schemes.
+  variety of schemes:
+
+.. testcode::
+
+    text = "a\\ a^"
+    output = transliterate(text, Scheme.Slp1, Scheme.Devanagari)
+    assert output == "अ॒ अ॑"
 
 - :func:`detect` is especially robust and has high coverage.
 
