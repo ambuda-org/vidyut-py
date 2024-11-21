@@ -44,6 +44,8 @@ macro_rules! py_enum {
         #[pymethods]
         impl $Py {
             fn __hash__(&self) -> u64 {
+                use std::collections::hash_map::DefaultHasher;
+                use std::hash::{Hash, Hasher};
                 let mut hasher = DefaultHasher::new();
                 self.hash(&mut hasher);
                 hasher.finish()
@@ -90,7 +92,7 @@ macro_rules! py_enum {
                     $(
                         stringify!($variant) => Ok($Py::$variant),
                     )*
-                    _ => Err(PyNotImplementedError::new_err(format!("Could not parse {val}"))),
+                    _ => Err(pyo3::exceptions::PyNotImplementedError::new_err(format!("Could not parse {val}"))),
                 }
             }
         }

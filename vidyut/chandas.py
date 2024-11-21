@@ -8,5 +8,5 @@ MatchResult = __mod.MatchResult
 Akshara = __mod.Akshara
 
 Vrtta = __mod.Vrtta
+VrttaPada = __mod.VrttaPada
 Jati = __mod.Jati
-Pada = __mod.Pada

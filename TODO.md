@@ -1,6 +1,6 @@
-x sandhi.rst docs
 - chandas.rst docs
-- prakriya.rst docs
 - kosha.rst docs
-x lipi.rst docs
 - cheda.rst docs
+x prakriya.rst docs
+x lipi.rst docs
+x sandhi.rst docs

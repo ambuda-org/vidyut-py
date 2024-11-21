@@ -2,7 +2,7 @@ import tempfile
 from pathlib import Path
 
 from vidyut import chandas
-from vidyut.chandas import Chandas, Akshara, Vrtta, Jati, Pada
+from vidyut.chandas import Chandas, Akshara, Vrtta, Jati, VrttaPada
 
 
 def test_init():
@@ -29,9 +29,9 @@ def test_init__missing_file():
         pass
 
 
-def test_padyas():
+def test_chandas__attrs():
     c = Chandas.from_text("mandAkrAntA	vrtta	GGGG|LLLLLG|GLGGLGG\n")
-    assert c.vrttas == [Vrtta("mandAkrAntA", [Pada.from_string("GGGG|LLLLLG|GLGGLGG")])]
+    assert c.vrttas == [Vrtta("mandAkrAntA", [VrttaPada.from_string("GGGG|LLLLLG|GLGGLGG")])]
     assert c.jatis == [
         Jati("vEtAlIyam", [14, 16, 14, 16]),
         Jati("upagIti", [12, 15, 12, 15]),
@@ -43,11 +43,9 @@ def test_padyas():
     ]
 
 
-def test_classify():
+def test_classify_vrtta():
     with tempfile.NamedTemporaryFile() as f:
         f.write(b"mandAkrAntA	vrtta	GGGG|LLLLLG|GLGGLGG\n")
-        assert Path(f.name).exists()
-
         c = Chandas(f.name)
 
     result = c.classify("kaScitkAntAvirahaguruRA svADikArapramattaH")
@@ -72,4 +70,19 @@ def test_classify():
             Akshara(text="ttaH", weight="G"),
         ]
     ]
-    assert result.vrtta == "mandAkrAntA"
+    assert result.padya == "mandAkrAntA"
+
+
+def test_classify_jati():
+    with tempfile.NamedTemporaryFile() as f:
+        f.write(b"mandAkrAntA	vrtta	GGGG|LLLLLG|GLGGLGG\n")
+        c = Chandas(f.name)
+
+
+    text = ("yenAmandamarande daladaravinde dinAnyanAyizata |"
+            "kuwaje Kalu tenehA tenehA maDukareRa kaTam ||")
+
+    result = c.classify(text)
+    assert result.padya == "AryA"
+
+

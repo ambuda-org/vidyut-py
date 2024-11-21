@@ -81,7 +81,7 @@ fn py_chandas(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<chandas::PyChandas>()?;
     m.add_class::<chandas::PyVrtta>()?;
     m.add_class::<chandas::PyJati>()?;
-    m.add_class::<chandas::PyPada>()?;
+    m.add_class::<chandas::PyVrttaPada>()?;
     m.add_class::<chandas::PyMatchResult>()?;
     Ok(())
 }

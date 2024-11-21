@@ -5,10 +5,7 @@ Pyo3 doesn't allow us to annotate existing enums, and using a wrapping struct ha
 for callers. So instead, redefine our enums of interest.
 */
 use crate::utils::py_enum;
-use pyo3::exceptions::PyNotImplementedError;
 use pyo3::prelude::*;
-use std::collections::hash_map::DefaultHasher;
-use std::hash::{Hash, Hasher};
 use vidyut_prakriya::args::{BaseKrt as Krt, *};
 
 #[pyclass(name = "Gana", module = "prakriya", eq, eq_int, ord)]

@@ -1,7 +1,8 @@
-use pyo3::exceptions::{PyIOError, PyOSError};
+use crate::utils::py_enum;
+use pyo3::exceptions::{PyIOError, PyOSError, PyValueError};
 use pyo3::prelude::*;
 use std::path::PathBuf;
-use vidyut_chandas::{Akshara, Chandas, Jati, Pada, Vrtta, Weight};
+use vidyut_chandas::{Akshara, Chandas, Jati, Vrtta, VrttaPada, VrttaWeight};
 
 /// A Sanskrit syllable.
 ///
@@ -12,21 +13,18 @@ use vidyut_chandas::{Akshara, Chandas, Jati, Pada, Vrtta, Weight};
 /// - It must not start with an anusvara or visarga.
 ///
 /// Together, these three rurles mean that an input string has exactly one division into aksharas.
-#[pyclass(name = "Akshara", get_all, eq)]
-#[derive(Clone, Eq, Hash, PartialEq)]
+#[pyclass(name = "Akshara", get_all, eq, ord)]
+#[derive(Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct PyAkshara {
     text: String,
     weight: String,
 }
 
-impl From<&Akshara> for PyAkshara {
-    fn from(a: &Akshara) -> Self {
+impl From<Akshara> for PyAkshara {
+    fn from(a: Akshara) -> Self {
         Self {
             text: a.text().to_string(),
-            weight: match a.weight() {
-                Weight::G => "G".to_string(),
-                Weight::L => "L".to_string(),
-            },
+            weight: a.weight().to_string(),
         }
     }
 }
@@ -54,49 +52,66 @@ impl PyAkshara {
     }
 }
 
-#[pyclass(name = "PatternWeight", eq, eq_int)]
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub enum PyPatternWeight {
+#[pyclass(name = "VrttaWeight", eq, eq_int)]
+#[derive(Copy, Clone, Debug, Hash, Eq, Ord, PartialEq, PartialOrd)]
+pub enum PyVrttaWeight {
     G,
     L,
     Any,
 }
 
-#[pyclass(name = "Pada")]
-#[derive(Clone)]
-pub struct PyPada {}
+py_enum!(PyVrttaWeight, VrttaWeight, [G, L, Any]);
+
+#[pyclass(name = "VrttaPada", eq, ord)]
+#[derive(Clone, Debug, Eq, PartialEq, Ord, PartialOrd)]
+pub struct PyVrttaPada {
+    weights: Vec<PyVrttaWeight>,
+    yati: Vec<usize>,
+}
 
 #[pymethods]
-impl PyPada {
-    #[new]
-    pub fn new() -> Self {
-        Self {}
-    }
-
+impl PyVrttaPada {
     #[staticmethod]
     #[pyo3(signature = (text))]
-    pub fn from_string(text: String) -> Self {
-        Self {}
+    pub fn from_string(text: String) -> PyResult<Self> {
+        match VrttaPada::try_from(text.as_str()) {
+            Ok(v) => Ok(v.into()),
+            Err(_) => Err(PyValueError::new_err("Could not parse string.")),
+        }
+    }
+}
+
+impl From<VrttaPada> for PyVrttaPada {
+    fn from(val: VrttaPada) -> Self {
+        PyVrttaPada {
+            weights: val.weights().into_iter().map(|w| (*w).into()).collect(),
+            yati: val.yati().to_vec(),
+        }
     }
 }
 
 /// Models a *vṛtta*, which defines a specific pattern of light and heavy syllables.
-#[pyclass(name = "Vrtta")]
+#[pyclass(name = "Vrtta", eq, ord)]
+#[derive(Clone, Eq, Ord, PartialEq, PartialOrd)]
 pub struct PyVrtta {
     #[pyo3(get)]
     name: String,
-    padas: Vec<PyPada>,
+    padas: Vec<PyVrttaPada>,
 }
 
 #[pymethods]
 impl PyVrtta {
     #[new]
     #[pyo3(signature = (name, padas))]
-    pub fn new(name: String, padas: Vec<PyPada>) -> Self {
+    pub fn new(name: String, padas: Vec<PyVrttaPada>) -> Self {
         Self { name, padas }
     }
 
-    pub fn padas(&self) -> Vec<PyPada> {
+    pub fn __repr__(&self) -> String {
+        format!("Vrtta(name=\'{}\', padas={:?})", self.name, self.padas)
+    }
+
+    pub fn padas(&self) -> Vec<PyVrttaPada> {
         self.padas.clone()
     }
 }
@@ -105,8 +120,7 @@ impl From<Vrtta> for PyVrtta {
     fn from(v: Vrtta) -> Self {
         Self {
             name: v.name().to_string(),
-            // TODO: fill this in once Pada is exported.
-            padas: vec![],
+            padas: v.padas().iter().map(|p| p.clone().into()).collect(),
         }
     }
 }
@@ -149,15 +163,15 @@ impl From<Jati> for PyJati {
 #[pyclass(name = "MatchResult", get_all, eq)]
 #[derive(Clone, Eq, Hash, PartialEq)]
 pub struct PyMatchResult {
-    pub vrtta: Option<String>,
+    pub padya: Option<String>,
     pub aksharas: Vec<Vec<PyAkshara>>,
 }
 
 #[pymethods]
 impl PyMatchResult {
     #[getter]
-    fn vrtta(&self) -> Option<String> {
-        self.vrtta.clone()
+    fn padya(&self) -> Option<String> {
+        self.padya.clone()
     }
 
     #[getter]
@@ -166,7 +180,7 @@ impl PyMatchResult {
     }
 
     fn __repr__(&self) -> String {
-        match &self.vrtta {
+        match &self.padya {
             Some(s) => format!("MatchResult(name=\'{}\')", s),
             None => "MatchResult(name=None)".to_string(),
         }
@@ -207,11 +221,11 @@ impl PyChandas {
         let padya_name = res.padya().as_ref().map(|v| v.name().to_string());
         let mut aksharas = Vec::new();
         for row in res.aksharas() {
-            let new_row: Vec<_> = row.iter().map(|a| a.into()).collect();
+            let new_row: Vec<_> = row.iter().map(|a| a.clone().into()).collect();
             aksharas.push(new_row);
         }
         Ok(PyMatchResult {
-            vrtta: padya_name,
+            padya: padya_name,
             aksharas,
         })
     }
