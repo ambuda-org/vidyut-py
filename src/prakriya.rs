@@ -195,6 +195,33 @@ impl PyVyakarana {
         )
     }
 
+    #[pyo3(signature = (dhatu))]
+    pub fn derive_dhatus(&self, dhatu: &PyDhatu) -> Vec<PyPrakriya> {
+        let args = dhatu.as_ref();
+        let results = self.0.derive_dhatus(args);
+        to_py_prakriyas(results)
+    }
+
+    /// Return all pratipadikas that can be derived from the given arguments.
+    ///
+    /// This function is meant mainly for krdantas and taddhitantas. If a pratipadika cannot be
+    /// derived, the function returns an empty list.
+    #[pyo3(signature = (pratipadika))]
+    pub fn derive_pratipadikas(&self, pratipadika: &PyPratipadika) -> Vec<PyPrakriya> {
+        let args = pratipadika.as_ref();
+        match args {
+            Pratipadika::Krdanta(k) => {
+                let results = self.0.derive_krdantas(k);
+                to_py_prakriyas(results)
+            }
+            Pratipadika::Taddhitanta(t) => {
+                let results = self.0.derive_taddhitantas(t);
+                to_py_prakriyas(results)
+            }
+            _ => Vec::new(),
+        }
+    }
+
     /// Return all tinantas that can be derived from the given initial arguments.
     #[pyo3(signature = (*, dhatu, prayoga, lakara, purusha, vacana))]
     pub fn derive_tinantas(
@@ -235,32 +262,5 @@ impl PyVyakarana {
         );
         let results = self.0.derive_subantas(&args);
         to_py_prakriyas(results)
-    }
-
-    #[pyo3(signature = (dhatu))]
-    pub fn derive_dhatus(&self, dhatu: &PyDhatu) -> Vec<PyPrakriya> {
-        let args = dhatu.as_ref();
-        let results = self.0.derive_dhatus(args);
-        to_py_prakriyas(results)
-    }
-
-    /// Return all pratipadikas that can be derived from the given arguments.
-    ///
-    /// This function is meant mainly for krdantas and taddhitantas. If a pratipadika cannot be
-    /// derived, the function returns an empty list.
-    #[pyo3(signature = (pratipadika))]
-    pub fn derive_pratipadikas(&self, pratipadika: &PyPratipadika) -> Vec<PyPrakriya> {
-        let args = pratipadika.as_ref();
-        match args {
-            Pratipadika::Krdanta(k) => {
-                let results = self.0.derive_krdantas(k);
-                to_py_prakriyas(results)
-            }
-            Pratipadika::Taddhitanta(t) => {
-                let results = self.0.derive_taddhitantas(t);
-                to_py_prakriyas(results)
-            }
-            _ => Vec::new(),
-        }
     }
 }
