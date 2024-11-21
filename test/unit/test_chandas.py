@@ -8,17 +8,20 @@ from vidyut.chandas import Chandas, Akshara, Vrtta, Jati, VrttaPada
 def test_init():
     with tempfile.NamedTemporaryFile() as f:
         f.write(b"mandAkrAntA	vrtta	GGGG|LLLLLG|GLGGLGG\n")
-        assert Path(f.name).exists()
-
+        f.seek(0)
         _ = Chandas(f.name)
 
 
 def test_init__invalid_file():
     with tempfile.NamedTemporaryFile() as f:
         f.write(b"junk data")
-        assert Path(f.name).exists()
+        f.seek(0)
 
-        _ = Chandas(f.name)
+        try:
+            _ = Chandas(f.name)
+            assert False
+        except IOError:
+            pass
 
 
 def test_init__missing_file():
@@ -46,6 +49,7 @@ def test_chandas__attrs():
 def test_classify_vrtta():
     with tempfile.NamedTemporaryFile() as f:
         f.write(b"mandAkrAntA	vrtta	GGGG|LLLLLG|GLGGLGG\n")
+        f.seek(0)
         c = Chandas(f.name)
 
     result = c.classify("kaScitkAntAvirahaguruRA svADikArapramattaH")
@@ -76,6 +80,7 @@ def test_classify_vrtta():
 def test_classify_jati():
     with tempfile.NamedTemporaryFile() as f:
         f.write(b"mandAkrAntA	vrtta	GGGG|LLLLLG|GLGGLGG\n")
+        f.seek(0)
         c = Chandas(f.name)
 
 

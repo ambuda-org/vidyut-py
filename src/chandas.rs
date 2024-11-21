@@ -1,5 +1,5 @@
 use crate::utils::py_enum;
-use pyo3::exceptions::{PyIOError, PyOSError, PyValueError};
+use pyo3::exceptions::{PyIOError, PyValueError};
 use pyo3::prelude::*;
 use std::path::PathBuf;
 use vidyut_chandas::{Akshara, Chandas, Jati, Vrtta, VrttaPada, VrttaWeight};
@@ -200,7 +200,7 @@ impl PyChandas {
     fn new(path: PathBuf) -> PyResult<Self> {
         match Chandas::from_file(path) {
             Ok(chandas) => Ok(PyChandas { chandas }),
-            Err(_) => Err(PyOSError::new_err("Could not read data from path.")),
+            Err(_) => Err(PyIOError::new_err("Could not read data from path.")),
         }
     }
 
