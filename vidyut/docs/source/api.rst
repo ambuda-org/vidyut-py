@@ -64,18 +64,24 @@ Builder API
 `vidyut.prakriya`
 -----------------
 
+The members here are documented in four sections:
+
+- *Main types* specifies our high-level API.
+- *Disk types* specifies the types used to read data from external files.
+- *Input types* specifies the types passed into our API.
+- *Output types* specifies the types returned by our API.
+
+
 Main types
 ~~~~~~~~~~
-
-*Main types* define the high-level API.
 
 .. autoclass:: vidyut.prakriya.Vyakarana
    :members:
    :undoc-members:
 
 
-Loading data
-~~~~~~~~~~~~
+Disk types
+~~~~~~~~~~
 
 .. autoclass:: vidyut.prakriya.Data
    :members:
@@ -92,10 +98,8 @@ Loading data
 Input types
 ~~~~~~~~~~~
 
-*Input types* define the input arguments for our API.
-
-Names of suffixes, including the members of `Krt` and `Sanadi`, are written in
-the `SLP1`_ encoding scheme.
+Names of suffixes, including the members of `Krt`, `Sanadi`, and `Taddhita`,
+are written in the `SLP1`_ encoding scheme.
 
 .. _SLP1: https://en.wikipedia.org/wiki/SLP1
 
@@ -143,8 +147,6 @@ the `SLP1`_ encoding scheme.
 
 Output types
 ~~~~~~~~~~~~
-
-*Output types* define the output format of our API.
 
 .. autoclass:: vidyut.prakriya.Prakriya
    :members:

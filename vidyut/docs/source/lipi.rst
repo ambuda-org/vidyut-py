@@ -4,12 +4,13 @@ Transliterating with `vidyut.lipi`
 ==================================
 
 `vidyut-lipi` is a transliteration library for Sanskrit and Pali that also
-supports many of the scripts used within the Indosphere.
+supports many of the scripts used within the Indosphere. Our main goals with
+this module are correctness, completeness, and consistency.
 
 `vidyut-lipi` is generally comparable to other Python-based transliterators
-like `Aksharamukha`_ and `indic_transliteration`_. For details on how
-`vidyut.lipi` differs from these options, see the :ref:`Features` section
-below.
+like `Aksharamukha`_ and `indic_transliteration`_ but has specific advantages
+for certain use cases. For details on how `vidyut.lipi` differs from these
+transliterators, see the :ref:`Features` section below.
 
 .. _indic_transliteration: https://github.com/indic-transliteration/indic_transliteration_py
 .. _Aksharamukha: https://github.com/virtualvinodh/aksharamukha-python
@@ -141,7 +142,7 @@ for uncommon use cases.
 - `vidyut.lipi` is aware of Unicode NFC and NFD forms and normalizes all output
   to NFC.
 
-- `vidyut.lipi` has strong support for anudatta and svarita accents across a
+- `vidyut.lipi` has strong support for *anudātta* and *svarita* accents across a
   variety of schemes:
 
 .. testcode::
@@ -153,6 +154,7 @@ for uncommon use cases.
 - :func:`detect` is especially robust and has high coverage.
 
 - `vidyut-lipi` is around 6 times faster than `indic_transliteration` and
-  around 8 times faster than Aksharamukha. This speed-up can matter for heavy
-  workloads, such as transliterating an entire corpus.
+  around 8 times faster than Aksharamukha. This speed-up does not matter for
+  everyday usage, but it can matter for heavy workloads, such as
+  transliterating an entire corpus.
 

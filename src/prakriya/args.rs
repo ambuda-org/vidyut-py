@@ -294,6 +294,8 @@ py_enum!(
 );
 
 /// The complete list of *taddhita* pratyayas.
+///
+/// Each pratyaya name is written in the SLP1 encoding scheme.
 #[pyclass(name = "Taddhita", module = "prakriya", eq, eq_int, ord)]
 #[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
 #[allow(non_camel_case_types)]

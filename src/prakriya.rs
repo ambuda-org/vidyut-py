@@ -46,13 +46,19 @@ py_only_enum!(
     ]
 );
 
+/// A sutra from the Ashtadhyayi or a related text.
+///
+/// Example::
+///
+///     s = Sutra(source=Source.Ashtadhyayi, code='1.1.1', text='vfdDirAdEc')
 #[pyclass(name = "Sutra", get_all, eq, ord)]
 #[derive(Clone, Eq, Ord, PartialEq, PartialOrd)]
 pub struct PySutra {
+    /// The source text that this sutra comes from.
     source: PySource,
-    /// The code of this sutra.
+    /// The code that represents this sutra.
     code: String,
-    /// The text of this sutra.
+    /// The text of this sutra. All sutra text is in the SLP1 encoding scheme.
     text: String,
 }
 
@@ -162,14 +168,16 @@ fn to_py_prakriyas(prakriyas: Vec<Prakriya>) -> Vec<PyPrakriya> {
 #[pyclass(name = "Entry", eq, ord)]
 #[derive(Eq, Ord, PartialEq, PartialOrd)]
 pub struct PyEntry {
-    /// The numeric code associtaed witht this dhatu.
+    /// The numeric code associated with this dhatu.
     ///
-    /// If using `dhatupatha.tsv`, this code is consistent with the codes used by ashtadhyayi.com.
+    /// If you are using the linguistic data that comes with Vidyut, this code is consistent with
+    /// the codes used by ashtadhyayi.com.
     #[pyo3(get)]
     code: String,
-    /// The
+    /// The dhatu itself.
     #[pyo3(get)]
     dhatu: PyDhatu,
+    /// The meaning of this dhatu.
     #[pyo3(get)]
     artha: String,
 }

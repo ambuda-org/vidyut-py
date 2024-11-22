@@ -181,7 +181,7 @@ Specifying arguments
 
 .. py:currentmodule:: vidyut.prakriya
 
-The real expressive power in this package comes from expressing different kinds
+The real expressive power in this library comes from expressing different kinds
 of arguments.
 
 For example, we can modify a :class:`Dhatu` to use one or more prefixes:
@@ -333,6 +333,7 @@ Generate all tinantas for some dhatu and prayoga
                     print(p.text)
 
 .. testoutput::
+   :hide:
    :options: +IGNORE_RESULT
 
 
@@ -386,6 +387,7 @@ Generate all subantas for some pratipadika
                 print(vibhakti, vacana, p.text)
 
 .. testoutput::
+   :hide:
    :options: +IGNORE_RESULT
 
 
@@ -408,6 +410,7 @@ Generate all krdantas for some dhatu
             print(f"- (no results for BU + {krt})")
 
 .. testoutput::
+   :hide:
    :options: +IGNORE_RESULT
 
 
@@ -431,6 +434,7 @@ Generate all taddhitantas for some pratipadika
             print(f"- (no results for guru + {taddhita})")
 
 .. testoutput::
+   :hide:
    :options: +IGNORE_RESULT
 
 
@@ -461,4 +465,5 @@ Find all rules used by a dhatu's tinantas
                             rules.add(step.code)
 
 .. testoutput::
+   :hide:
    :options: +IGNORE_RESULT

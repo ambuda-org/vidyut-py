@@ -4,7 +4,7 @@ Analyzing meter with `vidyut.chandas`
 =====================================
 
 .. warning::
-   This package is experimental.
+   This module is experimental.
 
 `vidyut.chandas` detects the meter used by a piece of Sanskrit text encoded in `SLP1`_.
 
