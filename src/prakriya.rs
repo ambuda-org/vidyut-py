@@ -357,7 +357,11 @@ impl PyVyakarana {
     }
 
     /// Return all tinantas that can be derived from the given arguments.
-    #[pyo3(signature = (*, dhatu, prayoga, lakara, purusha, vacana))]
+    ///
+    /// If `skip_at_agama` is ``True`` and the `lakara` is `Lun`, `Lan`, or `Lrn`, then the
+    /// derivation will not add the *aṭ*/*āṭ* *āgama* to the verb. This is to derive forms like
+    /// *gamat*, *karot*, etc.
+    #[pyo3(signature = (*, dhatu, prayoga, lakara, purusha, vacana, skip_at_agama=false))]
     pub fn derive_tinantas(
         &self,
         dhatu: &PyDhatu,
@@ -365,6 +369,7 @@ impl PyVyakarana {
         lakara: PyLakara,
         purusha: PyPurusha,
         vacana: PyVacana,
+        skip_at_agama: bool,
     ) -> Vec<PyPrakriya> {
         let tin_args = Tinanta::builder()
             .dhatu(dhatu.as_rust().clone())
@@ -372,6 +377,7 @@ impl PyVyakarana {
             .purusha(purusha.into())
             .vacana(vacana.into())
             .lakara(lakara.into())
+            .skip_at_agama(skip_at_agama)
             .build()
             .expect("should have all required fields");
 

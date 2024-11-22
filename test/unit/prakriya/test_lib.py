@@ -181,6 +181,19 @@ def test_derive_yananta_tinantas(code, expected):
     assert expected == actual
 
 
+def test_derive_tinantas_without_at_agama():
+    bhu = Dhatu.mula("BU", Gana.Bhvadi)
+    prakriyas = v.derive_tinantas(
+        dhatu=bhu,
+        prayoga=Prayoga.Kartari,
+        purusha=Purusha.Prathama,
+        vacana=Vacana.Eka,
+        lakara=Lakara.Lun,
+        skip_at_agama=True,
+    )
+    assert prakriyas[0].text == "BUt"
+
+
 def test_derive_subantas():
     prakriyas = v.derive_subantas(
         pratipadika=Pratipadika.basic("deva"),
