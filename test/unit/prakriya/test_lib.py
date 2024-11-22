@@ -12,6 +12,7 @@ from vidyut.prakriya import (
     Prayoga,
     Purusha,
     Sanadi,
+    Source,
     Step,
     Taddhita,
     Vibhakti,
@@ -46,28 +47,29 @@ def test_prakriya():
     assert p.text == "Bavati"
 
     # Filter out debugging rules, which have `rule` = "    "
-    filtered_steps = [step for step in p.history if step.rule.strip()]
+    filtered_steps = [step for step in p.history if step.code.strip()]
 
+    a = Source.Ashtadhyayi
     assert filtered_steps == [
-        Step(rule="1.3.1", result=["BU"]),
-        Step(rule="3.2.123", result=["BU", "la~w"]),
-        Step(rule="1.3.2", result=["BU", "la~w"]),
-        Step(rule="1.3.3", result=["BU", "la~w"]),
-        Step(rule="1.3.9", result=["BU", "l"]),
-        Step(rule="1.3.78", result=["BU", "l"]),
-        Step(rule="3.4.78", result=["BU", "tip"]),
-        Step(rule="1.3.3", result=["BU", "tip"]),
-        Step(rule="1.3.9", result=["BU", "ti"]),
-        Step(rule="3.4.113", result=["BU", "ti"]),
-        Step(rule="3.1.68", result=["BU", "Sap", "ti"]),
-        Step(rule="1.3.3", result=["BU", "Sap", "ti"]),
-        Step(rule="1.3.8", result=["BU", "Sap", "ti"]),
-        Step(rule="1.3.9", result=["BU", "a", "ti"]),
-        Step(rule="3.4.113", result=["BU", "a", "ti"]),
-        Step(rule="7.3.84", result=["Bo", "a", "ti"]),
-        Step(rule="1.4.14", result=["Bo", "a", "ti"]),
-        Step(rule="6.1.78", result=["Bav", "a", "ti"]),
-        Step(rule="8.4.68", result=["Bav", "a", "ti"]),
+        Step(source=a, code="1.3.1", result=["BU"]),
+        Step(source=a, code="3.2.123", result=["BU", "la~w"]),
+        Step(source=a, code="1.3.2", result=["BU", "la~w"]),
+        Step(source=a, code="1.3.3", result=["BU", "la~w"]),
+        Step(source=a, code="1.3.9", result=["BU", "l"]),
+        Step(source=a, code="1.3.78", result=["BU", "l"]),
+        Step(source=a, code="3.4.78", result=["BU", "tip"]),
+        Step(source=a, code="1.3.3", result=["BU", "tip"]),
+        Step(source=a, code="1.3.9", result=["BU", "ti"]),
+        Step(source=a, code="3.4.113", result=["BU", "ti"]),
+        Step(source=a, code="3.1.68", result=["BU", "Sap", "ti"]),
+        Step(source=a, code="1.3.3", result=["BU", "Sap", "ti"]),
+        Step(source=a, code="1.3.8", result=["BU", "Sap", "ti"]),
+        Step(source=a, code="1.3.9", result=["BU", "a", "ti"]),
+        Step(source=a, code="3.4.113", result=["BU", "a", "ti"]),
+        Step(source=a, code="7.3.84", result=["Bo", "a", "ti"]),
+        Step(source=a, code="1.4.14", result=["Bo", "a", "ti"]),
+        Step(source=a, code="6.1.78", result=["Bav", "a", "ti"]),
+        Step(source=a, code="8.4.68", result=["Bav", "a", "ti"]),
     ]
 
 
