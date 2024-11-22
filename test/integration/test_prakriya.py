@@ -2,7 +2,20 @@ import os
 import pytest
 from pathlib import Path
 
-from vidyut.prakriya import Data, Entry, Sutra, Dhatu, Gana, Source
+from vidyut.prakriya import (
+    Data,
+    Entry,
+    Sutra,
+    Dhatu,
+    Gana,
+    Source,
+    Dhatu,
+    Vyakarana,
+    Prayoga,
+    Purusha,
+    Vacana,
+    Lakara,
+)
 
 
 @pytest.fixture(scope="module")
@@ -60,3 +73,24 @@ def test_varttikas(all_sutras):
 def test_sutra_repr(all_sutras):
     for s in all_sutras:
         assert eval(repr(s)) == s
+
+
+def test_can_map_from_history_to_sutras(all_sutras):
+    sutra_map = {(s.source, s.code): s for s in all_sutras}
+
+    v = Vyakarana()
+    prakriyas = v.derive_tinantas(
+        dhatu=Dhatu.mula("BU", Gana.Bhvadi),
+        prayoga=Prayoga.Kartari,
+        purusha=Purusha.Prathama,
+        vacana=Vacana.Eka,
+        lakara=Lakara.Lat,
+    )
+    assert prakriyas
+    for p in prakriyas:
+        # Filter out debug rules (won't affect release)
+        steps = [s for s in p.history if s.code.strip()]
+        assert steps
+        for step in steps:
+            key = (step.source, step.code)
+            assert key in sutra_map

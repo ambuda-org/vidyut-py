@@ -11,6 +11,7 @@ from vidyut.prakriya import (
     Prayoga,
     Purusha,
     Sanadi,
+    Source,
     Taddhita,
     Vacana,
     Vibhakti,
@@ -29,6 +30,9 @@ ENUMS = [
     Taddhita,
     Vacana,
     Vibhakti,
+
+    # Also include data enums
+    Source,
 ]
 
 
@@ -122,7 +126,6 @@ def test_dhatu__dunders():
     )
 
 
-@pytest.mark.skip("need to fix pratipadika internal representation")
 def test_pratipadika_new():
     p = Pratipadika.basic("deva")
     assert repr(p) == "Pratipadika(text='deva')"
