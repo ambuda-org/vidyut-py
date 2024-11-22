@@ -3,7 +3,7 @@ Deployment checklist
 
 Data (if a major release):
 
-- `make create_data` passes
+- `make create_data` passes.
 - Data directory exists with release version.
   (`zip -r data-VERSION.zip data-VERSION/`)
 
@@ -27,6 +27,7 @@ Quality:
 - `make integration_tests` passes
 - `make lint-check` passes
 - `make docs` passes
+- `make doctest` passes
 
 Finalize:
 
