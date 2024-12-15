@@ -210,7 +210,6 @@ dependencies = [
  "cfg-if",
  "itoa",
  "ryu",
- "serde",
  "static_assertions",
 ]
 
@@ -760,6 +759,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "08d43f7aa6b08d49f382cde6a7982047c3426db949b1424bc4b7ec9ae12c6ce2"
 
 [[package]]
+name = "rustc-hash"
+version = "2.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c7fb8039b3032c191086b10f11f319a6e99e1e82889c5cc6046f515c9db1d497"
+
+[[package]]
 name = "rustversion"
 version = "1.0.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -800,6 +805,18 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.89",
+]
+
+[[package]]
+name = "serde_json"
+version = "1.0.133"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c7fceb2473b9166b2294ef05efcb65a3db80803f0b03ef86a5fc88a2b85ee377"
+dependencies = [
+ "itoa",
+ "memchr",
+ "ryu",
+ "serde",
 ]
 
 [[package]]
@@ -966,7 +983,7 @@ dependencies = [
  "multimap",
  "priority-queue",
  "regex",
- "rustc-hash",
+ "rustc-hash 1.1.0",
  "vidyut-kosha",
  "vidyut-lipi",
  "vidyut-prakriya",
@@ -982,7 +999,9 @@ dependencies = [
  "fst",
  "log",
  "modular-bitfield",
- "rustc-hash",
+ "rustc-hash 1.1.0",
+ "serde",
+ "serde_json",
  "vidyut-prakriya",
 ]
 
@@ -992,7 +1011,7 @@ version = "0.1.0"
 dependencies = [
  "clap",
  "console_error_panic_hook",
- "rustc-hash",
+ "rustc-hash 1.1.0",
  "serde-wasm-bindgen",
  "unicode-normalization",
  "wasm-bindgen",
@@ -1003,12 +1022,12 @@ name = "vidyut-prakriya"
 version = "0.1.0"
 dependencies = [
  "clap",
- "compact_str",
  "console_error_panic_hook",
  "csv",
  "enumset",
  "lazy_static",
  "rayon",
+ "rustc-hash 2.1.0",
  "serde",
  "serde-wasm-bindgen",
  "sha2",
@@ -1037,7 +1056,7 @@ dependencies = [
  "compact_str",
  "csv",
  "lazy_static",
- "rustc-hash",
+ "rustc-hash 1.1.0",
 ]
 
 [[package]]
@@ -1048,6 +1067,8 @@ checksum = "128d1e363af62632b8eb57219c8fd7877144af57558fb2ef0368d0087bddeb2e"
 dependencies = [
  "cfg-if",
  "once_cell",
+ "serde",
+ "serde_json",
  "wasm-bindgen-macro",
 ]
 

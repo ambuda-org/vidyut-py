@@ -5,6 +5,7 @@ Pyo3 doesn't allow us to annotate existing enums, and using a wrapping struct ha
 for callers. So instead, redefine our enums of interest.
 */
 use crate::utils::py_enum;
+use pyo3::exceptions::PyValueError;
 use pyo3::prelude::*;
 use vidyut_prakriya::args::{BaseKrt as Krt, *};
 
@@ -851,8 +852,8 @@ impl PyDhatu {
         antargana: Option<PyAntargana>,
         prefixes: Option<Vec<String>>,
         sanadi: Option<Vec<PySanadi>>,
-    ) -> Self {
-        let mut builder = Dhatu::builder().upadesha(&aupadeshika).gana(gana.into());
+    ) -> PyResult<Self> {
+        let mut builder = Dhatu::builder().aupadeshika(&aupadeshika).gana(gana.into());
         if let Some(a) = antargana {
             builder = builder.antargana(a.into());
         }
@@ -864,8 +865,15 @@ impl PyDhatu {
             builder = builder.sanadi(&sanadis);
         }
 
-        let dhatu = builder.build().expect("always has aupadeshika and gana");
-        PyDhatu(dhatu)
+        let dhatu = match builder.build() {
+            Ok(dhatu) => dhatu,
+            Err(_) => {
+                return Err(PyValueError::new_err(format!(
+                    "{aupadeshika} must be an SLP1 string."
+                )))
+            }
+        };
+        Ok(PyDhatu(dhatu))
     }
 
     /// Creates a new namadhatu with its *sanadi pratyaya*.
@@ -895,7 +903,7 @@ impl PyDhatu {
     /// The aupadeshika form of this dhatu.
     #[getter]
     pub fn aupadeshika(&self) -> String {
-        match self.0.upadesha() {
+        match self.0.aupadeshika() {
             Some(s) => s.to_string(),
             None => String::new(),
         }
@@ -1013,11 +1021,19 @@ impl PyPratipadika {
     /// `text` should be an SLP1 string.
     #[staticmethod]
     #[pyo3(signature = (text))]
-    pub fn basic(text: String) -> Self {
-        Self {
-            pratipadika: Pratipadika::basic(text.clone()),
+    pub fn basic(text: String) -> PyResult<Self> {
+        let safe = match Slp1String::from(text.clone()) {
+            Ok(s) => s,
+            Err(e) => {
+                return Err(PyValueError::new_err(format!(
+                    "{text} must be an SLP1 string."
+                )))
+            }
+        };
+        Ok(Self {
+            pratipadika: Pratipadika::basic(safe),
             text,
-        }
+        })
     }
 
     /// Create a new pratipadika that is a krdanta.
