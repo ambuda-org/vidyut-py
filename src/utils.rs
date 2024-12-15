@@ -97,8 +97,6 @@ macro_rules! py_enum {
     }
 }
 
-pub(crate) use py_enum;
-
 macro_rules! py_only_enum {
     ($Py:ident, $Name:ident, [$( $variant:ident ),*]) => {
         impl std::fmt::Display for $Py {
@@ -157,4 +155,5 @@ macro_rules! py_only_enum {
     }
 }
 
+pub(crate) use py_enum;
 pub(crate) use py_only_enum;

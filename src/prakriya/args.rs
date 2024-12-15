@@ -82,6 +82,10 @@ pub enum PyKrt {
     ac,
     /// -a
     aR,
+    /// -aDyE
+    aDyE,
+    /// -aDyE
+    aDyEn,
     /// -at (jarat)
     atfn,
     /// -aTu (vepaTu). Allowed only for dhatus that are `qvit`.
@@ -92,6 +96,10 @@ pub enum PyKrt {
     anIyar,
     /// -a
     ap,
+    /// -ase
+    ase,
+    /// -ase
+    asen,
     /// -Alu
     Aluc,
     /// -Aru
@@ -118,12 +126,20 @@ pub enum PyKrt {
     ka,
     /// -a
     kaY,
+    /// -aDyE
+    kaDyE,
+    /// -aDyE
+    kaDyEn,
     /// -am
     kamul,
     /// -as (visfpaH, ...)
     kasun,
     /// -a
     kap,
+    /// -ase
+    kase,
+    /// -ase
+    kasen,
     /// -Ana (cakrARa, ...)
     kAnac,
     /// -i (udaDi, ...)
@@ -155,7 +171,7 @@ pub enum PyKrt {
     /// -ru (BIru)
     kru,
     /// -ruka (BIruka)
-    kruka,
+    krukan,
     /// -luka (BIluka)
     klukan,
     /// -van
@@ -194,6 +210,8 @@ pub enum PyKrt {
     Nvanip,
     /// -Ana
     cAnaS,
+    /// -ana
+    Yyuw,
     /// -a
     wa,
     /// -a
@@ -220,6 +238,12 @@ pub enum PyKrt {
     Rvuc,
     /// -aka
     Rvul,
+    /// -tave
+    taveN,
+    /// -tave
+    taven,
+    /// -tavE
+    tavE,
     /// -tavya (gantavya, bhavitavya, ...)
     tavya,
     /// -tavya
@@ -230,6 +254,8 @@ pub enum PyKrt {
     tfc,
     /// -tf
     tfn,
+    /// -tos (udetoH)
+    tosun,
     /// -Taka (gATaka)
     Takan,
     /// -na
@@ -238,16 +264,10 @@ pub enum PyKrt {
     najiN,
     /// -na (svapna)
     nan,
+    /// -ni,
+    ni,
     /// -man
     manin,
-    /// -a
-    Sa,
-    /// -at (gacCat, Bavat, ...)
-    Satf,
-    /// -Ana (laBamAna, sevamAna, ...)
-    SAnac,
-    /// -Ana
-    SAnan,
     /// -ya
     yat,
     /// -ana
@@ -278,19 +298,36 @@ pub enum PyKrt {
     zwran,
     /// -aka
     zvun,
+    /// -a
+    Sa,
+    /// -at (gacCat, Bavat, ...)
+    Satf,
+    /// -aDyE
+    SaDyE,
+    /// -aDyE
+    SaDyEn,
+    /// -Ana (laBamAna, sevamAna, ...)
+    SAnac,
+    /// -Ana
+    SAnan,
+    /// -se
+    se,
+    /// -se
+    sen,
 }
 
 py_enum!(
     PyKrt,
     Krt,
     [
-        a, aN, ac, aR, atfn, aTuc, ani, anIyar, ap, Aluc, Aru, ika, ikavaka, itra, in_, ini, izRuc,
-        u, ukaY, Uka, ka, kaY, kamul, kasun, kap, kAnac, ki, kin, kurac, kelimar, kta, ktavatu,
-        ktic, ktin, ktri, ktvA, knu, kmarac, kyap, kru, kruka, klukan, kvanip, kvarap, kvasu, ksnu,
-        kvin, kvip, Kac, KaS, Kal, KizRuc, KukaY, Kyun, Ga, GaY, GinuR, Gurac, Nvanip, cAnaS, wa,
-        wak, qa, qara, qu, Ra, Ramul, Rini, Ryat, Ryuw, Rvi, Rvuc, Rvul, tavya, tavyat, tumun, tfc,
-        tfn, Takan, naN, najiN, nan, manin, Sa, Satf, SAnac, SAnan, yat, yuc, ra, ru, lyu, lyuw,
-        vanip, varac, vic, viw, vuY, vun, zAkan, zwran, zvun
+        a, aN, ac, aR, aDyE, aDyEn, atfn, aTuc, ani, anIyar, ap, ase, asen, Aluc, Aru, ika,
+        ikavaka, itra, in_, ini, izRuc, u, ukaY, Uka, ka, kaY, kaDyE, kaDyEn, kamul, kasun, kap,
+        kase, kasen, kAnac, ki, kin, kurac, kelimar, kta, ktavatu, ktic, ktin, ktri, ktvA, knu,
+        kmarac, kyap, kru, krukan, klukan, kvanip, kvarap, kvasu, ksnu, kvin, kvip, Kac, KaS, Kal,
+        KizRuc, KukaY, Kyun, Ga, GaY, GinuR, Gurac, Nvanip, cAnaS, Yyuw, wa, wak, qa, qara, qu, Ra,
+        Ramul, Rini, Ryat, Ryuw, Rvi, Rvuc, Rvul, taveN, taven, tavE, tavya, tavyat, tumun, tfc,
+        tfn, tosun, Takan, naN, najiN, nan, ni, manin, yat, yuc, ra, ru, lyu, lyuw, vanip, varac,
+        vic, viw, vuY, vun, zAkan, zwran, zvun, Sa, Satf, SaDyE, SaDyEn, SAnac, SAnan, se, sen
     ]
 );
 
@@ -325,7 +362,7 @@ pub enum PyTaddhita {
     asic,
     /// -astAt
     astAti,
-    /// -Akin,
+    /// -Akin
     Akinic,
     /// -Ara
     Arak,
@@ -345,9 +382,9 @@ pub enum PyTaddhita {
     ilac,
     /// -izWa
     izWan,
-    /// -Ika,
+    /// -Ika
     Ikak,
-    /// -Ika,
+    /// -Ika
     Ikan,
     /// -Iyas
     Iyasun,
@@ -371,7 +408,7 @@ pub enum PyTaddhita {
     kftvasuc,
     /// -kuwAra
     kuwArac,
-    /// -kura,
+    /// -kura
     kuRap,
     /// -Ina
     Ka,
@@ -397,21 +434,21 @@ pub enum PyTaddhita {
     cvi,
     /// -Iya
     Ca,
-    /// -Iya,
+    /// -Iya
     CaR,
-    /// -Iya,
+    /// -Iya
     Cas,
     /// -jAtIya
     jAtIyar,
     /// -jAha
     jAhac,
-    /// -a,
+    /// -a
     Ya,
     /// -ika
     YiW,
     /// -ya
     Yya,
-    /// -ya,
+    /// -ya
     YyaN,
     /// -ya
     Yyaw,
@@ -592,6 +629,8 @@ pub enum PyTaddhita {
     /// -la
     lac,
     /// -vat
+    vati,
+    /// -vat
     vatup,
     /// -vaya
     vaya,
@@ -623,7 +662,7 @@ pub enum PyTaddhita {
     za,
     /// -ka
     zkan,
-    /// -tra
+    /// -tara
     zwarac,
     /// -ika
     zWac,
@@ -633,6 +672,10 @@ pub enum PyTaddhita {
     zWal,
     /// Ayana
     zPak,
+    /// -ya
+    zyaN,
+    /// -ya
+    zyaY,
     /// -sa
     sa,
     /// -sna
@@ -660,9 +703,9 @@ py_enum!(
         tarap, tal, tasi, tasil, ti, tikan, tIya, tyak, tyakan, tyap, tyu, tyul, tral, trA, tva,
         Tamu, Tyan, TAl, daGnac, dA, dAnIm, deSya, deSIyar, dvayasac, DA, na, naY, nAwac, Pak, PaY,
         PiY, bahuc, biqac, birIsac, Baktal, Brawac, ma, matup, map, mayaw, mAtrac, pASap, piwac,
-        ya, yak, yaY, yat, yan, yus, ra, rUpap, rhil, rUpya, lac, vatup, vaya, valac, vini, viDal,
-        vuk, vuY, vun, vyat, vyan, Sa, SaNkawac, SAlac, Sas, za, zkan, zwarac, zWac, zWan, zWal,
-        zPak, sa, sna, sAti, suc, snaY, ha
+        ya, yak, yaY, yat, yan, yus, ra, rUpap, rhil, rUpya, lac, vati, vatup, vaya, valac, vini,
+        viDal, vuk, vuY, vun, vyat, vyan, Sa, SaNkawac, SAlac, Sas, za, zkan, zwarac, zWac, zWan,
+        zWal, zPak, zyaN, zyaY, sa, sna, sAti, suc, snaY, ha
     ]
 );
 

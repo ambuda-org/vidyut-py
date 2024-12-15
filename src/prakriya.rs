@@ -236,9 +236,9 @@ impl PyData {
                 let mut ret = Vec::new();
                 for entry in dhatupatha.iter() {
                     ret.push(PyEntry {
-                        code: entry.code().clone(),
+                        code: entry.code().to_string(),
                         dhatu: entry.dhatu().clone().into(),
-                        artha: entry.artha().clone(),
+                        artha: entry.artha().to_string(),
                     });
                 }
                 Ok(ret)
