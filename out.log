@@ -4,7 +4,7 @@ uv run maturin build
 🔗 Found pyo3 bindings with abi3 support for Python ≥ 3.7
 🐍 Not using a specific python interpreter
 💻 Using `MACOSX_DEPLOYMENT_TARGET=11.0` for aarch64-apple-darwin by default
-   Compiling pyo3-build-config v0.23.1
+   Compiling pyo3-build-config v0.23.3
 warning: associated function `from_bytes` is never used
    --> /Users/arun/personal/vidyut/vidyut-kosha/src/packing.rs:239:1
     |
@@ -169,10 +169,10 @@ warning: function `if_not_in_compound_then_linga_match` is never used
    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 warning: `vidyut-cheda` (lib) generated 23 warnings (run `cargo fix --lib -p vidyut-cheda` to apply 13 suggestions)
-   Compiling pyo3-macros-backend v0.23.1
-   Compiling pyo3-ffi v0.23.1
-   Compiling pyo3 v0.23.1
-   Compiling pyo3-macros v0.23.1
+   Compiling pyo3-macros-backend v0.23.3
+   Compiling pyo3-ffi v0.23.3
+   Compiling pyo3 v0.23.3
+   Compiling pyo3-macros v0.23.3
    Compiling vidyut-py v0.3.0 (/Users/arun/personal/vidyut-py)
 error[E0432]: unresolved import `vidyut_cheda::Config`
  --> src/cheda.rs:2:29
@@ -286,9 +286,9 @@ help: consider importing this enum
     |
 
 error[E0412]: cannot find type `Pada` in this scope
-   --> src/kosha/semantics.rs:321:11
+   --> src/kosha/semantics.rs:318:11
     |
-321 | impl From<Pada> for PyPada {
+318 | impl From<Pada> for PyPada {
     |           ^^^^ not found in this scope
     |
 help: consider importing this enum
@@ -297,9 +297,9 @@ help: consider importing this enum
     |
 
 error[E0412]: cannot find type `Pada` in this scope
-   --> src/kosha/semantics.rs:322:18
+   --> src/kosha/semantics.rs:319:18
     |
-322 |     fn from(val: Pada) -> Self {
+319 |     fn from(val: Pada) -> Self {
     |                  ^^^^ not found in this scope
     |
 help: consider importing this enum
@@ -308,9 +308,9 @@ help: consider importing this enum
     |
 
 error[E0433]: failed to resolve: use of undeclared type `Pada`
-   --> src/kosha/semantics.rs:325:13
+   --> src/kosha/semantics.rs:322:13
     |
-325 |             Pada::Avyaya(a) => {
+322 |             Pada::Avyaya(a) => {
     |             ^^^^ use of undeclared type `Pada`
     |
 help: consider importing this enum
@@ -319,9 +319,9 @@ help: consider importing this enum
     |
 
 error[E0433]: failed to resolve: use of undeclared type `Pada`
-   --> src/kosha/semantics.rs:329:13
+   --> src/kosha/semantics.rs:326:13
     |
-329 |             Pada::Subanta(s) => {
+326 |             Pada::Subanta(s) => {
     |             ^^^^ use of undeclared type `Pada`
     |
 help: consider importing this enum
@@ -330,9 +330,9 @@ help: consider importing this enum
     |
 
 error[E0433]: failed to resolve: use of undeclared type `Pada`
-   --> src/kosha/semantics.rs:337:13
+   --> src/kosha/semantics.rs:334:13
     |
-337 |             Pada::Tinanta(t) => {
+334 |             Pada::Tinanta(t) => {
     |             ^^^^ use of undeclared type `Pada`
     |
 help: consider importing this enum
@@ -341,9 +341,9 @@ help: consider importing this enum
     |
 
 error[E0433]: failed to resolve: use of undeclared type `Pada`
-   --> src/kosha/semantics.rs:345:13
+   --> src/kosha/semantics.rs:342:13
     |
-345 |             Pada::Unknown => {
+342 |             Pada::Unknown => {
     |             ^^^^ use of undeclared type `Pada`
     |
 help: consider importing this enum
@@ -352,9 +352,9 @@ help: consider importing this enum
     |
 
 error[E0412]: cannot find type `Pada` in this scope
-   --> src/kosha/semantics.rs:354:23
+   --> src/kosha/semantics.rs:351:23
     |
-354 | impl From<PyPada> for Pada {
+351 | impl From<PyPada> for Pada {
     |                       ^^^^ not found in this scope
     |
 help: consider importing this enum
@@ -363,9 +363,9 @@ help: consider importing this enum
     |
 
 error[E0433]: failed to resolve: use of undeclared type `Pada`
-   --> src/kosha/semantics.rs:359:37
+   --> src/kosha/semantics.rs:356:37
     |
-359 |             Some(PyPOS::Tinanta) => Pada::Tinanta(Tinanta {
+356 |             Some(PyPOS::Tinanta) => Pada::Tinanta(Tinanta {
     |                                     ^^^^ use of undeclared type `Pada`
     |
 help: consider importing this enum
@@ -374,9 +374,9 @@ help: consider importing this enum
     |
 
 error[E0422]: cannot find struct, variant or union type `Tinanta` in this scope
-   --> src/kosha/semantics.rs:359:51
+   --> src/kosha/semantics.rs:356:51
     |
-359 |             Some(PyPOS::Tinanta) => Pada::Tinanta(Tinanta {
+356 |             Some(PyPOS::Tinanta) => Pada::Tinanta(Tinanta {
     |                                                   ^^^^^^^ not found in this scope
     |
 help: consider importing one of these items
@@ -392,9 +392,9 @@ help: consider importing one of these items
       and 2 other candidates
 
 error[E0433]: failed to resolve: use of undeclared type `Pada`
-   --> src/kosha/semantics.rs:370:37
+   --> src/kosha/semantics.rs:367:37
     |
-370 |             Some(PyPOS::Subanta) => Pada::Subanta(Subanta {
+367 |             Some(PyPOS::Subanta) => Pada::Subanta(Subanta {
     |                                     ^^^^ use of undeclared type `Pada`
     |
 help: consider importing this enum
@@ -403,9 +403,9 @@ help: consider importing this enum
     |
 
 error[E0422]: cannot find struct, variant or union type `Subanta` in this scope
-   --> src/kosha/semantics.rs:370:51
+   --> src/kosha/semantics.rs:367:51
     |
-370 |             Some(PyPOS::Subanta) => Pada::Subanta(Subanta {
+367 |             Some(PyPOS::Subanta) => Pada::Subanta(Subanta {
     |                                                   ^^^^^^^ not found in this scope
     |
 help: consider importing one of these items
@@ -421,9 +421,9 @@ help: consider importing one of these items
       and 2 other candidates
 
 error[E0433]: failed to resolve: use of undeclared type `Pada`
-   --> src/kosha/semantics.rs:381:36
+   --> src/kosha/semantics.rs:378:36
     |
-381 |             Some(PyPOS::Avyaya) => Pada::Avyaya(Avyaya {
+378 |             Some(PyPOS::Avyaya) => Pada::Avyaya(Avyaya {
     |                                    ^^^^ use of undeclared type `Pada`
     |
 help: consider importing this enum
@@ -432,9 +432,9 @@ help: consider importing this enum
     |
 
 error[E0422]: cannot find struct, variant or union type `Avyaya` in this scope
-   --> src/kosha/semantics.rs:381:49
+   --> src/kosha/semantics.rs:378:49
     |
-381 |             Some(PyPOS::Avyaya) => Pada::Avyaya(Avyaya {
+378 |             Some(PyPOS::Avyaya) => Pada::Avyaya(Avyaya {
     |                                                 ^^^^^^ not found in this scope
     |
 help: consider importing one of these items
@@ -449,9 +449,9 @@ help: consider importing one of these items
     |
 
 error[E0433]: failed to resolve: use of undeclared type `Pada`
-   --> src/kosha/semantics.rs:387:44
+   --> src/kosha/semantics.rs:384:44
     |
-387 |             Some(PyPOS::Unknown) | None => Pada::Unknown,
+384 |             Some(PyPOS::Unknown) | None => Pada::Unknown,
     |                                            ^^^^ use of undeclared type `Pada`
     |
 help: consider importing this enum
@@ -590,72 +590,6 @@ error[E0433]: failed to resolve: use of undeclared type `POSTag`
 25 | py_enum!(PyPartOfSpeech, POSTag, [Avyaya, Subanta, Tinanta, Unknown]);
    |                          ^^^^^^ use of undeclared type `POSTag`
 
-error[E0624]: method `__pyo3__repr__` is private
-   --> src/kosha/semantics.rs:280:55
-    |
-280 |                     args.push(format!("purusha={}", x.__pyo3__repr__()));
-    |                                                       ^^^^^^^^^^^^^^ private method
-    |
-   ::: src/prakriya/args.rs:776:1
-    |
-776 | #[pyclass(name = "Purusha", module = "prakriya", eq, eq_int, ord)]
-    | ------------------------------------------------------------------ private method defined here
-
-error[E0624]: method `__pyo3__repr__` is private
-   --> src/kosha/semantics.rs:283:54
-    |
-283 |                     args.push(format!("vacana={}", x.__pyo3__repr__()));
-    |                                                      ^^^^^^^^^^^^^^ private method
-    |
-   ::: src/prakriya/args.rs:826:1
-    |
-826 | #[pyclass(name = "Vacana", module = "prakriya", eq, eq_int, ord)]
-    | ----------------------------------------------------------------- private method defined here
-
-error[E0624]: method `__pyo3__repr__` is private
-   --> src/kosha/semantics.rs:286:54
-    |
-286 |                     args.push(format!("lakara={}", x.__pyo3__repr__()));
-    |                                                      ^^^^^^^^^^^^^^ private method
-    |
-   ::: src/prakriya/args.rs:713:1
-    |
-713 | #[pyclass(name = "Lakara", module = "prakriya", eq, eq_int, ord)]
-    | ----------------------------------------------------------------- private method defined here
-
-error[E0624]: method `__pyo3__repr__` is private
-   --> src/kosha/semantics.rs:297:53
-    |
-297 |                     args.push(format!("linga={}", x.__pyo3__repr__()));
-    |                                                     ^^^^^^^^^^^^^^ private method
-    |
-   ::: src/prakriya/args.rs:747:1
-    |
-747 | #[pyclass(name = "Linga", module = "prakriya", eq, eq_int, ord)]
-    | ---------------------------------------------------------------- private method defined here
-
-error[E0624]: method `__pyo3__repr__` is private
-   --> src/kosha/semantics.rs:300:56
-    |
-300 |                     args.push(format!("vibhakti={}", x.__pyo3__repr__()));
-    |                                                        ^^^^^^^^^^^^^^ private method
-    |
-   ::: src/prakriya/args.rs:840:1
-    |
-840 | #[pyclass(name = "Vibhakti", module = "prakriya", eq, eq_int, ord)]
-    | ------------------------------------------------------------------- private method defined here
-
-error[E0624]: method `__pyo3__repr__` is private
-   --> src/kosha/semantics.rs:303:54
-    |
-303 |                     args.push(format!("vacana={}", x.__pyo3__repr__()));
-    |                                                      ^^^^^^^^^^^^^^ private method
-    |
-   ::: src/prakriya/args.rs:826:1
-    |
-826 | #[pyclass(name = "Vacana", module = "prakriya", eq, eq_int, ord)]
-    | ----------------------------------------------------------------- private method defined here
-
 error[E0624]: method `contains_prefix` is private
    --> src/kosha.rs:33:16
     |
@@ -704,7 +638,7 @@ error[E0277]: the trait bound `PadaEntry<'_>: From<PyPada>` is not satisfied
 Some errors have detailed explanations: E0277, E0308, E0412, E0422, E0432, E0433, E0599, E0603, E0624.
 For more information about an error, try `rustc --explain E0277`.
 warning: `vidyut-py` (lib) generated 1 warning
-error: could not compile `vidyut-py` (lib) due to 42 previous errors; 1 warning emitted
+error: could not compile `vidyut-py` (lib) due to 36 previous errors; 1 warning emitted
 💥 maturin failed
   Caused by: Failed to build a native library through cargo
   Caused by: Cargo build finished with "exit status: 101": `env -u CARGO MACOSX_DEPLOYMENT_TARGET="11.0" "cargo" "rustc" "--message-format" "json-render-diagnostics" "--manifest-path" "/Users/arun/personal/vidyut-py/Cargo.toml" "--lib" "--" "-C" "link-arg=-undefined" "-C" "link-arg=dynamic_lookup" "-C" "link-args=-Wl,-install_name,@rpath/vidyut.abi3.so"`

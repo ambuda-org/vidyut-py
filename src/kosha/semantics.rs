@@ -277,16 +277,13 @@ impl PyPada {
                     args.push(format!("dhatu={}", x.__repr__()));
                 };
                 if let Some(x) = &self.purusha {
-                    args.push(format!("purusha={}", x.__pyo3__repr__()));
+                    args.push(format!("purusha={}", x.__repr__()));
                 };
                 if let Some(x) = &self.vacana {
-                    args.push(format!("vacana={}", x.__pyo3__repr__()));
+                    args.push(format!("vacana={}", x.__repr__()));
                 };
                 if let Some(x) = &self.lakara {
-                    args.push(format!("lakara={}", x.__pyo3__repr__()));
-                };
-                if let Some(x) = &self.pada_prayoga {
-                    args.push(format!("pada_prayoga={}", x.__pyo3__repr__()));
+                    args.push(format!("lakara={}", x.__repr__()));
                 };
             }
             Some(PyPartOfSpeech::Subanta) | Some(PyPartOfSpeech::Avyaya) => {
@@ -294,13 +291,13 @@ impl PyPada {
                     args.push(format!("pratipadika={}", x.__repr__()));
                 };
                 if let Some(x) = &self.linga {
-                    args.push(format!("linga={}", x.__pyo3__repr__()));
+                    args.push(format!("linga={}", x.__repr__()));
                 };
                 if let Some(x) = &self.vibhakti {
-                    args.push(format!("vibhakti={}", x.__pyo3__repr__()));
+                    args.push(format!("vibhakti={}", x.__repr__()));
                 };
                 if let Some(x) = &self.vacana {
-                    args.push(format!("vacana={}", x.__pyo3__repr__()));
+                    args.push(format!("vacana={}", x.__repr__()));
                 };
                 let is_purvapada = match self.is_purvapada {
                     true => "True",

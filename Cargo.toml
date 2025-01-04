@@ -8,12 +8,6 @@ name = "vidyut"
 crate-type = ["cdylib"]
 
 [dependencies]
-# vidyut-chandas = { git = "https://github.com/ambuda-org/vidyut", rev = "c426cdf5" }
-# vidyut-cheda = { git = "https://github.com/ambuda-org/vidyut", rev = "c426cdf5" }
-# vidyut-kosha = { git = "https://github.com/ambuda-org/vidyut", rev = "c426cdf5" }
-# vidyut-lipi = { git = "https://github.com/ambuda-org/vidyut", rev = "c426cdf5" }
-# vidyut-prakriya = { git = "https://github.com/ambuda-org/vidyut", rev = "c426cdf5" }
-# vidyut-sandhi = { git = "https://github.com/ambuda-org/vidyut", rev = "c426cdf5" }
 vidyut-chandas = { path = "../vidyut/vidyut-chandas" }
 vidyut-cheda = { path = "../vidyut/vidyut-cheda" }
 vidyut-kosha = { path = "../vidyut/vidyut-kosha" }
@@ -22,7 +16,7 @@ vidyut-prakriya = { path = "../vidyut/vidyut-prakriya" }
 vidyut-sandhi = { path = "../vidyut/vidyut-sandhi" }
 
 [dependencies.pyo3]
-version = "0.23.1"
+version = "0.23.3"
 features = ["extension-module", "abi3-py37"]
 
 [package.metadata.maturin]

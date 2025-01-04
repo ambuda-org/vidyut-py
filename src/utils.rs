@@ -51,7 +51,7 @@ macro_rules! py_enum {
                 hasher.finish()
             }
 
-            fn __repr__(&self) -> String {
+            pub(crate) fn __repr__(&self) -> String {
                 format!("{}.{}", stringify!{$Rust}, self.name())
             }
 
