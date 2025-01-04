@@ -107,24 +107,11 @@ fn py_kosha(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_class::<kosha::PyKosha>()?;
     m.add_class::<kosha::PyBuilder>()?;
 
-    // These symbols have name collisions with their similarly named counterparts in the `prakriya`
-    // module. By wrapping these symbols in their own native module, we avoid the name collision
-    // and can freely use both sets of symbols.
-    //
-    // (Note: these symbols are hard to unify. The symbols here model the *structure* of Sanskrit
-    // words, and the symbols in `prakriya` model the *arguments* to the Ashtadhyayi. While these
-    // two symbols have substantial overlap, they model Sanskrit words slightly differently and
-    // have different use cases.)
     m.add_class::<kosha::semantics::PyDhatu>()?;
-    m.add_class::<kosha::semantics::PyLakara>()?;
-    m.add_class::<kosha::semantics::PyLinga>()?;
     m.add_class::<kosha::semantics::PyPada>()?;
     m.add_class::<kosha::semantics::PyPratipadika>()?;
     m.add_class::<kosha::semantics::PyPadaPrayoga>()?;
     m.add_class::<kosha::semantics::PyPartOfSpeech>()?;
-    m.add_class::<kosha::semantics::PyPurusha>()?;
-    m.add_class::<kosha::semantics::PyVacana>()?;
-    m.add_class::<kosha::semantics::PyVibhakti>()?;
 
     Ok(())
 }

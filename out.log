@@ -459,111 +459,6 @@ help: consider importing this enum
 1   + use vidyut_prakriya::args::Pada;
     |
 
-error[E0603]: enum import `PyLakara` is private
-   --> src/lib.rs:119:37
-    |
-119 |     m.add_class::<kosha::semantics::PyLakara>()?;
-    |                                     ^^^^^^^^ private enum import
-    |
-note: the enum import `PyLakara` is defined here...
-   --> src/kosha/semantics.rs:4:29
-    |
-4   | use crate::prakriya::args::{PyLakara, PyLinga, PyPurusha, PyVacana, PyVibhakti};
-    |                             ^^^^^^^^
-note: ...and refers to the enum `PyLakara` which is defined here
-   --> src/prakriya/args.rs:715:1
-    |
-715 | pub enum PyLakara {
-    | ^^^^^^^^^^^^^^^^^ consider importing it directly
-help: consider importing this enum instead
-    |
-119 |     m.add_class::<crate::prakriya::args::PyLakara>()?;
-    |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-error[E0603]: enum import `PyLinga` is private
-   --> src/lib.rs:120:37
-    |
-120 |     m.add_class::<kosha::semantics::PyLinga>()?;
-    |                                     ^^^^^^^ private enum import
-    |
-note: the enum import `PyLinga` is defined here...
-   --> src/kosha/semantics.rs:4:39
-    |
-4   | use crate::prakriya::args::{PyLakara, PyLinga, PyPurusha, PyVacana, PyVibhakti};
-    |                                       ^^^^^^^
-note: ...and refers to the enum `PyLinga` which is defined here
-   --> src/prakriya/args.rs:749:1
-    |
-749 | pub enum PyLinga {
-    | ^^^^^^^^^^^^^^^^ consider importing it directly
-help: consider importing this enum instead
-    |
-120 |     m.add_class::<crate::prakriya::args::PyLinga>()?;
-    |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-error[E0603]: enum import `PyPurusha` is private
-   --> src/lib.rs:125:37
-    |
-125 |     m.add_class::<kosha::semantics::PyPurusha>()?;
-    |                                     ^^^^^^^^^ private enum import
-    |
-note: the enum import `PyPurusha` is defined here...
-   --> src/kosha/semantics.rs:4:48
-    |
-4   | use crate::prakriya::args::{PyLakara, PyLinga, PyPurusha, PyVacana, PyVibhakti};
-    |                                                ^^^^^^^^^
-note: ...and refers to the enum `PyPurusha` which is defined here
-   --> src/prakriya/args.rs:778:1
-    |
-778 | pub enum PyPurusha {
-    | ^^^^^^^^^^^^^^^^^^ consider importing it directly
-help: consider importing this enum instead
-    |
-125 |     m.add_class::<crate::prakriya::args::PyPurusha>()?;
-    |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-error[E0603]: enum import `PyVacana` is private
-   --> src/lib.rs:126:37
-    |
-126 |     m.add_class::<kosha::semantics::PyVacana>()?;
-    |                                     ^^^^^^^^ private enum import
-    |
-note: the enum import `PyVacana` is defined here...
-   --> src/kosha/semantics.rs:4:59
-    |
-4   | use crate::prakriya::args::{PyLakara, PyLinga, PyPurusha, PyVacana, PyVibhakti};
-    |                                                           ^^^^^^^^
-note: ...and refers to the enum `PyVacana` which is defined here
-   --> src/prakriya/args.rs:828:1
-    |
-828 | pub enum PyVacana {
-    | ^^^^^^^^^^^^^^^^^ consider importing it directly
-help: consider importing this enum instead
-    |
-126 |     m.add_class::<crate::prakriya::args::PyVacana>()?;
-    |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-error[E0603]: enum import `PyVibhakti` is private
-   --> src/lib.rs:127:37
-    |
-127 |     m.add_class::<kosha::semantics::PyVibhakti>()?;
-    |                                     ^^^^^^^^^^ private enum import
-    |
-note: the enum import `PyVibhakti` is defined here...
-   --> src/kosha/semantics.rs:4:69
-    |
-4   | use crate::prakriya::args::{PyLakara, PyLinga, PyPurusha, PyVacana, PyVibhakti};
-    |                                                                     ^^^^^^^^^^
-note: ...and refers to the enum `PyVibhakti` which is defined here
-   --> src/prakriya/args.rs:842:1
-    |
-842 | pub enum PyVibhakti {
-    | ^^^^^^^^^^^^^^^^^^^ consider importing it directly
-help: consider importing this enum instead
-    |
-127 |     m.add_class::<crate::prakriya::args::PyVibhakti>()?;
-    |                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 warning: unused import: `vidyut_kosha::entries::*`
  --> src/kosha/semantics.rs:5:5
   |
@@ -635,10 +530,10 @@ error[E0277]: the trait bound `PadaEntry<'_>: From<PyPada>` is not satisfied
              <PadaEntry<'a> as From<TinantaEntry<'a>>>
    = note: required for `PyPada` to implement `Into<PadaEntry<'_>>`
 
-Some errors have detailed explanations: E0277, E0308, E0412, E0422, E0432, E0433, E0599, E0603, E0624.
+Some errors have detailed explanations: E0277, E0308, E0412, E0422, E0432, E0433, E0599, E0624.
 For more information about an error, try `rustc --explain E0277`.
 warning: `vidyut-py` (lib) generated 1 warning
-error: could not compile `vidyut-py` (lib) due to 36 previous errors; 1 warning emitted
+error: could not compile `vidyut-py` (lib) due to 31 previous errors; 1 warning emitted
 💥 maturin failed
   Caused by: Failed to build a native library through cargo
   Caused by: Cargo build finished with "exit status: 101": `env -u CARGO MACOSX_DEPLOYMENT_TARGET="11.0" "cargo" "rustc" "--message-format" "json-render-diagnostics" "--manifest-path" "/Users/arun/personal/vidyut-py/Cargo.toml" "--lib" "--" "-C" "link-arg=-undefined" "-C" "link-arg=dynamic_lookup" "-C" "link-args=-Wl,-install_name,@rpath/vidyut.abi3.so"`
