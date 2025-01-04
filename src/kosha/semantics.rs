@@ -1,7 +1,7 @@
 use crate::utils::py_enum;
 use pyo3::prelude::*;
 
-use vidyut_kosha::morph::*;
+use vidyut_kosha::entries::*;
 
 /// A short part-of-speech tag for some `Pada`.
 ///
@@ -23,134 +23,6 @@ pub enum PyPartOfSpeech {
 
 py_enum!(PyPartOfSpeech, POSTag, [Avyaya, Subanta, Tinanta, Unknown]);
 
-/// The person of a Sanskrit verb.
-#[pyclass(name = "Purusha", eq, eq_int, ord)]
-#[derive(Clone, Copy, Debug, Hash, Eq, Ord, PartialEq, PartialOrd)]
-pub enum PyPurusha {
-    /// The first *puruṣa* (third person).
-    Prathama,
-    /// The middle *puruṣa* (second person).
-    Madhyama,
-    /// The last *puruṣa* (first person).
-    Uttama,
-}
-
-py_enum!(PyPurusha, Purusha, [Prathama, Madhyama, Uttama]);
-
-/// The gender of a Sanskrit nominal.
-#[pyclass(name = "Linga", eq, eq_int, ord)]
-#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub enum PyLinga {
-    /// The masculine gender.
-    Pum,
-    /// The feminine gender.
-    Stri,
-    /// The neuter gender.
-    Napumsaka,
-}
-
-py_enum!(PyLinga, Linga, [Pum, Stri, Napumsaka]);
-
-/// The number of a Sanskrit word.
-#[pyclass(name = "Vacana", eq, eq_int, ord)]
-#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
-pub enum PyVacana {
-    /// The singular.
-    Eka,
-    /// The dual.
-    Dvi,
-    /// The plural.
-    Bahu,
-}
-
-py_enum!(PyVacana, Vacana, [Eka, Dvi, Bahu]);
-
-/// The case of a Sanskrit nominal.
-#[pyclass(name = "Vibhakti", eq, eq_int, ord)]
-#[derive(Clone, Copy, Debug, Hash, Eq, Ord, PartialEq, PartialOrd)]
-pub enum PyVibhakti {
-    /// The first *vibhakti* (nominative case).
-    Prathama,
-    /// The second *vibhakti* (accusative case).
-    Dvitiya,
-    /// The third *vibhakti* (instrumental case).
-    Trtiya,
-    /// The fourth *vibhakti* (dative case).
-    Caturthi,
-    /// The fifth *vibhakti* (ablative case).
-    Panchami,
-    /// The sixth *vibhakti* (genitive case).
-    Sasthi,
-    /// The seventh *vibhakti* (locative case).
-    Saptami,
-    /// The first *vibhakti* in the condition of *sambodhana* (vocative case).
-    Sambodhana,
-}
-
-py_enum!(
-    PyVibhakti,
-    Vibhakti,
-    [Prathama, Dvitiya, Trtiya, Caturthi, Panchami, Sasthi, Saptami, Sambodhana]
-);
-
-/*
-/// The number of a Sanskrit word.
-#[allow(non_camel_case_types)]
-#[pyclass(name = "Sanadi", eq, eq_int)]
-#[derive(Clone, Debug, Eq, Hash, PartialEq)]
-pub enum PySanadi {
-    Ric,
-    san,
-    yaN,
-    yaNluk,
-    kAmyac,
-    kyaN,
-    kyac,
-}
-
-py_enum!(
-    PySanadi,
-    Sanadi,
-    [Ric, san, yaN, yaNluk, kAmyac, kyaN, kyac]
-);
-*/
-
-/// The tense-mood of a Sanskrit verb.
-#[pyclass(name = "Lakara", eq, eq_int, ord)]
-#[derive(Clone, Copy, Debug, Hash, Eq, Ord, PartialEq, PartialOrd)]
-pub enum PyLakara {
-    /// *laṭ-lakāra* (present indicative).
-    Lat,
-    /// *liṭ-lakāra* (perfect).
-    Lit,
-    /// *luṭ-lakāra* (periphrastic future).
-    Lut,
-    /// *lṛṭ-lakāra* (simple future).
-    Lrt,
-    /// *leṭ-lakāra* (Vedic subjunctive).
-    Let,
-    /// *loṭ-lakāra* (imperative).
-    Lot,
-    /// *laṅ-lakāra* (imperfect).
-    Lan,
-    /// *liṅ-lakāra* in the sense of benediction (benedictive).
-    AshirLin,
-    /// *liṅ-lakāra* in the sense of a rule or injunction (optative).
-    VidhiLin,
-    /// *luṅ-lakāra* (aorist).
-    Lun,
-    /// *luṅ-lakāra* without its *a-* prefix (injunctive).
-    LunNoAgama,
-    /// *lṛṅ-lakāra* (conditional).
-    Lrn,
-}
-
-py_enum!(
-    PyLakara,
-    Lakara,
-    [Lat, Lit, Lut, Lrt, Let, Lot, Lan, AshirLin, VidhiLin, Lun, LunNoAgama, Lrn]
-);
-
 #[pyclass(name = "PadaPrayoga", eq, eq_int, ord)]
 #[derive(Clone, Copy, Debug, Hash, Eq, Ord, PartialEq, PartialOrd)]
 pub enum PyPadaPrayoga {
@@ -158,12 +30,6 @@ pub enum PyPadaPrayoga {
     AtmanepadaKartari,
     AtmanepadaNotKartari,
 }
-
-py_enum!(
-    PyPadaPrayoga,
-    PadaPrayoga,
-    [Parasmaipada, AtmanepadaKartari, AtmanepadaNotKartari]
-);
 
 /// A verb root.
 #[pyclass(name = "Dhatu", get_all, eq, ord)]

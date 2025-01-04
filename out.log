@@ -1,0 +1,741 @@
+uv run maturin build
+📦 Including license file "/Users/arun/personal/vidyut-py/LICENSE.md"
+🍹 Building a mixed python/rust project
+🔗 Found pyo3 bindings with abi3 support for Python ≥ 3.7
+🐍 Not using a specific python interpreter
+💻 Using `MACOSX_DEPLOYMENT_TARGET=11.0` for aarch64-apple-darwin by default
+   Compiling pyo3-build-config v0.23.1
+warning: associated function `from_bytes` is never used
+   --> /Users/arun/personal/vidyut/vidyut-kosha/src/packing.rs:239:1
+    |
+239 | /// Semantics for an unknown term.
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ associated function in this implementation
+    |
+    = note: `#[warn(dead_code)]` on by default
+
+warning: `vidyut-kosha` (lib) generated 1 warning
+warning: unused variable: `lemma_counts_path`
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/scoring.rs:38:16
+   |
+38 |     pub fn new(lemma_counts_path: &Path, p2: &Path) -> Result<Self> {
+   |                ^^^^^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_lemma_counts_path`
+   |
+   = note: `#[warn(unused_variables)]` on by default
+
+warning: unused variable: `p2`
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/scoring.rs:38:42
+   |
+38 |     pub fn new(lemma_counts_path: &Path, p2: &Path) -> Result<Self> {
+   |                                          ^^ help: if this is intentional, prefix it with an underscore: `_p2`
+
+warning: unused variable: `phrase`
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/scoring.rs:67:32
+   |
+67 |     pub(crate) fn score(&self, phrase: &Phrase, tokens: &TokenPool) -> i32 {
+   |                                ^^^^^^ help: if this is intentional, prefix it with an underscore: `_phrase`
+
+warning: unused variable: `tokens`
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/scoring.rs:67:49
+   |
+67 |     pub(crate) fn score(&self, phrase: &Phrase, tokens: &TokenPool) -> i32 {
+   |                                                 ^^^^^^ help: if this is intentional, prefix it with an underscore: `_tokens`
+
+warning: unused variable: `cur`
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/strict_mode.rs:12:5
+   |
+12 |     cur: &Phrase,
+   |     ^^^ help: if this is intentional, prefix it with an underscore: `_cur`
+
+warning: unused variable: `pool`
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/strict_mode.rs:13:5
+   |
+13 |     pool: &TokenPool,
+   |     ^^^^ help: if this is intentional, prefix it with an underscore: `_pool`
+
+warning: unused variable: `split`
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/strict_mode.rs:14:5
+   |
+14 |     split: &Split,
+   |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_split`
+
+warning: unused variable: `semantics`
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/strict_mode.rs:15:5
+   |
+15 |     semantics: &PadaEntry,
+   |     ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_semantics`
+
+warning: unused variable: `split`
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/strict_mode.rs:34:36
+   |
+34 | fn if_purvapada_then_not_chunk_end(split: &Split, s: &Subanta) -> bool {
+   |                                    ^^^^^ help: if this is intentional, prefix it with an underscore: `_split`
+
+warning: unused variable: `s`
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/strict_mode.rs:34:51
+   |
+34 | fn if_purvapada_then_not_chunk_end(split: &Split, s: &Subanta) -> bool {
+   |                                                   ^ help: if this is intentional, prefix it with an underscore: `_s`
+
+warning: unused variable: `cur`
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/strict_mode.rs:60:40
+   |
+60 | fn if_not_in_compound_then_linga_match(cur: &Phrase, pool: &TokenPool, s: &Subanta) -> bool {
+   |                                        ^^^ help: if this is intentional, prefix it with an underscore: `_cur`
+
+warning: unused variable: `pool`
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/strict_mode.rs:60:54
+   |
+60 | fn if_not_in_compound_then_linga_match(cur: &Phrase, pool: &TokenPool, s: &Subanta) -> bool {
+   |                                                      ^^^^ help: if this is intentional, prefix it with an underscore: `_pool`
+
+warning: unused variable: `s`
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/strict_mode.rs:60:72
+   |
+60 | fn if_not_in_compound_then_linga_match(cur: &Phrase, pool: &TokenPool, s: &Subanta) -> bool {
+   |                                                                        ^ help: if this is intentional, prefix it with an underscore: `_s`
+
+warning: function `normalize` is never used
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/normalize_text.rs:10:8
+   |
+10 | pub fn normalize(text: &str) -> String {
+   |        ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` on by default
+
+warning: fields `log_probs` and `log_epsilon` are never read
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/scoring.rs:26:5
+   |
+23 | pub struct Model {
+   |            ----- fields in this struct
+...
+26 |     log_probs: FxHashMap<(StateCode, StateCode), f32>,
+   |     ^^^^^^^^^
+27 |     /// The log probability of a transition state not seen anywhere in the training data.
+28 |     log_epsilon: f32,
+   |     ^^^^^^^^^^^
+
+warning: function `log_prob` is never used
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/scoring.rs:32:4
+   |
+32 | fn log_prob(num: f64, denom: i32) -> f32 {
+   |    ^^^^^^^^
+
+warning: methods `to_code` and `log_prob` are never used
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/scoring.rs:72:19
+   |
+37 | impl Model {
+   | ---------- methods in this implementation
+...
+72 |     pub(crate) fn to_code(&self, entry: &PadaEntry) -> StateCode {
+   |                   ^^^^^^^
+...
+92 |     fn log_prob(&self, prev: StateCode, cur: StateCode) -> f32 {
+   |        ^^^^^^^^
+
+warning: function `is_ac` is never used
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/sounds.rs:55:8
+   |
+55 | pub fn is_ac(c: char) -> bool {
+   |        ^^^^^
+
+warning: function `is_hal` is never used
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/sounds.rs:65:8
+   |
+65 | pub fn is_hal(c: char) -> bool {
+   |        ^^^^^^
+
+warning: function `is_ghosha` is never used
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/sounds.rs:73:8
+   |
+73 | pub fn is_ghosha(c: char) -> bool {
+   |        ^^^^^^^^^
+
+warning: function `if_purvapada_then_not_chunk_end` is never used
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/strict_mode.rs:34:4
+   |
+34 | fn if_purvapada_then_not_chunk_end(split: &Split, s: &Subanta) -> bool {
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `if_ac_pada_then_not_hal` is never used
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/strict_mode.rs:47:4
+   |
+47 | fn if_ac_pada_then_not_hal(split: &Split, is_purvapada: bool) -> bool {
+   |    ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `if_not_in_compound_then_linga_match` is never used
+  --> /Users/arun/personal/vidyut/vidyut-cheda/src/strict_mode.rs:60:4
+   |
+60 | fn if_not_in_compound_then_linga_match(cur: &Phrase, pool: &TokenPool, s: &Subanta) -> bool {
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `vidyut-cheda` (lib) generated 23 warnings (run `cargo fix --lib -p vidyut-cheda` to apply 13 suggestions)
+   Compiling pyo3-macros-backend v0.23.1
+   Compiling pyo3-ffi v0.23.1
+   Compiling pyo3 v0.23.1
+   Compiling pyo3-macros v0.23.1
+   Compiling vidyut-py v0.3.0 (/Users/arun/personal/vidyut-py)
+error[E0432]: unresolved import `vidyut_cheda::Config`
+ --> src/cheda.rs:2:29
+  |
+2 | use vidyut_cheda::{Chedaka, Config, Error};
+  |                             ^^^^^^ no `Config` in the root
+
+error[E0412]: cannot find type `POSTag` in this scope
+  --> src/kosha/semantics.rs:24:26
+   |
+24 | py_enum!(PyPartOfSpeech, POSTag, [Avyaya, Subanta, Tinanta, Unknown]);
+   |                          ^^^^^^ not found in this scope
+
+error[E0412]: cannot find type `Dhatu` in this scope
+  --> src/kosha/semantics.rs:78:24
+   |
+78 | impl From<PyDhatu> for Dhatu {
+   |                        ^^^^^ not found in this scope
+   |
+help: consider importing this enum
+   |
+1  + use vidyut_prakriya::args::Dhatu;
+   |
+
+error[E0433]: failed to resolve: use of undeclared type `Dhatu`
+  --> src/kosha/semantics.rs:80:9
+   |
+80 |         Dhatu::mula(val.text)
+   |         ^^^^^ use of undeclared type `Dhatu`
+   |
+help: consider importing this enum
+   |
+1  + use vidyut_prakriya::args::Dhatu;
+   |
+
+error[E0412]: cannot find type `Dhatu` in this scope
+  --> src/kosha/semantics.rs:84:11
+   |
+84 | impl From<Dhatu> for PyDhatu {
+   |           ^^^^^ not found in this scope
+   |
+help: consider importing this enum
+   |
+1  + use vidyut_prakriya::args::Dhatu;
+   |
+
+error[E0412]: cannot find type `Dhatu` in this scope
+  --> src/kosha/semantics.rs:85:18
+   |
+85 |     fn from(val: Dhatu) -> PyDhatu {
+   |                  ^^^^^ not found in this scope
+   |
+help: consider importing this enum
+   |
+1  + use vidyut_prakriya::args::Dhatu;
+   |
+
+error[E0412]: cannot find type `Pratipadika` in this scope
+   --> src/kosha/semantics.rs:126:30
+    |
+101 | pub struct PyPratipadika {
+    | ------------------------ similarly named struct `PyPratipadika` defined here
+...
+126 | impl From<PyPratipadika> for Pratipadika {
+    |                              ^^^^^^^^^^^
+    |
+help: a struct with a similar name exists
+    |
+126 | impl From<PyPratipadika> for PyPratipadika {
+    |                              ~~~~~~~~~~~~~
+help: consider importing this enum
+    |
+1   + use vidyut_prakriya::args::Pratipadika;
+    |
+
+error[E0433]: failed to resolve: use of undeclared type `Pratipadika`
+   --> src/kosha/semantics.rs:128:9
+    |
+128 |         Pratipadika::Basic {
+    |         ^^^^^^^^^^^ use of undeclared type `Pratipadika`
+    |
+help: a struct with a similar name exists
+    |
+128 |         PyPratipadika::Basic {
+    |         ~~~~~~~~~~~~~
+help: consider importing this enum
+    |
+1   + use vidyut_prakriya::args::Pratipadika;
+    |
+
+error[E0412]: cannot find type `Dhatu` in this scope
+   --> src/kosha/semantics.rs:135:11
+    |
+135 | impl From<Dhatu> for PyPratipadika {
+    |           ^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+1   + use vidyut_prakriya::args::Dhatu;
+    |
+
+error[E0412]: cannot find type `Dhatu` in this scope
+   --> src/kosha/semantics.rs:136:18
+    |
+136 |     fn from(val: Dhatu) -> Self {
+    |                  ^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+1   + use vidyut_prakriya::args::Dhatu;
+    |
+
+error[E0412]: cannot find type `PyPurusha` in this scope
+   --> src/kosha/semantics.rs:154:21
+    |
+154 |     purusha: Option<PyPurusha>,
+    |                     ^^^^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+1   + use crate::prakriya::args::PyPurusha;
+    |
+
+error[E0412]: cannot find type `PyLakara` in this scope
+   --> src/kosha/semantics.rs:156:20
+    |
+156 |     lakara: Option<PyLakara>,
+    |                    ^^^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+1   + use crate::prakriya::args::PyLakara;
+    |
+
+error[E0412]: cannot find type `PyVacana` in this scope
+   --> src/kosha/semantics.rs:158:20
+    |
+158 |     vacana: Option<PyVacana>,
+    |                    ^^^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+1   + use crate::prakriya::args::PyVacana;
+    |
+
+error[E0412]: cannot find type `PyLinga` in this scope
+   --> src/kosha/semantics.rs:160:19
+    |
+160 |     linga: Option<PyLinga>,
+    |                   ^^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+1   + use crate::prakriya::args::PyLinga;
+    |
+
+error[E0412]: cannot find type `PyVibhakti` in this scope
+   --> src/kosha/semantics.rs:162:22
+    |
+162 |     vibhakti: Option<PyVibhakti>,
+    |                      ^^^^^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+1   + use crate::prakriya::args::PyVibhakti;
+    |
+
+error[E0412]: cannot find type `PyPurusha` in this scope
+   --> src/kosha/semantics.rs:208:25
+    |
+208 |         purusha: Option<PyPurusha>,
+    |                         ^^^^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+1   + use crate::prakriya::args::PyPurusha;
+    |
+
+error[E0412]: cannot find type `PyVacana` in this scope
+   --> src/kosha/semantics.rs:209:24
+    |
+209 |         vacana: Option<PyVacana>,
+    |                        ^^^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+1   + use crate::prakriya::args::PyVacana;
+    |
+
+error[E0412]: cannot find type `PyLakara` in this scope
+   --> src/kosha/semantics.rs:210:24
+    |
+210 |         lakara: Option<PyLakara>,
+    |                        ^^^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+1   + use crate::prakriya::args::PyLakara;
+    |
+
+error[E0412]: cannot find type `PyLinga` in this scope
+   --> src/kosha/semantics.rs:230:23
+    |
+230 |         linga: Option<PyLinga>,
+    |                       ^^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+1   + use crate::prakriya::args::PyLinga;
+    |
+
+error[E0412]: cannot find type `PyVibhakti` in this scope
+   --> src/kosha/semantics.rs:231:26
+    |
+231 |         vibhakti: Option<PyVibhakti>,
+    |                          ^^^^^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+1   + use crate::prakriya::args::PyVibhakti;
+    |
+
+error[E0412]: cannot find type `PyVacana` in this scope
+   --> src/kosha/semantics.rs:232:24
+    |
+232 |         vacana: Option<PyVacana>,
+    |                        ^^^^^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+1   + use crate::prakriya::args::PyVacana;
+    |
+
+error[E0412]: cannot find type `Pada` in this scope
+   --> src/kosha/semantics.rs:320:11
+    |
+320 | impl From<Pada> for PyPada {
+    |           ^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+1   + use vidyut_prakriya::args::Pada;
+    |
+
+error[E0412]: cannot find type `Pada` in this scope
+   --> src/kosha/semantics.rs:321:18
+    |
+321 |     fn from(val: Pada) -> Self {
+    |                  ^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+1   + use vidyut_prakriya::args::Pada;
+    |
+
+error[E0433]: failed to resolve: use of undeclared type `Pada`
+   --> src/kosha/semantics.rs:324:13
+    |
+324 |             Pada::Avyaya(a) => {
+    |             ^^^^ use of undeclared type `Pada`
+    |
+help: consider importing this enum
+    |
+1   + use vidyut_prakriya::args::Pada;
+    |
+
+error[E0433]: failed to resolve: use of undeclared type `Pada`
+   --> src/kosha/semantics.rs:328:13
+    |
+328 |             Pada::Subanta(s) => {
+    |             ^^^^ use of undeclared type `Pada`
+    |
+help: consider importing this enum
+    |
+1   + use vidyut_prakriya::args::Pada;
+    |
+
+error[E0433]: failed to resolve: use of undeclared type `Pada`
+   --> src/kosha/semantics.rs:336:13
+    |
+336 |             Pada::Tinanta(t) => {
+    |             ^^^^ use of undeclared type `Pada`
+    |
+help: consider importing this enum
+    |
+1   + use vidyut_prakriya::args::Pada;
+    |
+
+error[E0433]: failed to resolve: use of undeclared type `Pada`
+   --> src/kosha/semantics.rs:344:13
+    |
+344 |             Pada::Unknown => {
+    |             ^^^^ use of undeclared type `Pada`
+    |
+help: consider importing this enum
+    |
+1   + use vidyut_prakriya::args::Pada;
+    |
+
+error[E0412]: cannot find type `Pada` in this scope
+   --> src/kosha/semantics.rs:353:23
+    |
+353 | impl From<PyPada> for Pada {
+    |                       ^^^^ not found in this scope
+    |
+help: consider importing this enum
+    |
+1   + use vidyut_prakriya::args::Pada;
+    |
+
+error[E0433]: failed to resolve: use of undeclared type `Pada`
+   --> src/kosha/semantics.rs:358:37
+    |
+358 |             Some(PyPOS::Tinanta) => Pada::Tinanta(Tinanta {
+    |                                     ^^^^ use of undeclared type `Pada`
+    |
+help: consider importing this enum
+    |
+1   + use vidyut_prakriya::args::Pada;
+    |
+
+error[E0422]: cannot find struct, variant or union type `Tinanta` in this scope
+   --> src/kosha/semantics.rs:358:51
+    |
+358 |             Some(PyPOS::Tinanta) => Pada::Tinanta(Tinanta {
+    |                                                   ^^^^^^^ not found in this scope
+    |
+help: consider importing one of these items
+    |
+1   + use crate::kosha::semantics::PadaEntry::Tinanta;
+    |
+1   + use crate::kosha::semantics::PyPartOfSpeech::Tinanta;
+    |
+1   + use vidyut_kosha::entries::PadaEntry::Tinanta;
+    |
+1   + use vidyut_kosha::packing::PartOfSpeech::Tinanta;
+    |
+      and 2 other candidates
+
+error[E0433]: failed to resolve: use of undeclared type `Pada`
+   --> src/kosha/semantics.rs:369:37
+    |
+369 |             Some(PyPOS::Subanta) => Pada::Subanta(Subanta {
+    |                                     ^^^^ use of undeclared type `Pada`
+    |
+help: consider importing this enum
+    |
+1   + use vidyut_prakriya::args::Pada;
+    |
+
+error[E0422]: cannot find struct, variant or union type `Subanta` in this scope
+   --> src/kosha/semantics.rs:369:51
+    |
+369 |             Some(PyPOS::Subanta) => Pada::Subanta(Subanta {
+    |                                                   ^^^^^^^ not found in this scope
+    |
+help: consider importing one of these items
+    |
+1   + use crate::kosha::semantics::PadaEntry::Subanta;
+    |
+1   + use crate::kosha::semantics::PyPartOfSpeech::Subanta;
+    |
+1   + use vidyut_kosha::entries::PadaEntry::Subanta;
+    |
+1   + use vidyut_kosha::packing::PartOfSpeech::Subanta;
+    |
+      and 2 other candidates
+
+error[E0433]: failed to resolve: use of undeclared type `Pada`
+   --> src/kosha/semantics.rs:380:36
+    |
+380 |             Some(PyPOS::Avyaya) => Pada::Avyaya(Avyaya {
+    |                                    ^^^^ use of undeclared type `Pada`
+    |
+help: consider importing this enum
+    |
+1   + use vidyut_prakriya::args::Pada;
+    |
+
+error[E0422]: cannot find struct, variant or union type `Avyaya` in this scope
+   --> src/kosha/semantics.rs:380:49
+    |
+380 |             Some(PyPOS::Avyaya) => Pada::Avyaya(Avyaya {
+    |                                                 ^^^^^^ not found in this scope
+    |
+help: consider importing one of these items
+    |
+1   + use crate::kosha::semantics::PadaEntry::Avyaya;
+    |
+1   + use crate::kosha::semantics::PyPartOfSpeech::Avyaya;
+    |
+1   + use vidyut_kosha::entries::PadaEntry::Avyaya;
+    |
+1   + use vidyut_kosha::packing::PartOfSpeech::Avyaya;
+    |
+
+error[E0433]: failed to resolve: use of undeclared type `Pada`
+   --> src/kosha/semantics.rs:386:44
+    |
+386 |             Some(PyPOS::Unknown) | None => Pada::Unknown,
+    |                                            ^^^^ use of undeclared type `Pada`
+    |
+help: consider importing this enum
+    |
+1   + use vidyut_prakriya::args::Pada;
+    |
+
+error[E0412]: cannot find type `PyLakara` in module `kosha::semantics`
+   --> src/lib.rs:119:37
+    |
+119 |     m.add_class::<kosha::semantics::PyLakara>()?;
+    |                                     ^^^^^^^^ not found in `kosha::semantics`
+    |
+help: consider importing this enum
+    |
+63  + use crate::prakriya::args::PyLakara;
+    |
+help: if you import `PyLakara`, refer to it directly
+    |
+119 -     m.add_class::<kosha::semantics::PyLakara>()?;
+119 +     m.add_class::<PyLakara>()?;
+    |
+
+error[E0412]: cannot find type `PyLinga` in module `kosha::semantics`
+   --> src/lib.rs:120:37
+    |
+120 |     m.add_class::<kosha::semantics::PyLinga>()?;
+    |                                     ^^^^^^^ not found in `kosha::semantics`
+    |
+help: consider importing this enum
+    |
+63  + use crate::prakriya::args::PyLinga;
+    |
+help: if you import `PyLinga`, refer to it directly
+    |
+120 -     m.add_class::<kosha::semantics::PyLinga>()?;
+120 +     m.add_class::<PyLinga>()?;
+    |
+
+error[E0412]: cannot find type `PyPurusha` in module `kosha::semantics`
+   --> src/lib.rs:125:37
+    |
+125 |     m.add_class::<kosha::semantics::PyPurusha>()?;
+    |                                     ^^^^^^^^^ not found in `kosha::semantics`
+    |
+help: consider importing this enum
+    |
+63  + use crate::prakriya::args::PyPurusha;
+    |
+help: if you import `PyPurusha`, refer to it directly
+    |
+125 -     m.add_class::<kosha::semantics::PyPurusha>()?;
+125 +     m.add_class::<PyPurusha>()?;
+    |
+
+error[E0412]: cannot find type `PyVacana` in module `kosha::semantics`
+   --> src/lib.rs:126:37
+    |
+126 |     m.add_class::<kosha::semantics::PyVacana>()?;
+    |                                     ^^^^^^^^ not found in `kosha::semantics`
+    |
+help: consider importing this enum
+    |
+63  + use crate::prakriya::args::PyVacana;
+    |
+help: if you import `PyVacana`, refer to it directly
+    |
+126 -     m.add_class::<kosha::semantics::PyVacana>()?;
+126 +     m.add_class::<PyVacana>()?;
+    |
+
+error[E0412]: cannot find type `PyVibhakti` in module `kosha::semantics`
+   --> src/lib.rs:127:37
+    |
+127 |     m.add_class::<kosha::semantics::PyVibhakti>()?;
+    |                                     ^^^^^^^^^^ not found in `kosha::semantics`
+    |
+help: consider importing this enum
+    |
+63  + use crate::prakriya::args::PyVibhakti;
+    |
+help: if you import `PyVibhakti`, refer to it directly
+    |
+127 -     m.add_class::<kosha::semantics::PyVibhakti>()?;
+127 +     m.add_class::<PyVibhakti>()?;
+    |
+
+warning: unused import: `vidyut_kosha::entries::*`
+ --> src/kosha/semantics.rs:4:5
+  |
+4 | use vidyut_kosha::entries::*;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` on by default
+
+error[E0599]: no method named `run` found for struct `Chedaka` in the current scope
+  --> src/cheda.rs:57:41
+   |
+57 |         let tokens = match self.chedaka.run(slp1_text) {
+   |                                         ^^^ method not found in `Chedaka`
+
+error[E0599]: no variant or associated item named `Io` found for enum `vidyut_cheda::Error` in the current scope
+  --> src/cheda.rs:85:20
+   |
+85 |             Error::Io(e) => PyOSError::new_err(format!("{}", e)),
+   |                    ^^ variant or associated item not found in `Error`
+
+error[E0433]: failed to resolve: use of undeclared type `POSTag`
+  --> src/kosha/semantics.rs:24:26
+   |
+24 | py_enum!(PyPartOfSpeech, POSTag, [Avyaya, Subanta, Tinanta, Unknown]);
+   |                          ^^^^^^ use of undeclared type `POSTag`
+
+error[E0624]: method `contains_prefix` is private
+   --> src/kosha.rs:33:16
+    |
+33  |         self.0.contains_prefix(&prefix)
+    |                ^^^^^^^^^^^^^^^ private method
+    |
+   ::: /Users/arun/personal/vidyut/vidyut-kosha/src/kosha.rs:244:5
+    |
+244 |     fn contains_prefix(&self, key: &str) -> bool {
+    |     -------------------------------------------- private method defined here
+
+error[E0308]: mismatched types
+   --> src/kosha.rs:42:49
+    |
+42  |                 if let Ok(pada) = self.0.unpack(p) {
+    |                                          ------ ^ expected `PackedEntry`, found `&PadaEntry<'_>`
+    |                                          |
+    |                                          arguments to this method are incorrect
+    |
+note: method defined here
+   --> /Users/arun/personal/vidyut/vidyut-kosha/src/kosha.rs:426:12
+    |
+426 |     pub fn unpack(&self, value: PackedEntry) -> Result<PadaEntry> {
+    |            ^^^^^^
+
+error[E0277]: the trait bound `PyPada: From<PadaEntry<'_>>` is not satisfied
+  --> src/kosha.rs:43:31
+   |
+43 |                     Some(pada.into())
+   |                               ^^^^ the trait `From<PadaEntry<'_>>` is not implemented for `PyPada`
+   |
+   = help: the trait `From<{type error}>` is implemented for `PyPada`
+   = note: required for `PadaEntry<'_>` to implement `Into<PyPada>`
+
+error[E0277]: the trait bound `PadaEntry<'_>: From<PyPada>` is not satisfied
+  --> src/kosha.rs:81:59
+   |
+81 |             Some(ref mut b) => match b.insert(&key, &pada.into()) {
+   |                                                           ^^^^ the trait `From<PyPada>` is not implemented for `PadaEntry<'_>`
+   |
+   = help: the following other types implement trait `From<T>`:
+             <PadaEntry<'a> as From<SubantaEntry<'a>>>
+             <PadaEntry<'a> as From<TinantaEntry<'a>>>
+   = note: required for `PyPada` to implement `Into<PadaEntry<'_>>`
+
+Some errors have detailed explanations: E0277, E0308, E0412, E0422, E0432, E0433, E0599, E0624.
+For more information about an error, try `rustc --explain E0277`.
+warning: `vidyut-py` (lib) generated 1 warning
+error: could not compile `vidyut-py` (lib) due to 47 previous errors; 1 warning emitted
+💥 maturin failed
+  Caused by: Failed to build a native library through cargo
+  Caused by: Cargo build finished with "exit status: 101": `env -u CARGO MACOSX_DEPLOYMENT_TARGET="11.0" "cargo" "rustc" "--message-format" "json-render-diagnostics" "--manifest-path" "/Users/arun/personal/vidyut-py/Cargo.toml" "--lib" "--" "-C" "link-arg=-undefined" "-C" "link-arg=dynamic_lookup" "-C" "link-args=-Wl,-install_name,@rpath/vidyut.abi3.so"`
+make: *** [build] Error 1
