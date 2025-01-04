@@ -711,7 +711,7 @@ py_enum!(
 
 /// The lakara to use in the derivation.
 #[pyclass(name = "Lakara", module = "prakriya", eq, eq_int, ord)]
-#[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
+#[derive(Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum PyLakara {
     /// Describes action in the present tense. Ssometimes called the *present indicative*.
     Lat,
@@ -745,7 +745,7 @@ py_enum!(
 
 /// The linga to use in the derivation.
 #[pyclass(name = "Linga", module = "prakriya", eq, eq_int, ord)]
-#[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
+#[derive(Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum PyLinga {
     /// The masculine.
     Pum,
@@ -759,7 +759,7 @@ py_enum!(PyLinga, Linga, [Pum, Stri, Napumsaka]);
 
 /// The prayoga of some tinanta.
 #[pyclass(name = "Prayoga", module = "prakriya", eq, eq_int, ord)]
-#[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
+#[derive(Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum PyPrayoga {
     /// Usage coreferent with the agent, e.g. "The horse *goes* to the village."
     Kartari,
@@ -774,7 +774,7 @@ py_enum!(PyPrayoga, Prayoga, [Kartari, Karmani, Bhave]);
 
 /// The person of some tinanta.
 #[pyclass(name = "Purusha", module = "prakriya", eq, eq_int, ord)]
-#[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
+#[derive(Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum PyPurusha {
     /// The third person.
     Prathama,
@@ -824,7 +824,7 @@ py_enum!(
 
 /// The number of some tinanta or subanta.
 #[pyclass(name = "Vacana", module = "prakriya", eq, eq_int, ord)]
-#[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
+#[derive(Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum PyVacana {
     /// The singular.
     Eka,
@@ -838,7 +838,7 @@ py_enum!(PyVacana, Vacana, [Eka, Dvi, Bahu]);
 
 /// The case ending of some subanta.
 #[pyclass(name = "Vibhakti", module = "prakriya", eq, eq_int, ord)]
-#[derive(Copy, Clone, Eq, Hash, PartialEq, PartialOrd)]
+#[derive(Copy, Clone, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub enum PyVibhakti {
     /// The first vibhakti. Sometimes called the *nominative case*.
     Prathama,

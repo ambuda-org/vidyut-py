@@ -1,6 +1,7 @@
 use crate::utils::py_enum;
 use pyo3::prelude::*;
 
+use crate::prakriya::args::{PyLakara, PyLinga, PyPurusha, PyVacana, PyVibhakti};
 use vidyut_kosha::entries::*;
 
 /// A short part-of-speech tag for some `Pada`.
